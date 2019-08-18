@@ -1,0 +1,41 @@
+$colour1: #8a182c;
+$colour2: #3a825f;
+$colour3: #7e3b44;
+$colour4: #514769;
+
+.titlebar {
+  background-color: $colour1;
+}
+
+.browser {
+	background-color: $colour2;
+}
+
+.playing-info {
+	background-color: $colour3;
+}
+
+.tag-entry {
+	background-color: $colour4;
+	border: none;
+	font-size: 25px;
+}
+
+.playing-audio {
+	background-color: $colour1;
+}
+
+.browser-item:hover {
+	background-color: darken($colour2, 20%);
+}
+
+* {
+    color: white;
+    font-family: sans-serif;
+}
+
+button {
+	border: none;
+	background-color: black;
+	border-radius: 5px;
+}

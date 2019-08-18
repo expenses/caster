@@ -1,0 +1,75 @@
+$gap: 5px;
+
+body {
+	margin: 0px;
+}
+
+.dashboard {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 50px minmax(150px, 1fr) 50px 2fr 50px;
+	grid-template-areas: 
+		"titlebar playing-image"
+		"browser playing-image"
+		"browser playing-audio"
+		"browser playing-info"
+		"browser tag-entry";
+	height: calc(100vh - #{$gap} * 2);
+	padding: $gap;
+	grid-gap: $gap;
+
+	& > div, input {
+		padding: 10px;
+	}
+}
+
+.titlebar {
+	grid-area: titlebar;
+}
+
+.browser {
+	grid-area: browser;
+	overflow-y: scroll;
+}
+
+.playing-info {
+	grid-area: playing-info;
+}
+
+.tag-entry {
+	grid-area: tag-entry;
+}
+
+.playing-audio {
+	grid-area: playing-audio;
+}
+
+.playing-image {
+	grid-area: playing-image;
+	padding: 0px !important;
+
+
+	background-color: black;
+
+	display: flex;
+	justify-content: center;
+
+	& > img {
+		height: 100%;
+		width: 100%;
+		object-fit: contain;
+	}
+}
+
+.browser-item {
+	display: flex;
+	align-items: center;
+
+	& > img {
+		height: 100px;
+	}
+}
+
+.item-description > * {
+	margin: 5px;
+}
