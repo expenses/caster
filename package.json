@@ -1,13 +1,13 @@
 {
-  "name": "hello-blockstack",
+  "name": "Caster",
   "version": "0.0.0",
-  "description": "A simple Blockstack app using ReactJS",
+  "description": "An online podcast player",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blockstack/hello-blockstack.git"
+    "url": "git+https://github.com/blockstack/caster.git"
   },
   "bugs": {
-    "url": "https://github.com/blockstack/hello-blockstack/issues"
+    "url": "https://github.com/expenses/caster/issues"
   },
   "author": "",
   "license": "MIT",
@@ -46,7 +46,6 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^1.1.2",
     "react-test-renderer": "^16.8.6"
   }
 }
