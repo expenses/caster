@@ -10,8 +10,6 @@ const appConfig = new AppConfig()
 const userSession = new UserSession({ appConfig: appConfig })
 
 export default class App extends Component {
-
-
   handleSignIn(e) {
     e.preventDefault();
     userSession.redirectToSignIn();

@@ -62,32 +62,6 @@ export default class Main extends Component {
         <TagEntry className="tag-entry" callback={this.addTag} />
       </div>
     );
-
-
-    /*return (
-      <div style={style}>
-        <div style={s2}>
-          {/*https://www.patreon.com/rss/cumtownRSS?auth=Sk3CTXwaTx0Aw_bT2PxSmYnN-st3sdxB}
-
-          <ReactAudioPlayer autoPlay controls src={this.state.playing} />
-
-          <div className="flexbox-left-center">
-            <form  className="flexbox-left-center">
-              <h2>Add Feed:</h2>
-              <input type="text" value={this.state.tempUrl} onChange={(e) => this.setState({tempUrl: e.target.value})} className="unbordered coloured"/>
-              <input type="submit" value="go!" className="coloured unbordered rounded padding-slight hover" />
-            </form>
-            <Button text="clear" onClick={this.clearFeeds}/>
-          </div>
-
-          {this.state.message ? <p>{this.state.message}</p> : null}
-
-          {Object.keys(feeds).map(url => <Feed key={url} feed={feeds[url].data} time={feeds[url].time} playAudio={this.playAudio} />)}
-        </div>  
-        <div style={s3}>hey</div> 
-        <div style={s4}>hey2</div>       
-      </div>
-    );*/
   }
 
   getTags() {
@@ -124,8 +98,6 @@ export default class Main extends Component {
       }
     );
 
-    console.log(newTags);
-
     this.setState({tags: newTags});
   }
 
@@ -158,10 +130,8 @@ export default class Main extends Component {
       if (error) {
         this.setError(error);
       } else if (data === {}) {
-        console.log()
         this.setError("Empty feed!");
       } else {
-        console.log(data);
         const newFeeds = {...this.state.feeds, [url]: {time: Date.now(), data}};
         this.setState({feeds: newFeeds}, this.saveFeeds);
         this.setMessage('');

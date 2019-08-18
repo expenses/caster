@@ -5,8 +5,6 @@ export default class PlayingInfo extends Component {
   	let playing = this.props.playing;
   	let tags = this.props.tags;
 
-  	console.log(tags);
-
     return (
     	<div className = "playing-info">
 	      <h1>{playing ? playing.episode.title : 'No Episode Selected'}</h1>
