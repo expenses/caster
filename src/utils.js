@@ -1,7 +1,7 @@
 import * as request from 'request';
 import * as parsePodcast from 'node-podcast-parser';
 
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+const CORS_PROXY = 'https://caster-cors-proxy.herokuapp.com/';
 
 export function requestResource(url, callback) {
 	request(url, (error, res, data) => {

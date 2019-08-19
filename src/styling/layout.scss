@@ -7,49 +7,71 @@ body {
 .dashboard {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 50px minmax(150px, 1fr) 50px 2fr 50px;
-	grid-template-areas: 
-		"titlebar playing-image"
+	grid-template-rows: minmax(150px, 1fr) 50px 2fr 50px;
+	grid-template-areas:
 		"browser playing-image"
-		"browser playing-audio"
+		"browser playing"
 		"browser playing-info"
 		"browser tag-entry";
 	height: calc(100vh - #{$gap} * 2);
 	padding: $gap;
 	grid-gap: $gap;
+}
 
-	& > div, input {
-		padding: 10px;
+$titlebarheight: 50px;
+
+.titlebar {
+	display: flex;
+	align-items: center;
+	height: calc(#{$titlebarheight} - 10px * 2);
+
+	padding: 10px;
+
+	& > * {
+		margin-right: 10px;
 	}
 }
 
-.titlebar {
-	grid-area: titlebar;
+.feed-entry {
+	padding: 10px;
 }
 
 .browser {
 	grid-area: browser;
+}
+
+.browser-content {
 	overflow-y: scroll;
+	height: calc(100% - #{$titlebarheight});
 }
 
 .playing-info {
 	grid-area: playing-info;
+	padding: 10px;
 }
 
 .tag-entry {
 	grid-area: tag-entry;
+	padding: 10px;
 }
 
-.playing-audio {
-	grid-area: playing-audio;
+.player {
+	grid-area: playing;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	padding: 10px;
+}
+
+.player-bar {
+	height: 5px;
+  border-radius: 5px;
+  width: 50%;
 }
 
 .playing-image {
 	grid-area: playing-image;
 	padding: 0px !important;
-
-
-	background-color: black;
 
 	display: flex;
 	justify-content: center;
@@ -64,12 +86,24 @@ body {
 .browser-item {
 	display: flex;
 	align-items: center;
+	padding: 10px;
+	margin-top: 10px;
 
 	& > img {
 		height: 100px;
 	}
 }
 
-.item-description > * {
-	margin: 5px;
+.item-description {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+
+	& > * {
+		margin: 5px;
+	}
+}
+
+.x-button {
+	height: 100%;
 }

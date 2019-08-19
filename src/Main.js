@@ -5,11 +5,11 @@ import {
 
 
 import Browser from './Browser.js';
-import TagEntry from './TagEntry.js';
+import TextEntry from './TextEntry.js';
 import PlayingInfo from './PlayingInfo.js';
+import Player from './Player.js';
 
 import {requestPodcast} from './utils.js';
-import ReactAudioPlayer from 'react-audio-player';
 
 import merge from 'deepmerge';
 
@@ -20,11 +20,16 @@ export default class Main extends Component {
   	super(props);
 
   	this.state = {
-      tempUrl: '',
-      message: '',
+      // Main State
       feeds: {},
-      playing: null,
       tags: {},
+
+      // Other state
+
+      playing: null,
+
+      tempUrl: '',
+      message: '',      
       time: 0
   	};
 
@@ -33,6 +38,7 @@ export default class Main extends Component {
     this.playAudio = this.playAudio.bind(this);
     this.deleteUrl = this.deleteUrl.bind(this);
     this.addTag = this.addTag.bind(this);
+    this.refresh= this.refresh.bind(this);
   }
 
   render() {
@@ -45,23 +51,27 @@ export default class Main extends Component {
     const feeds = this.state.feeds;
     const playing = this.state.playing;
 
+    let image = playing ? playing.episode.image ? playing.episode.image : playing.feed.image ? playing.feed.image : null : null;
+
     return (
       <div className="dashboard">
-        <div className = "titlebar"></div>
-        <Browser feeds={feeds} deleteUrl={this.deleteUrl} play={this.playAudio}/>
-        <div className = "playing-image">
-          <img src={playing ? playing.episode.image ? playing.episode.image : playing.feed.image ? playing.feed.image : null : null} alt=""/>
-        </div>
-        <ReactAudioPlayer
-          className="playing-audio"
-          autoPlay controls src={playing ? playing.episode.enclosure.url : null}
-          listenInterval={1000}
-          onListen={time => this.setState({time})}
+        <Browser
+          feeds={feeds}
+          deleteUrl={this.deleteUrl}
+          play={this.playAudio}
+          refresh={this.refresh}
+          addFeed={this.addFeed}
         />
+        <div className = "playing-image">{image ? <img src={image} alt=""/> : null}</div>
+        <Player playing={playing} setTime={time => this.setState({time})} />
         <PlayingInfo playing={playing} tags={this.getTags()}/>
-        <TagEntry className="tag-entry" callback={this.addTag} />
+        <TextEntry placeholder="Enter Tag:" className="tag-entry" callback={this.addTag} />
       </div>
     );
+  }
+
+  refresh() {
+    Object.keys(this.state.feeds).forEach(this.addFeed);
   }
 
   getTags() {
@@ -115,15 +125,7 @@ export default class Main extends Component {
     this.setState({feeds: []}, this.saveFeeds);
   }
 
-  addFeed(e) {
-    e.preventDefault();
-
-    const url = this.state.tempUrl;
-
-    if (!url) {
-      return;
-    }
-
+  addFeed(url) {
     this.setMessage(`Loading ${url}...`);
 
     requestPodcast(url, (error, data) => {

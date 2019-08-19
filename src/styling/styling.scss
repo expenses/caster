@@ -1,41 +1,115 @@
-$colour1: #8a182c;
-$colour2: #3a825f;
-$colour3: #7e3b44;
-$colour4: #514769;
+
+/* Modified from https://stackoverflow.com/questions/6542212/use-css3-transitions-with-gradient-backgrounds*/
+@mixin gradientAnimation($before, $start, $end, $transTime, $border-radius ){
+    background-size: 100%;
+    background-image: linear-gradient($before, $before);
+    position: relative;
+    z-index: 100;
+    &:before {
+        background-image: linear-gradient($start, $end);
+        content: "";
+        display: block;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        opacity: 0;
+        width: 100%;
+        z-index: -100;
+        border-radius: $border-radius;
+        transition: opacity $transTime;
+    }
+    &:hover {
+        &:before {
+            opacity: 1;
+        }
+    }
+}
+
+$border: #241734;
+$main: #2e2157;
+$highlight-1: #fd3777;
+$highlight-2: #fd1d53;
+
+$br: 10px;
+
+.playing-info, .tag-entry, .browser-item, .feed-entry, .player {
+	border-radius: $br;
+	background-color: $main;
+}
+
+.browser-content {
+	background-color: $main;
+	border-bottom-left-radius: $br;
+	border-bottom-right-radius: $br;
+}
+
+.feed-entry {
+	font-size: 20px;
+	border: none;
+	width: 100%;
+	margin-right: 0px;
+}
+
+.player > svg {
+	transition: 0.25s all;
+
+	&:hover {
+		color: white;
+	}
+}
 
 .titlebar {
-  background-color: $colour1;
+	background-image: linear-gradient($highlight-1, $highlight-2);
+	border-top-right-radius: $br;
+	border-top-left-radius: $br;
+
+
+	& > svg {
+		color: $main;
+		transition: 0.25s all;
+
+		&:hover {
+			color: white;
+		}
+	}
 }
 
-.browser {
-	background-color: $colour2;
-}
-
-.playing-info {
-	background-color: $colour3;
+body {
+	background-color: $border;
 }
 
 .tag-entry {
-	background-color: $colour4;
 	border: none;
 	font-size: 25px;
 }
 
-.playing-audio {
-	background-color: $colour1;
+.playing-image {
+	border-radius: $br;
+	background-color: darken($border, 2.5%);
 }
 
-.browser-item:hover {
-	background-color: darken($colour2, 20%);
+.browser-item {
+	@include gradientAnimation($main, $highlight-1, $highlight-2, .25s, $br);
+
+	&:hover {
+		color: white;
+
+		& .x-button {
+			color: $main;
+			transition: 0.25s all;
+
+			&:hover {
+				color: white;
+			}
+		}
+	}
 }
 
-* {
-    color: white;
+.dashboard, .dashboard input, .dashboard button {
+    color: $highlight-1;
     font-family: sans-serif;
 }
 
-button {
-	border: none;
-	background-color: black;
-	border-radius: 5px;
+.player-bar {
+  background-color: $highlight-1;
 }
