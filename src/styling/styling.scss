@@ -81,7 +81,21 @@ a {
   padding: 10px;
 }
 
-.player-bar, .tag, .titlebar, .settings-title {
+.player-bar {
+  -webkit-appearance: none;
+  background-image: linear-gradient($highlight-1, $highlight-2);
+  border-radius: 5px;
+
+  //https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+  &::-webkit-slider-thumb, &::-moz-range-thumb {
+    -webkit-appearance: none;
+    border: none;
+    border-radius: 15px;
+    background-image: linear-gradient($highlight-1, $highlight-2);
+  }
+}
+
+.tag, .titlebar, .settings-title {
   background-image: linear-gradient($highlight-1, $highlight-2);
 }
 

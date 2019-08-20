@@ -66,8 +66,12 @@ $titlebarheight: 50px;
 
 .player-bar {
 	height: 5px;
-  border-radius: 5px;
   width: 50%;
+
+	&::-webkit-slider-thumb, &::-moz-range-thumb {
+		height: 15px;
+    width: 15px;
+	}
 }
 
 .playing-image {

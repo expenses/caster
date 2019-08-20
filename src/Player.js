@@ -12,6 +12,8 @@ export default class Player extends Component {
       time: 0,
       playing: false
     };
+
+    this.seek = this.seek.bind(this);
   }
 
   render() {
@@ -40,13 +42,19 @@ export default class Player extends Component {
       <Pause onClick={() => audioEl.pause()} /> :
       <Play onClick={() => src ? audioEl.play() : null} />;
 
-    //console.log(audioEl);
-
     return (
       <div className="player">
         {button}
         <p>{timestamp(this.state.time)}</p>
-        <div className="player-bar"></div>
+        <input
+          className="player-bar"
+          type="range"
+          min="0"
+          value={audioEl.currentTime}
+          max={audioEl.duration || 0}
+          step="any"
+          onChange={(e) => this.seek(e.target.value)}
+        />
         <p>{src ? timestamp(audioEl.duration) : '--:--:--'}</p>
         {player}
       </div>
