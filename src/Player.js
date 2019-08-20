@@ -24,7 +24,7 @@ export default class Player extends Component {
         ref={ref => this.player = ref}
         onPlay={() => this.setState({playing: true})}
         onPause={() => this.setState({playing: false})}
-        listenInterval={1000}
+        listenInterval={100}
         onListen={time => this.setState({time})}
       />
     );
@@ -51,6 +51,29 @@ export default class Player extends Component {
         {player}
       </div>
     );
+  }
+
+  time() {
+    return this.player ? this.player.audioEl.currentTime : 0;
+  }
+
+  seek(time) {
+    this.player.audioEl.currentTime = time;
+    this.setState({time});
+  }
+
+  toggle() {
+    let audioEl = this.player.audioEl;
+
+    if (!audioEl.src) {
+      return;
+    }
+
+    if (this.state.playing) {
+      audioEl.pause();
+    } else {
+      audioEl.play();
+    }
   }
 }
 

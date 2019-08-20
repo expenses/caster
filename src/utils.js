@@ -22,3 +22,12 @@ export function requestPodcast(url, callback) {
 	  }
     });
 }
+
+export function saveData(userSession, filename, data) {
+	userSession.putFile(filename, JSON.stringify(data), {});
+}
+
+export function loadData(userSession, filename, callback) {
+	userSession.getFile(filename, {})
+		.then(content => callback(JSON.parse(content) || {}));
+}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { XCircle } from 'react-feather';
 
 export default class PlayingInfo extends Component {
   render() {
@@ -11,7 +12,23 @@ export default class PlayingInfo extends Component {
 	      {playing ? <h2>{playing.feed.title}</h2> : null}
 	      {playing ? <p dangerouslySetInnerHTML={{__html: playing.episode.description}}></p> : null}
 	      {playing ? <h2>Tags:</h2> : null}
-	      <p>{tags.map(tag => `${tag.text} @ ${tag.time}`).join(', ')}</p>
+        <div className="tags">
+          {
+            tags.map((tag, i) =>
+              <div
+                key={i}
+                className="tag"
+                onClick={() => this.props.seek(tag.time)}
+              >
+                <p>{tag.text}</p>
+                <XCircle
+                  size="12px"
+                  onClick={() => this.props.deleteTag(i)}
+                />
+              </div>
+            )
+          }
+        </div>
 	    </div>
     );
   }

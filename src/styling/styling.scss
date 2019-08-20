@@ -32,9 +32,17 @@ $highlight-2: #fd1d53;
 
 $br: 10px;
 
+a {
+  color: $highlight-2;
+}
+
 .playing-info, .tag-entry, .browser-item, .feed-entry, .player {
 	border-radius: $br;
 	background-color: $main;
+}
+
+.player-bar, .tag, .titlebar {
+  background-image: linear-gradient($highlight-1, $highlight-2);
 }
 
 .browser-content {
@@ -59,10 +67,8 @@ $br: 10px;
 }
 
 .titlebar {
-	background-image: linear-gradient($highlight-1, $highlight-2);
 	border-top-right-radius: $br;
 	border-top-left-radius: $br;
-
 
 	& > svg {
 		color: $main;
@@ -110,6 +116,18 @@ body {
     font-family: sans-serif;
 }
 
-.player-bar {
-  background-color: $highlight-1;
+.tag {
+  color: $main;
+  padding: 5px;
+  border-radius: 1em;
+  transition: 0.25s all;
+  margin: 5px;
+
+  & > * {
+    transition: 0.25s all;
+  }
+
+  &:hover p, & svg:hover {
+    color: white;
+  }
 }

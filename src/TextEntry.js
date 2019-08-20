@@ -16,10 +16,13 @@ export default class TextEntry extends Component {
     	onChange={(e) => this.setState({entered: e.target.value})}
     	onKeyDown={this.handleKey}
     	placeholder = {this.props.placeholder}
+      ref={input => this.input = input}
     />;
   }
 
   handleKey(e) {
+    e.stopPropagation();
+
   	if (e.key !== 'Enter') {
   		return;
   	}
@@ -29,6 +32,7 @@ export default class TextEntry extends Component {
   	if (entered) {
   		this.setState({entered: ''});
   		this.props.callback(entered);
+      this.props.returnFocus.focus();
   	}
   }
 }

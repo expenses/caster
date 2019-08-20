@@ -13,8 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "blockstack": "^19.2.5",
-    "deepmerge": "^4.0.0",
     "hologo": "^1.0.6",
+    "immutability-helper": "^3.0.1",
     "node-podcast-parser": "^2.3.0",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",

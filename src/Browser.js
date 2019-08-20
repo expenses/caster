@@ -22,11 +22,16 @@ export default class Browser extends Component {
   		<div className="titlebar">
         <Settings/>
         <RefreshCw onClick={this.props.refresh} />
-        {	
+        {
         	this.state.selected ?
         	<ChevronLeft onClick={() => this.setState({selected: null})} />
         	:
-        	<TextEntry className="feed-entry" placeholder="Enter Url:" callback={this.props.addFeed} />
+        	<TextEntry
+            className="feed-entry"
+            placeholder="Enter Url:"
+            callback={this.props.addFeed}
+            returnFocus={this.props.returnFocus}
+          />
         }
       </div>
   	);

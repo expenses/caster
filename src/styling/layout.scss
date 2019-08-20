@@ -48,6 +48,7 @@ $titlebarheight: 50px;
 .playing-info {
 	grid-area: playing-info;
 	padding: 10px;
+	overflow-y: scroll;
 }
 
 .tag-entry {
@@ -106,4 +107,18 @@ $titlebarheight: 50px;
 
 .x-button {
 	height: 100%;
+}
+
+.tags {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.tag {
+	display: inherit;
+
+	& > p {
+		margin: 0px;
+		margin-right: 5px;
+	}
 }
