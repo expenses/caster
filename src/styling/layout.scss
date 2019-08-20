@@ -122,3 +122,18 @@ $titlebarheight: 50px;
 		margin-right: 5px;
 	}
 }
+
+.settings-modal {
+  margin: 50px;
+  height: calc(100% - 50px * 2);
+}
+
+.settings-title {
+  display: flex;
+  align-items: center;
+}
+
+.settings-modal-overlay {
+	position: fixed;
+	inset: 0px;
+}

@@ -62,6 +62,10 @@ export default class Player extends Component {
     this.setState({time});
   }
 
+  seekRelative(time) {
+    this.seek(this.player.audioEl.currentTime + time);
+  }
+
   toggle() {
     let audioEl = this.player.audioEl;
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class TextEntry extends Component {
   constructor(props) {
     super(props);
-    this.state = {entered: ''};
+    this.state = {entered: props.defaultValue || ''};
 
     this.handleKey = this.handleKey.bind(this);
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Main from './Main.js';
+import Dashboard from './Dashboard.js';
 import Signin from './Signin.js';
 import {
   UserSession,
@@ -22,7 +22,7 @@ export default class App extends Component {
 
   render() {
     if (userSession.isUserSignedIn()) {
-      return <Main userSession={userSession} handleSignOut={ this.handleSignOut } />;
+      return <Dashboard userSession={userSession} handleSignOut={ this.handleSignOut } />;
     } else {
       return <Signin userSession={userSession} handleSignIn={ this.handleSignIn } />;
     }

@@ -3,12 +3,12 @@ import {
   Person,
 } from 'blockstack';
 
-
 import Browser from './Browser.js';
 import TextEntry from './TextEntry.js';
 import PlayingInfo from './PlayingInfo.js';
 import Player from './Player.js';
 import PlayingImage from './PlayingImage.js';
+import Settings from './Settings.js';
 
 import {requestPodcast, saveData, loadData} from './utils.js';
 import update from 'immutability-helper';
@@ -16,7 +16,7 @@ import update from 'immutability-helper';
 const FEEDS_FILENAME = 'feeds.json';
 const TAGS_FILENAME = 'tags.json';
 
-export default class Main extends Component {
+export default class Dashboard extends Component {
   constructor(props) {
   	super(props);
 
@@ -24,14 +24,24 @@ export default class Main extends Component {
       // Main State
       feeds: {},
       tags: {},
+      settings: {
+        corsProxy: 'https://caster-cors-proxy.herokuapp.com',
+        toggle: 'p',
+        seekBackwards: ',',
+        seekForwards: '.',
+        enterTag: 't',
+        seekAmount: 5
+      },
 
       // Other state
 
       playing: null,
+      settingsOpen: false,
       message: ''
   	};
 
     this.addFeed = this.addFeed.bind(this);
+    this.addFeedAndSave = this.addFeedAndSave.bind(this);
     this.clearFeeds = this.clearFeeds.bind(this);
     this.playAudio = this.playAudio.bind(this);
     this.deleteUrl = this.deleteUrl.bind(this);
@@ -39,6 +49,8 @@ export default class Main extends Component {
     this.refresh= this.refresh.bind(this);
     this.deleteTag = this.deleteTag.bind(this);
     this.handleKey = this.handleKey.bind(this);
+
+    this.saveFeeds = this.saveFeeds.bind(this);
   }
 
   render() {
@@ -52,13 +64,19 @@ export default class Main extends Component {
         onKeyUp={this.handleKey}
         tabIndex="0"
       >
+        <Settings
+          open={this.state.settingsOpen}
+          settings={this.state.settings}
+          close={() => this.setState({settingsOpen: false})}
+        />
         <Browser
           feeds={feeds}
           deleteUrl={this.deleteUrl}
           play={this.playAudio}
           refresh={this.refresh}
-          addFeed={this.addFeed}
+          addFeed={this.addFeedAndSave}
           returnFocus={this.dashboard}
+          settings={() => this.setState({settingsOpen: true})}
         />
         <PlayingImage playing={playing}/>
         <Player
@@ -84,17 +102,29 @@ export default class Main extends Component {
   }
 
   handleKey(e) {
-    if (e.key === 'k') {
+    let settings = this.state.settings;
+
+    if (e.key === settings.toggle) {
       this.player.toggle();
     }
 
-    if (e.key === 't') {
+    if (e.key === settings.seekBackwards) {
+      this.player.seekRelative(-settings.seekAmount);
+    }
+
+    if (e.key === settings.seekForwards) {
+      this.player.seekRelative(+settings.seekAmount);
+    }
+
+    if (e.key === settings.enterTag) {
       this.tagentry.input.focus();
     }
   }
 
   refresh() {
+    // TODO: make this await
     Object.keys(this.state.feeds).forEach(this.addFeed);
+    this.saveFeeds();
   }
 
   playingString() {
@@ -115,6 +145,7 @@ export default class Main extends Component {
     let string = this.playingString();
 
     if (string && string in tags) {
+      console.log(tags, tags[string], string);
       return tags[string];
     } else {
       return [];
@@ -127,7 +158,8 @@ export default class Main extends Component {
     if (string) {
       let newTags = update(
         this.state.tags,
-        {[string]: {$unset: [id]}}
+        // have to splice because json doesnt serialize
+        {[string]: {$splice: [[id, 1]]}}
       );
       this.setState({tags: newTags}, this.saveTags);
     }
@@ -168,10 +200,10 @@ export default class Main extends Component {
     this.setState({feeds: {}}, this.saveFeeds);
   }
 
-  addFeed(url) {
+  addFeed(url, callback=() => {}) {
     this.setMessage(`Loading ${url}...`);
 
-    requestPodcast(url, (error, data) => {
+    requestPodcast(this.state.settings.corsProxy, url, (error, data) => {
       if (error) {
         this.setError(error);
       } else if (data === {}) {
@@ -179,12 +211,17 @@ export default class Main extends Component {
       } else {
         let feeds = update(
           this.state.feeds,
-          { $set: {[url]: {time: Date.now(), data}} }
+          { $merge: {[url]: {time: Date.now(), data}} }
         );
-        this.setState({feeds}, this.saveFeeds);
+        this.setState({feeds});
         this.setMessage('');
+        callback();
       }
     });
+  }
+
+  addFeedAndSave(url) {
+    this.addFeed(url, this.saveFeeds);
   }
 
   setMessage(message) {

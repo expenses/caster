@@ -20,7 +20,7 @@ export default class Browser extends Component {
 
   	let titlebar = (
   		<div className="titlebar">
-        <Settings/>
+        <Settings onClick={this.props.settings} />
         <RefreshCw onClick={this.props.refresh} />
         {
         	this.state.selected ?
