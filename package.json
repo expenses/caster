@@ -1,7 +1,7 @@
 {
   "name": "Caster",
   "version": "0.0.0",
-  "description": "An online podcast player",
+  "description": "A Blockstack podcast player",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/blockstack/caster.git"
@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "blockstack": "^19.2.5",
+    "gh-pages": "^2.1.1",
     "immutability-helper": "^3.0.1",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",

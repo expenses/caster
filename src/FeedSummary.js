@@ -16,7 +16,7 @@ export default class FeedSummary extends Component {
 	  				<p>{feed.meta.description}</p>
 	  				<p>{feed.episodes.length} episodes</p>
 	  				<p>Last refreshed {moment(this.props.time).fromNow()}</p>
-            <p>Last updated {moment(feed.meta.lastUpdated).fromNow()}</p>
+            <p>Latest episode was {moment(feed.episodes[0].pubDate).fromNow()}</p>
 	  			</div>
 	  			<XCircle className="x-button" onClick={this.delete.bind(this)}/>
   			</div>
