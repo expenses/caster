@@ -41,7 +41,6 @@ export default class Dashboard extends Component {
   	};
 
     this.addFeed = this.addFeed.bind(this);
-    this.addFeedAndSave = this.addFeedAndSave.bind(this);
     this.clearFeeds = this.clearFeeds.bind(this);
     this.playAudio = this.playAudio.bind(this);
     this.deleteUrl = this.deleteUrl.bind(this);
@@ -61,7 +60,7 @@ export default class Dashboard extends Component {
       <div
         className="dashboard"
         ref={ref => this.dashboard = ref}
-        onKeyUp={this.handleKey}
+        onKeyDown={this.handleKey}
         tabIndex="0"
       >
         <Settings
@@ -74,7 +73,7 @@ export default class Dashboard extends Component {
           deleteUrl={this.deleteUrl}
           play={this.playAudio}
           refresh={this.refresh}
-          addFeed={this.addFeedAndSave}
+          addFeed={url => this.addFeed(url).then(this.saveFeeds)}
           returnFocus={this.dashboard}
           settings={() => this.setState({settingsOpen: true})}
         />
@@ -102,6 +101,9 @@ export default class Dashboard extends Component {
   }
 
   handleKey(e) {
+    // No side effects such inserting a 't' into tagentry
+    e.preventDefault();
+
     let settings = this.state.settings;
 
     if (e.key === settings.toggle) {
@@ -121,9 +123,8 @@ export default class Dashboard extends Component {
     }
   }
 
-  refresh() {
-    // TODO: make this await
-    Object.keys(this.state.feeds).forEach(this.addFeed);
+  async refresh() {
+    await Promise.all(Object.keys(this.state.feeds).map(this.addFeed));
     this.saveFeeds();
   }
 
@@ -145,7 +146,6 @@ export default class Dashboard extends Component {
     let string = this.playingString();
 
     if (string && string in tags) {
-      console.log(tags, tags[string], string);
       return tags[string];
     } else {
       return [];
@@ -200,41 +200,20 @@ export default class Dashboard extends Component {
     this.setState({feeds: {}}, this.saveFeeds);
   }
 
-  addFeed(url, callback=() => {}) {
-    this.setMessage(`Loading ${url}...`);
-
-    requestPodcast(this.state.settings.corsProxy, url, (error, data) => {
-      if (error) {
-        this.setError(error);
-      } else if (data === {}) {
-        this.setError("Empty feed!");
-      } else {
+  async addFeed(url) {
+    return requestPodcast(this.state.settings.corsProxy, url)
+      .then(data => {
         let feeds = update(
           this.state.feeds,
           { $merge: {[url]: {time: Date.now(), data}} }
         );
-        this.setState({feeds});
-        this.setMessage('');
-        callback();
-      }
-    });
-  }
-
-  addFeedAndSave(url) {
-    this.addFeed(url, this.saveFeeds);
-  }
-
-  setMessage(message) {
-    this.setState({message});
-  }
-
-  setError(error) {
-    console.error(error);
-    this.setMessage("Error: " + error);
+        return this.setState({feeds});
+      });
   }
 
   loadFeeds() {
-    loadData(this.props.userSession, FEEDS_FILENAME, feeds => this.setState({feeds}));
+    loadData(this.props.userSession, FEEDS_FILENAME)
+      .then(feeds => this.setState({feeds}));
   }
 
   saveFeeds() {
@@ -242,7 +221,8 @@ export default class Dashboard extends Component {
   }
 
   loadTags() {
-    loadData(this.props.userSession, TAGS_FILENAME, tags => this.setState({tags}));
+    loadData(this.props.userSession, TAGS_FILENAME)
+      .then(tags => this.setState({tags}));
   }
 
   saveTags() {

@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
 
-import { hologo } from 'hologo';
+import moment from 'moment';
 import { XCircle } from 'react-feather';
- 
+
 export default class FeedSummary extends Component {
 	render() {
   	let feed = this.props.feed;
 
   	return (
   		<div className="browser-item" onClick={this.props.onClick}>
-  			<img src={feed.image} alt=""/>
-  			<div className="item-description" >
+  			<img src={feed.meta.imageURL} alt=""/>
+  			<div className="feed-description" >
   				<div>
-	  				<h2>{feed.title}</h2>
-	  				{feed.description ? <p>{feed.description.long}</p> : null}
-	  				{feed.episodes ? <p>{`${feed.episodes.length} episodes`}</p> : null}
-	  				<p>Last refreshed: {hologo(this.props.time)} ago</p>
+	  				<h2>{feed.meta.title}</h2>
+	  				<p>{feed.meta.description}</p>
+	  				<p>{feed.episodes.length} episodes</p>
+	  				<p>Last refreshed {moment(this.props.time).fromNow()}</p>
+            <p>Last updated {moment(feed.meta.lastUpdated).fromNow()}</p>
 	  			</div>
-
-	  			<div className="x-button" onClick={this.delete.bind(this)}>
-  					<XCircle/>
-  				</div>
+	  			<XCircle className="x-button" onClick={this.delete.bind(this)}/>
   			</div>
   		</div>
   	);

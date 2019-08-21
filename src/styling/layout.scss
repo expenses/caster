@@ -18,17 +18,21 @@ body {
 	grid-gap: $gap;
 }
 
-$titlebarheight: 50px;
-
 .titlebar {
+	grid-area: titlebar;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+}
+
+.titlebar-left {
 	display: flex;
 	align-items: center;
-	height: calc(#{$titlebarheight} - 10px * 2);
 
-	padding: 10px;
-
-	& > * {
-		margin-right: 10px;
+	& * {
+		margin-right: 20px;
 	}
 }
 
@@ -38,11 +42,23 @@ $titlebarheight: 50px;
 
 .browser {
 	grid-area: browser;
+
+	display: grid;
+	grid-template-rows: 50px 1fr 50px;
+
+	grid-template-areas:
+		"titlebar"
+		"browser-content"
+		"browser-input"
+
 }
 
 .browser-content {
 	overflow-y: scroll;
-	height: calc(100% - #{$titlebarheight});
+}
+
+.browser-input {
+	grid-area: browser-input;
 }
 
 .playing-info {
@@ -99,12 +115,16 @@ $titlebarheight: 50px;
 	}
 }
 
-.item-description {
+.episode-description {
+	padding: 10px;
+}
+
+.feed-description {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
 
-	& > * {
+	& * {
 		margin: 5px;
 	}
 }

@@ -1,31 +1,27 @@
-import * as request from 'request';
-import * as parsePodcast from 'node-podcast-parser';
+import * as podcastFeedParser from 'podcast-feed-parser';
 
-export function requestResource(proxy, url, callback) {
-	request(url, (error, res, data) => {
-	  if (error) {
-	  	request(`${proxy}/${url}`, (error, res, data) => callback(error, data));
-	  } else {
-	  	callback(error, data);
-	  }
-    });
+// https://github.com/jbierfeldt/podcast-feed-parser/blob/master/index.js#L17
+// removed category and added guid
+const options = {
+	fields: {
+    meta: ['title', 'description', 'subtitle', 'imageURL', 'lastUpdated', 'link',
+            'language', 'editor', 'author', 'summary', 'owner',
+            'explicit', 'complete', 'blocked'],
+    episodes: ['title', 'description', 'subtitle', 'imageURL', 'pubDate',
+            'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
+            'explicit', 'order', 'guid']
+  }
 }
 
-export function requestPodcast(proxy, url, callback) {
-	requestResource(proxy, url, (error, data) => {
-	  if (error) {
-	  	callback(error, null);
-	  } else {
-	  	parsePodcast(data, (error, feed) => callback(error, feed));
-	  }
-    });
+export async function requestPodcast(proxy, url) {
+	return podcastFeedParser.getPodcastFromURL(`${proxy}/${url}`, options);
 }
 
 export function saveData(userSession, filename, data) {
 	userSession.putFile(filename, JSON.stringify(data), {});
 }
 
-export function loadData(userSession, filename, callback) {
-	userSession.getFile(filename, {})
-		.then(content => callback(JSON.parse(content) || {}));
+export async function loadData(userSession, filename) {
+	return userSession.getFile(filename, {})
+		.then(content => JSON.parse(content) || {})
 }

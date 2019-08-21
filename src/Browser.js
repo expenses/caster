@@ -4,48 +4,56 @@ import FeedSummary from './FeedSummary.js';
 import Episode from './Episode.js';
 import TextEntry from './TextEntry.js';
 
-import { Settings, RefreshCw, ChevronLeft } from 'react-feather';
+import { Home, Settings, Search, RefreshCw } from 'react-feather';
 
 export default class Browser extends Component {
   constructor(props) {
   	super(props);
 
   	this.state = {
-  		selected: null
+  		selected: null,
+      search: false,
+      searchTerm: ''
   	};
+
+    this.toHome = this.toHome.bind(this);
   }
 
   render() {
-  	let feeds = this.props.feeds;
-
-  	let titlebar = (
-  		<div className="titlebar">
-        <Settings onClick={this.props.settings} />
-        <RefreshCw onClick={this.props.refresh} />
-        {
-        	this.state.selected ?
-        	<ChevronLeft onClick={() => this.setState({selected: null})} />
-        	:
-        	<TextEntry
-            className="feed-entry"
-            placeholder="Enter Url:"
-            callback={this.props.addFeed}
-            returnFocus={this.props.returnFocus}
-          />
-        }
-      </div>
+  	return (
+  		<div className="browser">
+        <div className="titlebar">
+          <div className="titlebar-left">
+            <Settings onClick={this.props.settings} />
+            <Home onClick={this.toHome} style={this.style(!this.state.selected && !this.state.search)} />
+            <Search onClick={() => this.setState({search: true})} style={this.style(this.state.search)} />
+            <h1>{this.state.selected ? this.props.feeds[this.state.selected].data.meta.title : 'Podcasts'}</h1>
+          </div>
+          <RefreshCw onClick={this.props.refresh} />
+        </div>
+  			<div className="browser-content">{this.inner()}</div>
+        {this.input()}
+  		</div>
   	);
+  }
 
-  	let inner = null;
+  inner() {
+    let feeds = this.props.feeds;
+    let selected = this.state.selected;
 
-  	if (this.state.selected) {
-  		let feed = feeds[this.state.selected].data;
+    if (this.state.search) {
+      return Object.keys(feeds)
+        .flatMap(url => feeds[url].data.episodes.map(episode => {return {episode, url}}))
+        .filter(tuple => this.filterEpisode(tuple.episode))
+        .map(tuple => this.episode(tuple.episode, tuple.url))
+    }
 
-  		inner = feed.episodes.map(episode => {
-				return <Episode episode={episode} key={episode.guid} backupImage={feed.image} play={() => this.play(episode)}/>
-			});
+  	if (selected) {
+  		let feed = feeds[selected].data;
+
+  		return feed.episodes.map(episode => this.episode(episode, selected));
   	} else {
-  		inner = Object.keys(feeds).map(url => {
+  		return Object.keys(feeds).map(url => {
 				return <FeedSummary
 					key={url}
 					feed={feeds[url].data}
@@ -55,16 +63,52 @@ export default class Browser extends Component {
 				/>;
 			});
   	}
-
-  	return (
-  		<div className="browser">
-  			{titlebar}
-  			<div className="browser-content">{inner}</div>
-  		</div>
-  	);
   }
 
-  play(episode) {
-  	this.props.play(episode, this.state.selected);
+  filterEpisode(episode) {
+    let term = this.state.searchTerm.toLowerCase();
+
+    return episode.title.toLowerCase().includes(term) || episode.description.toLowerCase().includes(term);
+  }
+
+  episode(episode, url) {
+    return <Episode
+      episode={episode}
+      key={episode.title}
+      backupImage={this.props.feeds[url].data.meta.imageURL}
+      play={() => this.props.play(episode, url)}
+    />;
+  }
+
+  input() {
+    if (this.state.search) {
+      return <input
+        className="browser-input"
+        placeholder="Search:"
+        onChange={(e) => this.setState({searchTerm: e.target.value})}
+        onKeyDown={e => e.stopPropagation()}
+        value={this.state.searchTerm}
+      />;
+    } else {
+      return <TextEntry
+        className="browser-input"
+        placeholder="Enter Url:"
+        callback={this.props.addFeed}
+        returnFocus={this.props.returnFocus}
+      />;
+    }
+  }
+
+  setSearch(e) {
+    e.stopPropagation();
+    this.setState({searchTerm: e.target.value});
+  }
+
+  style(predicate) {
+    return predicate ? {color: 'white'} : null;
+  }
+
+  toHome() {
+    this.setState({selected: null, search: false});
   }
 }

@@ -101,13 +101,18 @@ a {
 
 .browser-content {
 	background-color: $main;
-	@include bottomRounded();
 }
 
-.feed-entry {
+.browser-input {
+  @include bottomRounded();
+  background-color: $main;
+}
+
+
+
+.feed-entry, .browser-input {
 	font-size: 20px;
 	border: none;
-	width: 100%;
 	margin-right: 0px;
 }
 
@@ -121,15 +126,19 @@ a {
 
 .titlebar {
 	@include topRounded();
+}
 
-	& > svg {
-		color: $main;
-		transition: 0.25s all;
+.titlebar-left > h1 {
+  color: white;
+}
 
-		&:hover {
-			color: white;
-		}
-	}
+.titlebar > svg, .titlebar-left > svg {
+  color: $main;
+  transition: 0.25s all;
+
+  &:hover {
+    color: white;
+  }
 }
 
 body {
@@ -163,9 +172,13 @@ body {
 	}
 }
 
+* {
+  font-family: "Helvetica Neue";
+  font-weight: 400;
+}
+
 .dashboard, .dashboard input, .dashboard button, .settings-modal {
     color: $highlight-1;
-    font-family: sans-serif;
 }
 
 .tag {
