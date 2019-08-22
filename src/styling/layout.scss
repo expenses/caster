@@ -207,3 +207,30 @@ body {
 	display: flex;
 	align-items: center;
 }
+
+@media (max-width: 767px) {
+  .dashboard {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"playing-image"
+			"player"
+			"playing"
+			"browser";
+
+		height: 100%;
+	}
+
+	h1 {
+		font-size: 20px;
+	}
+
+	h2 {
+		font-size: 18px;
+	}
+
+	.settings-modal {
+	  margin: 20px;
+	  height: calc(100% - 20px * 2);
+	}
+}

@@ -13,7 +13,6 @@ import * as moment from 'moment';
 import 'moment/min/locales';
 
 //todo: settings
-//todo: mobile
 //todo: autotagging
 //todo: open episode save/load
 //todo: testing
