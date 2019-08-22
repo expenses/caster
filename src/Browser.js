@@ -5,7 +5,7 @@ import Episode from './Episode.js';
 import TextEntry from './TextEntry.js';
 
 import fuzzysort from 'fuzzysort';
-import { LogOut, Home, Settings, Search, RefreshCw } from 'react-feather';
+import { LogOut, Home, Settings, Search, RefreshCw, Plus } from 'react-feather';
 
 export default class Browser extends Component {
   constructor(props) {
@@ -34,7 +34,10 @@ export default class Browser extends Component {
           <RefreshCw onClick={this.props.refresh} />
         </div>
   			<div className="browser-content">{this.inner()}</div>
-        {this.input()}
+        <div className = "browser-input">
+          {this.state.search ? <Search/> : <Plus/>}
+          {this.input()}
+        </div>
   		</div>
   	);
   }
@@ -43,7 +46,9 @@ export default class Browser extends Component {
     let feeds = this.props.feeds;
     let selected = this.state.selected;
 
-    if (this.state.search) {
+    if (this.state.search && !this.state.searchTerm) {
+      return <h1 className="center">No search term entered</h1>;
+    } else if (this.state.search) {
       let objects = Object.keys(feeds)
         .flatMap(url => feeds[url].data.episodes.map(episode => {
           return {
@@ -92,16 +97,14 @@ export default class Browser extends Component {
   input() {
     if (this.state.search) {
       return <input
-        className="browser-input"
-        placeholder="Search:"
+        placeholder="Search"
         onChange={(e) => this.setState({searchTerm: e.target.value})}
         onKeyDown={e => e.stopPropagation()}
         value={this.state.searchTerm}
       />;
     } else {
       return <TextEntry
-        className="browser-input"
-        placeholder="Enter Url:"
+        placeholder="Add feed url"
         callback={this.props.addFeed}
         returnFocus={this.props.returnFocus}
       />;

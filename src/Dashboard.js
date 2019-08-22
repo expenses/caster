@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Browser from './Browser.js';
-import TextEntry from './TextEntry.js';
 import PlayingInfo from './PlayingInfo.js';
 import Player from './Player.js';
 import PlayingImage from './PlayingImage.js';
@@ -87,13 +86,6 @@ export default class Dashboard extends Component {
           tags={this.getTags()}
           seek={(time) => this.player?.seek(time)}
           deleteTag={this.deleteTag}
-        />
-        <TextEntry
-          placeholder="Enter Tag:"
-          className="tag-entry"
-          callback={this.addTag}
-          ref={ref => this.tagentry = ref}
-          returnFocus={this.dashboard}
         />
       </div>
     );

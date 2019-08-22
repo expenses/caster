@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/blockstack/caster.git"
   },
+  "homepage": "https://expenses.github.io/caster",
   "bugs": {
     "url": "https://github.com/expenses/caster/issues"
   },
@@ -29,7 +30,8 @@
     "serve": "serve -s build",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "deploy": "npm run-script build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"

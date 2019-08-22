@@ -7,12 +7,11 @@ body {
 .dashboard {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: minmax(150px, 1fr) 50px 2fr 50px;
+	grid-template-rows: minmax(150px, 1fr) 50px 2fr;
 	grid-template-areas:
 		"browser playing-image"
-		"browser playing"
-		"browser playing-info"
-		"browser tag-entry";
+		"browser player"
+		"browser playing";
 	height: calc(100vh - #{$gap} * 2);
 	padding: $gap;
 	grid-gap: $gap;
@@ -49,8 +48,7 @@ body {
 	grid-template-areas:
 		"titlebar"
 		"browser-content"
-		"browser-input"
-
+		"browser-input";
 }
 
 .browser-content {
@@ -59,21 +57,47 @@ body {
 
 .browser-input {
 	grid-area: browser-input;
+
+	display: flex;
+	align-items: center;
+
+	padding: 10px;
+}
+
+.browser-input svg, .tag-entry svg {
+	margin-right: 5px;
+}
+
+.browser-input input, .tag-entry input {
+	width: 100%;
+	padding: 5px;
+}
+
+.playing {
+	grid-area: playing;
+
+	display: grid;
+	grid-template-rows: 1fr 50px;
+	grid-template-areas:
+		"playing-info"
+		"tag-entry";
 }
 
 .playing-info {
-	grid-area: playing-info;
 	padding: 10px;
 	overflow-y: scroll;
 }
 
 .tag-entry {
 	grid-area: tag-entry;
+
+	display: flex;
+	align-items: center;
 	padding: 10px;
 }
 
 .player {
-	grid-area: playing;
+	grid-area: player;
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
@@ -109,6 +133,7 @@ body {
 	align-items: center;
 	padding: 10px;
 	margin-top: 10px;
+	cursor: pointer;
 
 	& > img {
 		height: 100px;

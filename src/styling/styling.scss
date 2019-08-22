@@ -45,9 +45,14 @@ a {
   color: $highlight-2;
 }
 
-.playing-info, .tag-entry, .browser-item, .feed-entry, .player, .settings-modal, .signin {
+.browser-item, .feed-entry, .player, .settings-modal, .signin {
 	border-radius: $br;
 	background-color: $main;
+}
+
+.playing-info {
+  background-color: $main;
+  @include topRounded();
 }
 
 .signin-button {
@@ -134,14 +139,17 @@ a {
 	background-color: $main;
 }
 
-.browser-input {
+.browser-input, .tag-entry {
   @include bottomRounded();
   background-color: $main;
 }
 
+.browser-input input, .tag-entry input {
+  background-color: $border;
+  border-radius: $br;
+}
 
-
-.feed-entry, .browser-input {
+.feed-entry, .browser-input input, .tag-entry input {
 	font-size: 20px;
 	border: none;
 	margin-right: 0px;
@@ -229,4 +237,8 @@ body {
   &:hover p, & svg:hover {
     color: white;
   }
+}
+
+.center {
+  text-align: center;
 }
