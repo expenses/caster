@@ -1,0 +1,6 @@
+{
+  "name": "Caster",
+  "description": "A Blockstack podcast player",
+  "start_url": "./index.html",
+  "display": "standalone"
+}
