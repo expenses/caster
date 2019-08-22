@@ -4,7 +4,7 @@ import FeedSummary from './FeedSummary.js';
 import Episode from './Episode.js';
 import TextEntry from './TextEntry.js';
 
-import { Home, Settings, Search, RefreshCw } from 'react-feather';
+import { LogOut, Home, Settings, Search, RefreshCw } from 'react-feather';
 
 export default class Browser extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ export default class Browser extends Component {
   		<div className="browser">
         <div className="titlebar">
           <div className="titlebar-left">
+            <LogOut onClick={this.props.logout} />
             <Settings onClick={this.props.settings} />
             <Home onClick={this.toHome} style={this.style(!this.state.selected && !this.state.search)} />
             <Search onClick={() => this.setState({search: true})} style={this.style(this.state.search)} />

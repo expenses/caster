@@ -22,14 +22,12 @@
     "react-audio-player": "^0.11.1",
     "react-dom": "^16.8.6",
     "react-feather": "^2.0.3",
-    "react-hot-loader": "^4.12.11",
-    "react-modal": "^3.9.1",
-    "react-scripts": "^3.1.1"
+    "react-modal": "^3.9.1"
   },
   "scripts": {
+    "analyse": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -48,6 +46,9 @@
     ]
   },
   "devDependencies": {
-    "react-test-renderer": "^16.8.6"
+    "react-hot-loader": "^4.12.11",
+    "react-scripts": "^3.1.1",
+    "react-test-renderer": "^16.8.6",
+    "source-map-explorer": "^2.0.1"
   }
 }

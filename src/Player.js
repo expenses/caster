@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 
-import { Pause, Play } from 'react-feather';
+import { Rewind, FastForward, Pause, Play } from 'react-feather';
 
 export default class Player extends Component {
   constructor(props) {
@@ -14,15 +14,15 @@ export default class Player extends Component {
     };
 
     this.seek = this.seek.bind(this);
+    this.seekBackwards = this.seekBackwards.bind(this);
+    this.seekForwards = this.seekForwards.bind(this);
   }
 
   render() {
-    let playing = this.props.playing;
-
     let player = (
       <ReactAudioPlayer
         autoPlay
-        src={playing ? playing.episode.enclosure.url : null}
+        src={this.props.url}
         ref={ref => this.player = ref}
         onPlay={() => this.setState({playing: true})}
         onPause={() => this.setState({playing: false})}
@@ -31,12 +31,8 @@ export default class Player extends Component {
       />
     );
 
-    if (!this.player) {
-      return <div className="player">{player}</div>;
-    }
-
-    let audioEl = this.player.audioEl;
-    let src = audioEl.src;
+    let audioEl = this.player?.audioEl;
+    let src = this.player?.src;
 
     let button = this.state.playing ?
       <Pause onClick={() => audioEl.pause()} /> :
@@ -44,7 +40,9 @@ export default class Player extends Component {
 
     return (
       <div className="player">
+        <Rewind onClick={this.seekBackwards}/>
         {button}
+        <FastForward onClick={this.seekForwards}/>
         <p>{timestamp(this.state.time)}</p>
         <input
           className="player-bar"
@@ -66,12 +64,22 @@ export default class Player extends Component {
   }
 
   seek(time) {
-    this.player.audioEl.currentTime = time;
+    let audioEl = this.player.audioEl;
+
+    if (!audioEl.src) {
+      return;
+    }
+
+    audioEl.currentTime = time;
     this.setState({time});
   }
 
-  seekRelative(time) {
-    this.seek(this.player.audioEl.currentTime + time);
+  seekBackwards() {
+    this.seek(this.player.audioEl.currentTime - this.props.settings.seekAmount)
+  }
+
+  seekForwards() {
+    this.seek(this.player.audioEl.currentTime + this.props.settings.seekAmount)
   }
 
   toggle() {

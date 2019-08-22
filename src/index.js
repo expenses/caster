@@ -12,6 +12,11 @@ import './styling/styling.scss';
 import * as moment from 'moment';
 import 'moment/min/locales';
 
+//todo: settings
+//todo: mobile
+//todo: autotagging
+//todo: open episode save/load
+//todo: testing
 
 const appConfig = new AppConfig();
 const userSession = new UserSession({ appConfig: appConfig });
@@ -32,9 +37,9 @@ class App extends Component {
 
   render() {
     if (userSession.isUserSignedIn()) {
-      return <Dashboard userSession={userSession} handleSignOut={ this.handleSignOut } />;
+      return <Dashboard userSession={userSession} handleSignOut={this.handleSignOut} />;
     } else {
-      return <Signin userSession={userSession} handleSignIn={ this.handleSignIn } />;
+      return <Signin handleSignIn={this.handleSignIn} />;
     }
   }
 

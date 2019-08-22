@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Person,
-} from 'blockstack';
 
 import Browser from './Browser.js';
 import TextEntry from './TextEntry.js';
@@ -76,15 +73,17 @@ export default class Dashboard extends Component {
           addFeed={url => this.addFeed(url).then(this.saveFeeds)}
           returnFocus={this.dashboard}
           settings={() => this.setState({settingsOpen: true})}
+          logout={this.props.handleSignOut}
         />
         <PlayingImage playing={playing}/>
         <Player
           playing={playing}
           setTime={time => this.setState({time})}
           ref={ref => this.player = ref}
+          settings={this.state.settings}
         />
         <PlayingInfo
-          playing={playing}
+          url={playing ? playing.episode.enclosure.url : null}
           tags={this.getTags()}
           seek={(time) => this.player ? this.player.seek(time) : null}
           deleteTag={this.deleteTag}
@@ -111,11 +110,11 @@ export default class Dashboard extends Component {
     }
 
     if (e.key === settings.seekBackwards) {
-      this.player.seekRelative(-settings.seekAmount);
+      this.player.seekBackwards();
     }
 
     if (e.key === settings.seekForwards) {
-      this.player.seekRelative(+settings.seekAmount);
+      this.player.seekForwards();
     }
 
     if (e.key === settings.enterTag) {
@@ -158,7 +157,7 @@ export default class Dashboard extends Component {
     if (string) {
       let newTags = update(
         this.state.tags,
-        // have to splice because json doesnt serialize
+        // $unset uses the delete keyword on arrays which is bad :^(
         {[string]: {$splice: [[id, 1]]}}
       );
       this.setState({tags: newTags}, this.saveTags);
@@ -211,18 +210,8 @@ export default class Dashboard extends Component {
       });
   }
 
-  loadFeeds() {
-    loadData(this.props.userSession, FEEDS_FILENAME)
-      .then(feeds => this.setState({feeds}));
-  }
-
   saveFeeds() {
     saveData(this.props.userSession, FEEDS_FILENAME, this.state.feeds);
-  }
-
-  loadTags() {
-    loadData(this.props.userSession, TAGS_FILENAME)
-      .then(tags => this.setState({tags}));
   }
 
   saveTags() {
@@ -230,12 +219,10 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const { userSession } = this.props;
-    this.setState({
-      person: new Person(userSession.loadUserData().profile),
-    });
+    loadData(this.props.userSession, FEEDS_FILENAME)
+      .then(feeds => this.setState({feeds}));
 
-    this.loadFeeds();
-    this.loadTags();
+    loadData(this.props.userSession, TAGS_FILENAME)
+      .then(tags => this.setState({tags}));
   }
 }

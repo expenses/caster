@@ -45,9 +45,40 @@ a {
   color: $highlight-2;
 }
 
-.playing-info, .tag-entry, .browser-item, .feed-entry, .player, .settings-modal {
+.playing-info, .tag-entry, .browser-item, .feed-entry, .player, .settings-modal, .signin {
 	border-radius: $br;
 	background-color: $main;
+}
+
+.signin-button {
+  background-image: linear-gradient($highlight-1, $highlight-2);
+  border: 0px;
+  color: $main;
+  border-radius: $br;
+  transition: 0.25s all;
+
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
+
+  & * {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 10px;
+  }
+
+  &:hover {
+    color: white;
+  }
+}
+
+.signin {
+  color: white;
+  padding: 20px;
+
+  & > svg {
+    color: $highlight-1;
+  }
 }
 
 .settings-title {
@@ -121,6 +152,7 @@ a {
 
 	&:hover {
 		color: white;
+    cursor: pointer;
 	}
 }
 
@@ -135,6 +167,8 @@ a {
 .titlebar > svg, .titlebar-left > svg {
   color: $main;
   transition: 0.25s all;
+
+  cursor: pointer;
 
   &:hover {
     color: white;
