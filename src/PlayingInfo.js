@@ -8,9 +8,9 @@ export default class PlayingInfo extends Component {
 
     return (
     	<div className = "playing-info">
-	      <h1>{playing ? playing.episode.title : 'No Episode Selected'}</h1>
-	      {playing ? <h2>{playing.feed.title}</h2> : null}
-	      {playing ? <p dangerouslySetInnerHTML={{__html: playing.episode.description}}></p> : null}
+	      <h1>{playing?.episode.title || 'No Episode Selected'}</h1>
+	      <h2>{playing?.feed.meta.title}</h2>
+        <p dangerouslySetInnerHTML={{__html: playing?.episode.description}}></p>
 	      {playing ? <h2>Tags:</h2> : null}
         <div className="tags">
           {

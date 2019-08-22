@@ -19,48 +19,42 @@ export default class Player extends Component {
   }
 
   render() {
-    let player = (
-      <ReactAudioPlayer
-        autoPlay
-        src={this.props.url}
-        ref={ref => this.player = ref}
-        onPlay={() => this.setState({playing: true})}
-        onPause={() => this.setState({playing: false})}
-        listenInterval={100}
-        onListen={time => this.setState({time})}
-      />
-    );
-
     let audioEl = this.player?.audioEl;
-    let src = this.player?.src;
-
-    let button = this.state.playing ?
-      <Pause onClick={() => audioEl.pause()} /> :
-      <Play onClick={() => src ? audioEl.play() : null} />;
 
     return (
       <div className="player">
         <Rewind onClick={this.seekBackwards}/>
-        {button}
+        {this.state.playing ?
+          <Pause onClick={() => audioEl?.pause()} /> :
+          <Play onClick={() => audioEl?.play()} />
+        }
         <FastForward onClick={this.seekForwards}/>
         <p>{timestamp(this.state.time)}</p>
         <input
           className="player-bar"
           type="range"
           min="0"
-          value={audioEl.currentTime}
-          max={audioEl.duration || 0}
+          value={audioEl?.currentTime || 0}
+          max={audioEl?.duration || 0}
           step="any"
           onChange={(e) => this.seek(e.target.value)}
         />
-        <p>{src ? timestamp(audioEl.duration) : '--:--:--'}</p>
-        {player}
+        <p>{audioEl?.duration ? timestamp(audioEl.duration) : '--:--:--'}</p>
+        <ReactAudioPlayer
+          autoPlay
+          src={this.props.url}
+          ref={ref => this.player = ref}
+          onPlay={() => this.setState({playing: true})}
+          onPause={() => this.setState({playing: false})}
+          listenInterval={100}
+          onListen={time => this.setState({time})}
+        />
       </div>
     );
   }
 
   time() {
-    return this.player ? this.player.audioEl.currentTime : 0;
+    return this.player?.audioEl.currentTime || 0;
   }
 
   seek(time) {

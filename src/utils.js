@@ -4,12 +4,8 @@ import * as podcastFeedParser from 'podcast-feed-parser';
 // removed category and added guid
 const options = {
 	fields: {
-    meta: ['title', 'description', 'subtitle', 'imageURL', 'lastUpdated', 'link',
-            'language', 'editor', 'author', 'summary', 'owner',
-            'explicit', 'complete', 'blocked'],
-    episodes: ['title', 'description', 'subtitle', 'imageURL', 'pubDate',
-            'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
-            'explicit', 'order', 'guid']
+    meta: ['title', 'description', 'imageURL'],
+    episodes: ['title', 'description', 'imageURL', 'pubDate', 'enclosure', 'duration', 'guid']
   }
 }
 

@@ -7,7 +7,7 @@ export default class Episode extends Component {
 
     return (
       <div className="browser-item" onClick={this.props.play}>
-        <img src={episode.imageURL ? episode.imageURL : this.props.backupImage} alt=""/>
+        <img src={episode.imageURL || this.props.backupImage} alt=""/>
         <div className="episode-description">
           <h2>{episode.title}</h2>
           <p>{moment(episode.pubDate).format("L LT")}</p>

@@ -77,15 +77,15 @@ export default class Dashboard extends Component {
         />
         <PlayingImage playing={playing}/>
         <Player
-          playing={playing}
+          url={playing?.episode.enclosure.url}
           setTime={time => this.setState({time})}
           ref={ref => this.player = ref}
           settings={this.state.settings}
         />
         <PlayingInfo
-          url={playing ? playing.episode.enclosure.url : null}
+          playing={playing}
           tags={this.getTags()}
-          seek={(time) => this.player ? this.player.seek(time) : null}
+          seek={(time) => this.player?.seek(time)}
           deleteTag={this.deleteTag}
         />
         <TextEntry

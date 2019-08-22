@@ -4,6 +4,7 @@ import FeedSummary from './FeedSummary.js';
 import Episode from './Episode.js';
 import TextEntry from './TextEntry.js';
 
+import fuzzysort from 'fuzzysort';
 import { LogOut, Home, Settings, Search, RefreshCw } from 'react-feather';
 
 export default class Browser extends Component {
@@ -43,10 +44,23 @@ export default class Browser extends Component {
     let selected = this.state.selected;
 
     if (this.state.search) {
-      return Object.keys(feeds)
-        .flatMap(url => feeds[url].data.episodes.map(episode => {return {episode, url}}))
-        .filter(tuple => this.filterEpisode(tuple.episode))
-        .map(tuple => this.episode(tuple.episode, tuple.url))
+      let objects = Object.keys(feeds)
+        .flatMap(url => feeds[url].data.episodes.map(episode => {
+          return {
+            episode, url,
+            episode_title: episode.title,
+            episode_description: episode.description
+          }
+        }));
+
+      let options = {
+        limit: 50,
+        keys: ['episode_title', 'episode_description'],
+        threshold: -500
+      };
+
+      return fuzzysort.go(this.state.searchTerm, objects, options)
+        .map(result => this.episode(result.obj.episode, result.obj.url));
     }
 
   	if (selected) {
@@ -64,12 +78,6 @@ export default class Browser extends Component {
 				/>;
 			});
   	}
-  }
-
-  filterEpisode(episode) {
-    let term = this.state.searchTerm.toLowerCase();
-
-    return episode.title.toLowerCase().includes(term) || episode.description.toLowerCase().includes(term);
   }
 
   episode(episode, url) {
