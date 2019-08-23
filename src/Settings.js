@@ -13,6 +13,7 @@ export default class Settings extends Component {
         className="settings-modal"
         overlayClassName="settings-modal-overlay"
         isOpen={this.props.open}
+        appElement={document.getElementById('root')}
       >
         <div className="settings-title">
           <ChevronLeft onClick={this.props.close}/>

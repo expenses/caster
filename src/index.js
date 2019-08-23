@@ -18,6 +18,9 @@ import 'moment/min/locales';
 //todo: testing
 
 const appConfig = new AppConfig();
+if (process.env.NODE_ENV !== 'development') {
+  appConfig.manifestPath = "/caster/manifest.json";
+}
 const userSession = new UserSession({ appConfig: appConfig });
 // set locale
 moment.locale(window.navigator.userLanguage || window.navigator.language);

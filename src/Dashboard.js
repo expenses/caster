@@ -73,6 +73,7 @@ export default class Dashboard extends Component {
           returnFocus={this.dashboard}
           settings={() => this.setState({settingsOpen: true})}
           logout={this.props.handleSignOut}
+          settingsOpen={this.state.settingsOpen}
         />
         <PlayingImage playing={playing}/>
         <Player

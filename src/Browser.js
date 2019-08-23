@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 import FeedSummary from './FeedSummary.js';
 import Episode from './Episode.js';
-import TextEntry from './TextEntry.js';
+import BrowserInput from './BrowserInput.js';
 
 import fuzzysort from 'fuzzysort';
-import { LogOut, Home, Settings, Search, RefreshCw, Plus } from 'react-feather';
+import {LogOut, Home, Settings, Search, RefreshCw} from 'react-feather';
 
 export default class Browser extends Component {
   constructor(props) {
@@ -26,20 +26,39 @@ export default class Browser extends Component {
         <div className="titlebar">
           <div className="titlebar-left">
             <LogOut onClick={this.props.logout} />
-            <Settings onClick={this.props.settings} />
-            <Home onClick={this.toHome} style={this.style(!this.state.selected && !this.state.search)} />
-            <Search onClick={() => this.setState({search: true})} style={this.style(this.state.search)} />
-            <h1>{this.state.selected ? this.props.feeds[this.state.selected].data.meta.title : 'Podcasts'}</h1>
+            <Settings onClick={this.props.settings} style={this.style(this.props.settingsOpen)} />
+            <Home
+              onClick={this.toHome}
+              style={this.style(!this.state.selected && !this.state.search && !this.props.settingsOpen)}
+            />
+            <Search
+              onClick={() => this.setState({search: true})}
+              style={this.style(this.state.search && !this.props.settingsOpen)}
+            />
+            <h1>{this.title()}</h1>
           </div>
           <RefreshCw onClick={this.props.refresh} />
         </div>
   			<div className="browser-content">{this.inner()}</div>
-        <div className = "browser-input">
-          {this.state.search ? <Search/> : <Plus/>}
-          {this.input()}
-        </div>
+        <BrowserInput
+          searchTerm={this.state.searchTerm}
+          onChange={searchTerm => this.setState({searchTerm})}
+          search={this.state.search}
+          addFeed={this.props.addFeed}
+          returnFocus={this.props.returnFocus}
+        />
   		</div>
   	);
+  }
+
+  title() {
+    if (this.state.search) {
+      return 'Search episodes';
+    } else if (this.state.selected) {
+      return this.props.feeds[this.state.selected].data.meta.title;
+    } else {
+      return 'Podcasts';
+    }
   }
 
   inner() {
@@ -88,32 +107,10 @@ export default class Browser extends Component {
   episode(episode, url) {
     return <Episode
       episode={episode}
-      key={episode.title}
+      key={episode.guid}
       backupImage={this.props.feeds[url].data.meta.imageURL}
       play={() => this.props.play(episode, url)}
     />;
-  }
-
-  input() {
-    if (this.state.search) {
-      return <input
-        placeholder="Search"
-        onChange={(e) => this.setState({searchTerm: e.target.value})}
-        onKeyDown={e => e.stopPropagation()}
-        value={this.state.searchTerm}
-      />;
-    } else {
-      return <TextEntry
-        placeholder="Add feed url"
-        callback={this.props.addFeed}
-        returnFocus={this.props.returnFocus}
-      />;
-    }
-  }
-
-  setSearch(e) {
-    e.stopPropagation();
-    this.setState({searchTerm: e.target.value});
   }
 
   style(predicate) {
