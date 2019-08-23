@@ -138,7 +138,7 @@ a {
 	background-color: $main;
 }
 
-.tag-entry, .browser-input, .tag-entry input {
+.tag-entry, .browser-input {
   @include bottomRounded();
   background-color: $main;
 }
@@ -148,7 +148,7 @@ a {
   border-radius: $br;
 }
 
-.feed-entry, .browser-input input, .tag-entry input {
+.browser-input input, .tag-entry input {
 	font-size: 20px;
 	border: none;
 	margin-right: 0px;
@@ -242,10 +242,13 @@ body {
   text-align: center;
 }
 
-@media only screen and (max-width: 65.625em) {
+@media only screen and (max-width: 46.875em) {
+  .titlebar, .playing-info, .browser, .feed-entry {
+    font-size: 0.75em;
+  }
+
   .titlebar {
     border-radius: 0px;
-    font-size: 0.75em;
   }
 
   .browser-content {

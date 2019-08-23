@@ -12,6 +12,7 @@ import './styling/styling.scss';
 import * as moment from 'moment';
 import 'moment/min/locales';
 
+// todo: mobile first restyling
 //todo: settings
 //todo: autotagging
 //todo: open episode save/load
