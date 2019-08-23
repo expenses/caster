@@ -18,9 +18,14 @@ import 'moment/min/locales';
 //todo: testing
 
 const appConfig = new AppConfig();
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV === 'production') {
   appConfig.manifestPath = "/caster/manifest.json";
+  appConfig.redirectPath = "/caster";
 }
+
+console.log(`Manifest path: ${appConfig.manifestURI()}`);
+console.log(`Redirect path: ${appConfig.redirectURI()}`);
+
 const userSession = new UserSession({ appConfig: appConfig });
 // set locale
 moment.locale(window.navigator.userLanguage || window.navigator.language);
