@@ -79,7 +79,6 @@ a {
 
 .signin {
   color: white;
-  padding: 20px;
 
   & > svg {
     color: $highlight-1;
@@ -139,7 +138,7 @@ a {
 	background-color: $main;
 }
 
-.browser-input, .tag-entry {
+.tag-entry, .browser-input, .tag-entry input {
   @include bottomRounded();
   background-color: $main;
 }
@@ -241,4 +240,15 @@ body {
 
 .center {
   text-align: center;
+}
+
+@media only screen and (max-width: 65.625em) {
+  .titlebar {
+    border-radius: 0px;
+    font-size: 0.75em;
+  }
+
+  .browser-content {
+    @include topRounded();
+  }
 }

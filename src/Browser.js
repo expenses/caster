@@ -21,24 +21,24 @@ export default class Browser extends Component {
   }
 
   render() {
-  	return (
-  		<div className="browser">
-        <div className="titlebar">
-          <div className="titlebar-left">
-            <LogOut onClick={this.props.logout} />
-            <Settings onClick={this.props.settings} style={this.style(this.props.settingsOpen)} />
-            <Home
-              onClick={this.toHome}
-              style={this.style(!this.state.selected && !this.state.search && !this.props.settingsOpen)}
-            />
-            <Search
-              onClick={() => this.setState({search: true})}
-              style={this.style(this.state.search && !this.props.settingsOpen)}
-            />
-            <h1>{this.title()}</h1>
-          </div>
-          <RefreshCw onClick={this.props.refresh} />
+  	return (<>
+      <div className="titlebar">
+        <div className="titlebar-left">
+          <LogOut onClick={this.props.logout} />
+          <Settings onClick={this.props.settings} style={this.style(this.props.settingsOpen)} />
+          <Home
+            onClick={this.toHome}
+            style={this.style(!this.state.selected && !this.state.search && !this.props.settingsOpen)}
+          />
+          <Search
+            onClick={() => this.setState({search: true})}
+            style={this.style(this.state.search && !this.props.settingsOpen)}
+          />
+          <h1>{this.title()}</h1>
         </div>
+        <RefreshCw onClick={this.props.refresh} />
+      </div>
+  		<div className="browser">
   			<div className="browser-content">{this.inner()}</div>
         <BrowserInput
           searchTerm={this.state.searchTerm}
@@ -48,7 +48,7 @@ export default class Browser extends Component {
           returnFocus={this.props.returnFocus}
         />
   		</div>
-  	);
+  	</>);
   }
 
   title() {

@@ -5,6 +5,7 @@ import PlayingInfo from './PlayingInfo.js';
 import Player from './Player.js';
 import PlayingImage from './PlayingImage.js';
 import Settings from './Settings.js';
+import TagEntry from './TagEntry.js';
 
 import {requestPodcast, saveData, loadData} from './utils.js';
 import update from 'immutability-helper';
@@ -86,7 +87,14 @@ export default class Dashboard extends Component {
           playing={playing}
           tags={this.getTags()}
           seek={(time) => this.player?.seek(time)}
+          addTag={this.addTag}
           deleteTag={this.deleteTag}
+          dashboard={this.dashboard}
+        />
+        <TagEntry
+          callback={this.addTag}
+          ref={ref => this.tagentry = ref}
+          returnFocus={this.dashboard}
         />
       </div>
     );
