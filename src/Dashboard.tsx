@@ -39,9 +39,9 @@ interface Props {
 
 interface State {
   feeds: Record<string, {data: Feed, time: Date}>;
-  tags: Record<string, any>;
+  tags: Record<string, {text: string, time: Date}>;
   settings: Record<string, any>;
-  playing: any;
+  playing: {episode: Episode, feed: Feed, feedUrl: string} | null;
   settingsOpen: boolean;
   message: string;
   sidenavOpen: boolean;

@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 
 import {Headphones, LogIn} from 'react-feather';
 
-export default class Signin extends Component {
-
+export default class Signin extends Component<{signIn: (e: Event) => void}> {
   render() {
-    const { handleSignIn } = this.props;
-
     return (
       <div className="signin-outer">
         <div className="signin">
@@ -14,7 +11,7 @@ export default class Signin extends Component {
           <h1>Log in with Blockstack:</h1>
           <button
             className="signin-button"
-            onClick={ handleSignIn.bind(this) }
+            onClick={this.props.signIn}
           >
             <LogIn/><p>Sign up/Log in</p>
           </button>

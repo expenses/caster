@@ -64,7 +64,7 @@ class App extends Component {
     if (userSession.isUserSignedIn()) {
       return <Dashboard userSession={userSession} handleSignOut={this.handleSignOut} />;
     } else {
-      return <Signin handleSignIn={this.handleSignIn} />;
+      return <Signin signIn={this.handleSignIn} />;
     }
   }
 
