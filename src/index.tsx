@@ -1,18 +1,35 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import Dashboard from './Dashboard.js';
+import Dashboard from './Dashboard';
 import Signin from './Signin.js';
 import {
   UserSession,
   AppConfig
 } from 'blockstack';
 
-import './styling/layout.scss';
-import './styling/styling.scss';
+import './react-audio-player.d.ts';
+import './podcast-feed-parser.d.ts';
+
+//import './styling/layout.scss';
+//import './styling/styling.scss';
+import './styling/mobile.scss';
+
+
 import * as moment from 'moment';
 import 'moment/min/locales';
 
 // todo: mobile first restyling
+// - Hamburger menu
+// -- <home> main
+// -- <Pod A>
+// -- <Pod B>
+// -- Search
+// -- Settings
+// -- Add Podcast
+// - Top menu
+// -- Refresh
+// - Bottom Menu
+// -- Currently Planing
 //todo: settings
 //todo: autotagging
 //todo: open episode save/load
@@ -29,16 +46,16 @@ console.log(`Redirect path: ${appConfig.redirectURI()}`);
 
 const userSession = new UserSession({ appConfig: appConfig });
 // set locale
-moment.locale(window.navigator.userLanguage || window.navigator.language);
+moment.locale(window.navigator.language);
 
 
 class App extends Component {
-  handleSignIn(e) {
+  handleSignIn(e: Event) {
     e.preventDefault();
     userSession.redirectToSignIn();
   }
 
-  handleSignOut(e) {
+  handleSignOut(e: Event) {
     e.preventDefault();
     userSession.signUserOut(window.location.origin);
   }

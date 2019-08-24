@@ -11,7 +11,7 @@ export default class TagEntry extends Component {
           <Plus/>
           <TextEntry
             placeholder="Enter Tag"
-            callback={this.props.addTag}
+            callback={this.props.callback}
             ref={ref => this.input = ref}
             returnFocus={this.props.dashboard}
           />

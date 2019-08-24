@@ -1,0 +1,58 @@
+body {
+	margin: 0px;
+  font-family: sans-serif;
+}
+
+.dashboard {
+  display: grid;
+
+  grid-template-rows: 50px 1fr 50px;
+  grid-template-areas:
+    "titlebar"
+    "main"
+    "player";
+
+  height: 100vh;
+}
+
+.bm-burger-button {
+  position: relative;
+
+	& button {
+		height: 24px;
+	}
+}
+
+.bm-overlay, .bm-menu-wrap {
+	left: 0px;
+	top: 0px;
+}
+
+.bm-menu-wrap {
+	background-color: white;
+}
+
+.titlebar {
+  background-color: red;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 20px;
+
+  & > * {
+    padding-right: 10px;
+  }
+}
+
+.main {
+  background-color: green;
+}
+
+.player {
+   background-color: blue;
+}
+
+.sidenav-item {
+	display: flex;
+	align-items: center;
+}

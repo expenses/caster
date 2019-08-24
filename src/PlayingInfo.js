@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import {XCircle} from 'react-feather';
 
+import oc from 'ts-optchain';
+
 export default class PlayingInfo extends Component {
   render() {
-  	let playing = this.props.playing;
+  	let playing = oc(this.props.playing);
   	let tags = this.props.tags;
 
     return (
       <div className="playing-info">
-	      <h1>{playing?.episode.title || 'No Episode Selected'}</h1>
-	      <h2>{playing?.feed.meta.title}</h2>
-        <p dangerouslySetInnerHTML={{__html: playing?.episode.description}}></p>
+	      <h1>{playing.episode.title || 'No Episode Selected'}</h1>
+	      <h2>{playing.feed.meta.title}</h2>
+        <p dangerouslySetInnerHTML={{__html: playing.episode.description}}></p>
 	      {playing ? <h2>Tags:</h2> : null}
         <div className="tags">
           {

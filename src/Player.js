@@ -1,7 +1,13 @@
-import React, { Component } from 'react';
+/*import React, { Component } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 
 import { Rewind, FastForward, Pause, Play } from 'react-feather';
+import oc from 'ts-optchain';
+
+interface Properties {
+  url: string;
+  settings: Settings;
+}
 
 export default class Player extends Component {
   constructor(props) {
@@ -19,14 +25,14 @@ export default class Player extends Component {
   }
 
   render() {
-    let audioEl = this.player?.audioEl;
+    let audioEl = oc(this.player).audioEl;
 
     return (
       <div className="player">
         <Rewind onClick={this.seekBackwards}/>
         {this.state.playing ?
-          <Pause onClick={() => audioEl?.pause()} /> :
-          <Play onClick={() => audioEl?.play()} />
+          <Pause onClick={() => oc(audioEl).pause()} /> :
+          <Play onClick={() => oc(audioEl).play()} />
         }
         <FastForward onClick={this.seekForwards}/>
         <p>{timestamp(this.state.time)}</p>
@@ -34,12 +40,12 @@ export default class Player extends Component {
           className="player-bar"
           type="range"
           min="0"
-          value={audioEl?.currentTime || 0}
-          max={audioEl?.duration || 0}
+          value={oc(audioEl).currentTime || 0}
+          max={oc(audioEl).duration || 0}
           step="any"
           onChange={(e) => this.seek(e.target.value)}
         />
-        <p>{audioEl?.duration ? timestamp(audioEl.duration) : '--:--:--'}</p>
+        <p>{oc(audioEl).duration ? timestamp(audioEl.duration) : '--:--:--'}</p>
         <ReactAudioPlayer
           autoPlay
           src={this.props.url}
@@ -54,7 +60,7 @@ export default class Player extends Component {
   }
 
   time() {
-    return this.player?.audioEl.currentTime || 0;
+    return oc(this.player).audioEl.currentTime || 0;
   }
 
   seek(time) {
@@ -102,3 +108,4 @@ function timestamp(secs) {
 
   return `${hours}:${minutes}:${seconds}`;
 }
+*/

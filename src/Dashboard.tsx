@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
+import {UserSession} from 'blockstack';
+import update from 'immutability-helper';
+import {requestPodcast, saveData, loadData} from './utils';
+import SideNav from './SideNav';
+import {Feed} from 'podcast-feed-parser';
 
-import Browser from './Browser.js';
+
+const FEEDS_FILENAME = 'feeds.json';
+const TAGS_FILENAME = 'tags.json';
+
+
+/*import Browser from './Browser.js';
 import PlayingInfo from './PlayingInfo.js';
-import Player from './Player.js';
+import Player from './Player.tsx';
 import PlayingImage from './PlayingImage.js';
 import Settings from './Settings.js';
 import TagEntry from './TagEntry.js';
@@ -10,11 +20,37 @@ import TagEntry from './TagEntry.js';
 import {requestPodcast, saveData, loadData} from './utils.js';
 import update from 'immutability-helper';
 
+
 const FEEDS_FILENAME = 'feeds.json';
 const TAGS_FILENAME = 'tags.json';
 
-export default class Dashboard extends Component {
-  constructor(props) {
+interface Settings {
+  corsProxy: string;
+  toggle: string;
+  seekBackwards: string;
+  enterTag: string;
+  seekAmount: number;
+}*/
+
+interface Props {
+  userSession: UserSession;
+  handleSignOut: (e: Event) => (void);
+}
+
+interface State {
+  feeds: Record<string, {data: Feed, time: Date}>;
+  tags: Record<string, any>;
+  settings: Record<string, any>;
+  playing: any;
+  settingsOpen: boolean;
+  message: string;
+  sidenavOpen: boolean;
+}
+
+export default class Dashboard extends Component<Props, State> {
+  player: any = null;
+
+  constructor(props: any) {
   	super(props);
 
   	this.state = {
@@ -34,10 +70,12 @@ export default class Dashboard extends Component {
 
       playing: null,
       settingsOpen: false,
-      message: ''
+      message: '',
+
+      sidenavOpen: false
   	};
 
-    this.addFeed = this.addFeed.bind(this);
+    /*this.addFeed = this.addFeed.bind(this);
     this.clearFeeds = this.clearFeeds.bind(this);
     this.playAudio = this.playAudio.bind(this);
     this.deleteUrl = this.deleteUrl.bind(this);
@@ -46,11 +84,23 @@ export default class Dashboard extends Component {
     this.deleteTag = this.deleteTag.bind(this);
     this.handleKey = this.handleKey.bind(this);
 
-    this.saveFeeds = this.saveFeeds.bind(this);
+    this.saveFeeds = this.saveFeeds.bind(this);*/
   }
 
   render() {
-    const feeds = this.state.feeds;
+    return (
+      <div className="dashboard">
+        <div className="titlebar">
+          <SideNav open={this.state.sidenavOpen}/>
+          <p>Podcasts</p>
+        </div>
+        <div className="main">
+        </div>
+        <div className="player"></div>
+      </div>
+    );
+
+    /*const feeds = this.state.feeds;
     const playing = this.state.playing;
 
     return (
@@ -97,10 +147,10 @@ export default class Dashboard extends Component {
           returnFocus={this.dashboard}
         />
       </div>
-    );
+    );*/
   }
 
-  handleKey(e) {
+  /*handleKey(e: KeyboardEvent) {
     // No side effects such inserting a 't' into tagentry
     e.preventDefault();
 
@@ -121,7 +171,7 @@ export default class Dashboard extends Component {
     if (e.key === settings.enterTag) {
       this.tagentry.input.focus();
     }
-  }
+  }*/
 
   async refresh() {
     await Promise.all(Object.keys(this.state.feeds).map(this.addFeed));
@@ -152,7 +202,7 @@ export default class Dashboard extends Component {
     }
   }
 
-  deleteTag(id) {
+  deleteTag(id: number) {
     let string = this.playingString();
 
     if (string) {
@@ -165,24 +215,24 @@ export default class Dashboard extends Component {
     }
   }
 
-  addTag(tag) {
+  addTag(tag: string) {
     let string = this.playingString();
 
     if (!string) {
       return;
     }
 
-    let tags = update(
+    let tags: Object = update(
       this.state.tags,
       {
-        [string]: tags => update(tags || [], { $push: [{'text': tag, 'time': this.player.time()}] })
+        [string]: (tags: any[]) => update(tags || [], { $push: [{'text': tag, 'time': this.player.time()}] })
       }
     );
 
     this.setState({tags}, this.saveTags);
   }
 
-  deleteUrl(url) {
+  deleteUrl(url: string) {
     let feeds = update(
       this.state.feeds,
       {$unset: [url]}
@@ -192,7 +242,7 @@ export default class Dashboard extends Component {
 
   }
 
-  playAudio(episode, feedUrl) {
+  playAudio(episode: any, feedUrl: string) {
     this.setState({playing: {'episode': episode, 'feed': this.state.feeds[feedUrl].data, 'feedUrl': feedUrl}});
   }
 
@@ -200,7 +250,7 @@ export default class Dashboard extends Component {
     this.setState({feeds: {}}, this.saveFeeds);
   }
 
-  async addFeed(url) {
+  async addFeed(url: string) {
     return requestPodcast(this.state.settings.corsProxy, url)
       .then(data => {
         let feeds = update(
