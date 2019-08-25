@@ -92,7 +92,7 @@ export default class Dashboard extends Component {
           dashboard={this.dashboard}
         />
         <TagEntry
-          callback={this.addTag}
+          addTag={this.addTag}
           ref={ref => this.tagentry = ref}
           returnFocus={this.dashboard}
         />

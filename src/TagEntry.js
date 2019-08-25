@@ -13,7 +13,7 @@ export default class TagEntry extends Component {
             placeholder="Enter Tag"
             callback={this.props.addTag}
             ref={ref => this.input = ref}
-            returnFocus={this.props.dashboard}
+            returnFocus={this.props.returnFocus}
           />
         </div>
       </div>
