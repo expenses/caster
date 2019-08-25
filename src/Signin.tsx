@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import {Headphones, LogIn} from 'react-feather';
 
-export default class Signin extends Component<{signIn: (e: Event) => void}> {
+export default class Signin extends Component<{signIn: any}> {
   render() {
     return (
       <div className="signin-outer">

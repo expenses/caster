@@ -1,36 +1,20 @@
 import React, { Component } from 'react';
 import {UserSession} from 'blockstack';
 import update from 'immutability-helper';
-import {requestPodcast, saveData, loadData} from './utils';
+import {requestPodcast, saveData, loadData, episodeImage} from './utils';
 import SideNav from './SideNav';
-import {Feed} from 'podcast-feed-parser';
+import Item from './Item';
+import {Feeds, Tag, Tags, View, Episode, EpisodeReference} from './types';
+import moment from 'moment';
+import {RefreshCw} from 'react-feather';
 
-
-const FEEDS_FILENAME = 'feeds.json';
-const TAGS_FILENAME = 'tags.json';
-
-
-/*import Browser from './Browser.js';
-import PlayingInfo from './PlayingInfo.js';
-import Player from './Player.tsx';
-import PlayingImage from './PlayingImage.js';
-import Settings from './Settings.js';
-import TagEntry from './TagEntry.js';
-
-import {requestPodcast, saveData, loadData} from './utils.js';
-import update from 'immutability-helper';
-
+import EpisodeItem from './EpisodeItem';
+import TextEntry from './TextEntry';
+import Search from './views/Search';
+import Main from './views/Main';
 
 const FEEDS_FILENAME = 'feeds.json';
 const TAGS_FILENAME = 'tags.json';
-
-interface Settings {
-  corsProxy: string;
-  toggle: string;
-  seekBackwards: string;
-  enterTag: string;
-  seekAmount: number;
-}*/
 
 interface Props {
   userSession: UserSession;
@@ -38,12 +22,14 @@ interface Props {
 }
 
 interface State {
-  feeds: Record<string, {data: Feed, time: Date}>;
-  tags: Record<string, {text: string, time: Date}>;
+  feeds: Feeds;
+  tags: Tags;
+  view: View;
+  playing: EpisodeReference | null;
+  viewing: string | EpisodeReference | undefined;
+
+
   settings: Record<string, any>;
-  playing: {episode: Episode, feed: Feed, feedUrl: string} | null;
-  settingsOpen: boolean;
-  message: string;
   sidenavOpen: boolean;
 }
 
@@ -59,119 +45,111 @@ export default class Dashboard extends Component<Props, State> {
       tags: {},
       settings: {
         corsProxy: 'https://caster-cors-proxy.herokuapp.com',
-        toggle: 'p',
-        seekBackwards: ',',
-        seekForwards: '.',
-        enterTag: 't',
-        seekAmount: 5
       },
-
-      // Other state
-
+      view: View.Main,
       playing: null,
-      settingsOpen: false,
-      message: '',
-
+      viewing: undefined,
       sidenavOpen: false
   	};
 
-    /*this.addFeed = this.addFeed.bind(this);
-    this.clearFeeds = this.clearFeeds.bind(this);
-    this.playAudio = this.playAudio.bind(this);
-    this.deleteUrl = this.deleteUrl.bind(this);
-    this.addTag = this.addTag.bind(this);
-    this.refresh= this.refresh.bind(this);
-    this.deleteTag = this.deleteTag.bind(this);
-    this.handleKey = this.handleKey.bind(this);
-
-    this.saveFeeds = this.saveFeeds.bind(this);*/
+    this.refresh = this.refresh.bind(this);
+    this.addFeed = this.addFeed.bind(this);
+    this.openEpisode = this.openEpisode.bind(this);
   }
 
   render() {
     return (
       <div className="dashboard">
         <div className="titlebar">
-          <SideNav open={this.state.sidenavOpen}/>
-          <p>Podcasts</p>
+          <SideNav
+            open={this.state.sidenavOpen}
+            feeds={this.state.feeds}
+            openHome={() => this.setState({view: View.Main, sidenavOpen: false})}
+            openFeed={viewing => this.setState({view: View.Viewing, viewing, sidenavOpen: false})}
+            openSettings={() => this.setState({view: View.Settings, sidenavOpen: false})}
+            openSearch={() => this.setState({view: View.Search, sidenavOpen: false})}
+            changeState={open => this.setState({sidenavOpen: open})}
+          />
+          <p>{this.title()}</p>
+          <RefreshCw onClick={this.refresh} />
         </div>
-        <div className="main">
-        </div>
+        <div className={this.className()}>{this.inner()}</div>
         <div className="player"></div>
       </div>
     );
-
-    /*const feeds = this.state.feeds;
-    const playing = this.state.playing;
-
-    return (
-      <div
-        className="dashboard"
-        ref={ref => this.dashboard = ref}
-        onKeyDown={this.handleKey}
-        tabIndex="0"
-      >
-        <Settings
-          open={this.state.settingsOpen}
-          settings={this.state.settings}
-          close={() => this.setState({settingsOpen: false})}
-        />
-        <Browser
-          feeds={feeds}
-          deleteUrl={this.deleteUrl}
-          play={this.playAudio}
-          refresh={this.refresh}
-          addFeed={url => this.addFeed(url).then(this.saveFeeds)}
-          returnFocus={this.dashboard}
-          settings={() => this.setState({settingsOpen: true})}
-          logout={this.props.handleSignOut}
-          settingsOpen={this.state.settingsOpen}
-        />
-        <PlayingImage playing={playing}/>
-        <Player
-          url={playing?.episode.enclosure.url}
-          setTime={time => this.setState({time})}
-          ref={ref => this.player = ref}
-          settings={this.state.settings}
-        />
-        <PlayingInfo
-          playing={playing}
-          tags={this.getTags()}
-          seek={(time) => this.player?.seek(time)}
-          addTag={this.addTag}
-          deleteTag={this.deleteTag}
-          dashboard={this.dashboard}
-        />
-        <TagEntry
-          callback={this.addTag}
-          ref={ref => this.tagentry = ref}
-          returnFocus={this.dashboard}
-        />
-      </div>
-    );*/
   }
 
-  /*handleKey(e: KeyboardEvent) {
-    // No side effects such inserting a 't' into tagentry
-    e.preventDefault();
-
-    let settings = this.state.settings;
-
-    if (e.key === settings.toggle) {
-      this.player.toggle();
+  className(): string {
+    if (this.state.view === View.Search) {
+      return 'search';
+    } else {
+      return 'main';
     }
+  }
 
-    if (e.key === settings.seekBackwards) {
-      this.player.seekBackwards();
-    }
+  title(): string {
+    let {view, viewing, feeds} = this.state;
 
-    if (e.key === settings.seekForwards) {
-      this.player.seekForwards();
+    if (view === View.Main) {
+      return 'Podcasts';
+    } else if (view === View.Settings) {
+      return 'Settings';
+    } else if (view === View.Search) {
+      return 'Search';
+    } else if (view === View.Viewing) {
+      if (typeof viewing === 'string') {
+        return feeds[viewing].data.meta.title;
+      } else if (typeof viewing !== 'undefined') {
+        return viewing.episode.title;
+      } else {
+        console.error('View set to viewing but this.state.viewing is undefined');
+        return '';
+      }
+    } else {
+      console.log(`View ${view} not handled in title()`);
+      return '';
     }
+  }
 
-    if (e.key === settings.enterTag) {
-      this.tagentry.input.focus();
+  inner(): any {
+    let {feeds, view} = this.state;
+
+    if (view === View.Main) {
+      return <Main
+        feeds={feeds}
+        openFeed={viewing => this.setState({viewing, view: View.Viewing})}
+        addFeed={this.addFeed}
+      />;
+    } else if (view === View.Settings) {
+      return <p>Settingssettingssettings</p>;
+    } else if (view === View.Viewing) {
+      if (typeof this.state.viewing === 'string') {
+        let feedUrl: string = this.state.viewing;
+        let feed = feeds[feedUrl].data;
+
+        return feed.episodes.map(episode => <EpisodeItem
+          key={episode.guid}
+          episode={{episode, feedUrl}}
+          feeds={feeds}
+          openEpisode={this.openEpisode}
+        />);
+      } else if (typeof this.state.viewing !== 'undefined') {
+        let episode = this.state.viewing.episode;
+
+        return <div className="episode-view">
+          <h1>{episode.title}</h1>
+          <img src={episodeImage(this.state.viewing, feeds)} alt=""/>
+          <p dangerouslySetInnerHTML={{__html: episode.description}}></p>
+        </div>;
+      } else {
+        console.error('View set to viewing but this.state.viewing is undefined');
+      }
+    } else if (view === View.Search) {
+      return <Search feeds={this.state.feeds} openEpisode={this.openEpisode} />;
+    } else {
+      console.log(`View ${view} not handled in inner()`);
     }
-  }*/
+  }
 
   async refresh() {
     await Promise.all(Object.keys(this.state.feeds).map(this.addFeed));
@@ -206,12 +184,12 @@ export default class Dashboard extends Component<Props, State> {
     let string = this.playingString();
 
     if (string) {
-      let newTags = update(
+      let tags = update(
         this.state.tags,
         // $unset uses the delete keyword on arrays which is bad :^(
         {[string]: {$splice: [[id, 1]]}}
       );
-      this.setState({tags: newTags}, this.saveTags);
+      this.setState({tags}, this.saveTags);
     }
   }
 
@@ -222,10 +200,10 @@ export default class Dashboard extends Component<Props, State> {
       return;
     }
 
-    let tags: Object = update(
+    let tags = update(
       this.state.tags,
       {
-        [string]: (tags: any[]) => update(tags || [], { $push: [{'text': tag, 'time': this.player.time()}] })
+        [string]: (tags: Tag[]) => update(tags || [], { $push: [{'text': tag, 'time': this.player.time()}] })
       }
     );
 
@@ -242,8 +220,8 @@ export default class Dashboard extends Component<Props, State> {
 
   }
 
-  playAudio(episode: any, feedUrl: string) {
-    this.setState({playing: {'episode': episode, 'feed': this.state.feeds[feedUrl].data, 'feedUrl': feedUrl}});
+  openEpisode(viewing: EpisodeReference) {
+    this.setState({viewing, view: View.Viewing});
   }
 
   clearFeeds() {
@@ -270,10 +248,10 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   componentDidMount() {
-    loadData(this.props.userSession, FEEDS_FILENAME)
+    loadData<Feeds>(this.props.userSession, FEEDS_FILENAME)
       .then(feeds => this.setState({feeds}));
 
-    loadData(this.props.userSession, TAGS_FILENAME)
+    loadData<Tags>(this.props.userSession, TAGS_FILENAME)
       .then(tags => this.setState({tags}));
   }
 }

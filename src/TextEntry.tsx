@@ -1,7 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, KeyboardEvent } from 'react';
 
-export default class TextEntry extends Component {
-  constructor(props) {
+interface Props {
+  defaultValue?: string;
+  className?: string;
+  placeholder?: string;
+  callback: (value: string) => void;
+}
+
+export default class TextEntry extends Component<Props, {entered: string}> {
+  constructor(props: Props) {
     super(props);
     this.state = {entered: props.defaultValue || ''};
 
@@ -16,11 +23,10 @@ export default class TextEntry extends Component {
     	onChange={(e) => this.setState({entered: e.target.value})}
     	onKeyDown={this.handleKey}
     	placeholder = {this.props.placeholder}
-      ref={input => this.input = input}
     />;
   }
 
-  handleKey(e) {
+  handleKey(e: KeyboardEvent) {
     e.stopPropagation();
 
   	if (e.key !== 'Enter') {
@@ -32,7 +38,6 @@ export default class TextEntry extends Component {
   	if (entered) {
   		this.setState({entered: ''});
   		this.props.callback(entered);
-      this.props.returnFocus.focus();
   	}
   }
 }

@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './Dashboard';
-import Signin from './Signin.js';
-import {
-  UserSession,
-  AppConfig
-} from 'blockstack';
+import Signin from './Signin';
+import {UserSession, AppConfig} from 'blockstack';
+import * as serviceWorker from './serviceWorker';
 
-import './react-audio-player.d.ts';
+//import './react-audio-player.d.ts';
 import './podcast-feed-parser.d.ts';
 
 //import './styling/layout.scss';
@@ -79,3 +77,8 @@ class App extends Component {
 }
 
 ReactDOM.render(<App/>, document.getElementById('root'));
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
