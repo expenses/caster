@@ -1,0 +1,3 @@
+[submodule "react-audio-player"]
+	path = react-audio-player
+	url = ./react-audio-player/

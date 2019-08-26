@@ -43,14 +43,17 @@ export default class Search extends Component<Props, {searchTerm: string}> {
           openEpisode={this.props.openEpisode}
       />);
 
-    return <>
+    return <div className="search">
       <div className="search-body">{renderedEpisodes}</div>
-      <input
-        className="search-input"
-        type="text"
-        onChange={(e) => this.setState({searchTerm: e.target.value})}
-        value={this.state.searchTerm}
-      />
-    </>;
+      <div className="search-input">
+        <input
+          className="search-input-inner"
+          type="text"
+          placeholder="Search Term"
+          onChange={(e) => this.setState({searchTerm: e.target.value})}
+          value={this.state.searchTerm}
+        />
+      </div>
+    </div>;
   }
 }

@@ -39,3 +39,15 @@ export async function loadData<T>(userSession: UserSession, filename: string): P
 export function episodeImage(ref: EpisodeReference, feeds: Feeds): string {
 	return ref.episode.imageURL || feeds[ref.feedUrl].data.meta.imageURL;
 }
+
+export function timestamp(secs: number): string {
+  let hours: any   = Math.floor(secs / 3600);
+  let minutes: any = Math.floor((secs - (hours * 3600)) / 60);
+  let seconds: any = Math.floor(secs % 60);
+
+  if (hours   < 10) {hours   = "0"+hours;}
+  if (minutes < 10) {minutes = "0"+minutes;}
+  if (seconds < 10) {seconds = "0"+seconds;}
+
+  return `${hours}:${minutes}:${seconds}`;
+}

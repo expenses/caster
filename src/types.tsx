@@ -1,11 +1,5 @@
-export interface Tag {
-  text: string,
-  time: Date
-}
-
 export type FeedState = {data: Feed, time: Date};
 export type Feeds = Record<string, FeedState>;
-export type Tags = Record<string, Tag[]>;
 
 export enum View {
   Main = 'Main',
@@ -41,3 +35,9 @@ export interface Episode {
   duration: string | null
   imageURL: string | null;
 };
+
+export interface Playing {
+  epRef: EpisodeReference;
+  time: number;
+  paused: boolean;
+}

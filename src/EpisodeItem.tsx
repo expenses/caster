@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import Item from './Item';
-import {Episode, EpisodeReference, Feeds} from './types';
+import {EpisodeReference, Feeds} from './types';
 import {episodeImage} from './utils';
 
 interface Props {

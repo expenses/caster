@@ -4,6 +4,8 @@ import { slide as Slide } from 'react-burger-menu';
 import {Home, Search, Menu, Settings} from 'react-feather';
 import {Feeds} from './types';
 
+import './SideNav.scss';
+
 interface Properties {
   open: boolean;
   changeState: (open: boolean) => void;
@@ -18,11 +20,10 @@ export default class SideNavigation extends Component<Properties> {
   render() {
     let {open, feeds, openSettings, openHome, openFeed, openSearch, changeState} = this.props;
 
-    return <>
+    return <div className="menu-button">
       <Slide
         isOpen={open}
         customBurgerIcon={<Menu/>}
-        width="60%"
         onStateChange={state => changeState(state.isOpen)}
       >
         <SideNavItem icon={<Home/>} text="Home" onClick={openHome} />
@@ -39,7 +40,7 @@ export default class SideNavigation extends Component<Properties> {
         }
         <SideNavItem icon={<Settings/>} text="Settings" onClick={openSettings} />
       </Slide>
-    </>;
+    </div>;
   }
 }
 

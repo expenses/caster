@@ -1,6 +1,13 @@
+@import 'constants';
+
+* {
+  font-family: "Helvetica Neue";
+  font-weight: 400;
+}
+
 body {
 	margin: 0px;
-  font-family: sans-serif;
+	overflow-y: hidden;
 }
 
 .dashboard {
@@ -10,67 +17,53 @@ body {
   grid-template-areas:
     "titlebar"
     "main"
-    "player";
+		"player";
 
   height: 100vh;
 }
 
-.bm-burger-button {
-  position: relative;
-
-	& button {
-		height: 24px;
-	}
+.refresh-button {
+	grid-area: refresh-button;
 }
 
-.bm-cross {
-	background-color: black;
-}
-
-.bm-overlay, .bm-menu-wrap {
-	left: 0px;
-	top: 0px;
-}
-
-.bm-menu-wrap {
-	background-color: white;
-	transition: 0.25s all !important;
+.refresh-button, .menu-button {
+	@include centerContent();
 }
 
 .titlebar {
-  background-color: red;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  font-size: 20px;
+	grid-area: titlebar;
+  display: grid;
+	grid-template-columns: 50px 1fr 50px;
+	grid-template-areas: "menu-button title refresh-button";
 
-  & > * {
-    padding-right: 10px;
-  }
+	background-image: linear-gradient($highlight-1, $highlight-2);
+	color: $main;
+}
+
+.title {
+	grid-area: title;
+	width: calc(100vw - 50px * 2);
+	height: 45px;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .main {
-  background-color: green;
+	grid-area: main;
+  background-color: $main;
 	overflow-y: scroll;
-	padding: 10px;
-}
-
-.player {
-   background-color: blue;
-}
-
-.sidenav-item {
-	display: flex;
-	align-items: center;
-}
-
-.sidenav-icon img {
-	height: 48px;
+	color: $highlight-1;
 }
 
 .item {
 	display: flex;
 	align-items: center;
+	transition: 0.25s all;
+	@include gradientAnimation($main, $highlight-1, $highlight-2, 0.25s, $br);
+
+	&:hover {
+		color: white;
+	}
 }
 
 .item, .item-inner {
@@ -78,7 +71,9 @@ body {
 }
 
 .item img {
-	width: 150px;
+	height: 75px;
+	width: 75px;
+	object-fit: contain;
 }
 
 .item-inner p, .item-inner h2 {
@@ -95,19 +90,28 @@ body {
 
 	height: 100%;
 	overflow-y: scroll;
-	width: 100vw;
+	width: 100%;
 }
 
 .search-body {
 	grid-area: search-body;
-	background-color: purple;
-	width: 100vw;
+	width: 100%;
 	overflow-y: scroll;
 
 }
 
 .search-input {
 	grid-area: search-input;
+	padding: 10px;
+}
+
+.search-input-inner {
+	border: 0px;
+	border-radius: 10px;
+	background-color: $border;
+	width: 100%;
+	height: 100%;
+	color: $highlight-1;
 }
 
 .episode-view {
@@ -118,4 +122,68 @@ body {
 
 .episode-view img {
 	width: 50%;
+}
+
+.episode-player {
+	display: flex;
+	align-items: center;
+
+	& > * {
+		margin: 5px;
+	}
+}
+
+@media only screen and (min-width: 46.875em) {
+	.dashboard {
+	  grid-template-rows: 50px 1fr;
+		grid-template-columns: 1fr 1fr;
+	  grid-template-areas:
+	    "titlebar player"
+	    "main player";
+
+		padding: 5px;
+		background-color: $border;
+	}
+
+	.main, .titlebar {
+		margin-right: 5px;
+	}
+
+	.titlebar {
+		@include topRounded();
+	}
+
+	.main {
+		height: calc(100% - 5px * 2);
+		@include bottomRounded();
+	}
+
+	.title {
+		width: calc(50vw - 50px * 2 - 5px * 2);
+	}
+}
+
+
+.title-text {
+	margin: 0px;
+	height: 45px;
+	display: flex;
+	align-items: center;
+}
+
+.add-feed {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+
+	& input {
+		border: 0px;
+		border-radius: 10px;
+		background-color: $border;
+		width: 100%;
+		height: 100%;
+		color: $highlight-1;
+		height: 25px;
+		padding: 5px;
+	}
 }

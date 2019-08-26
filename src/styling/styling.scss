@@ -1,29 +1,5 @@
 
-/* Modified from https://stackoverflow.com/questions/6542212/use-css3-transitions-with-gradient-backgrounds */
-@mixin gradientAnimation($before, $start, $end, $transTime, $border-radius ){
-    background-size: 100%;
-    background-image: linear-gradient($before, $before);
-    position: relative;
-    z-index: 0;
-    &:before {
-        background-image: linear-gradient($start, $end);
-        content: "";
-        display: block;
-        height: 100%;
-        position: absolute;
-        top: 0; left: 0;
-        opacity: 0;
-        width: 100%;
-        z-index: -100;
-        border-radius: $border-radius;
-        transition: opacity $transTime;
-    }
-    &:hover {
-        &:before {
-            opacity: 1;
-        }
-    }
-}
+
 
 $border: #241734;
 $main: #2e2157;

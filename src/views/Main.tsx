@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
+import {Plus} from 'react-feather';
 import {Feeds} from '../types';
 import Item from '../Item';
 import TextEntry from '../TextEntry';
@@ -33,7 +34,10 @@ export default class Main extends Component<Props> {
 
     return <>
       {items}
-      <TextEntry placeholder="Podcast Feed URL" callback={this.props.addFeed}/>
+      <div className="add-feed">
+        <Plus/>
+        <TextEntry placeholder="Podcast Feed URL" callback={this.props.addFeed}/>
+      </div>
     </>;
   }
 }

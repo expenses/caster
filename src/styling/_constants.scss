@@ -1,0 +1,65 @@
+$border: #241734;
+$main: #2e2157;
+$highlight-1: #fd3777;
+$highlight-2: #fd1d53;
+$br: 10px;
+
+@mixin centerContent() {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin imageFit() {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+@mixin colourTransition() {
+  transition: 0.25s color;
+
+  &:hover, &:active {
+    color: white;
+  }
+}
+
+@mixin topRounded() {
+  border-top-left-radius: $br;
+  border-top-right-radius: $br;
+}
+
+@mixin bottomRounded() {
+  border-bottom-left-radius: $br;
+  border-bottom-right-radius: $br;
+}
+
+@mixin gradientBg() {
+  background-image: linear-gradient($highlight-1, $highlight-2);
+}
+
+/* Modified from https://stackoverflow.com/questions/6542212/use-css3-transitions-with-gradient-backgrounds */
+@mixin gradientAnimation($before, $start, $end, $transTime, $border-radius ){
+    background-size: 100%;
+    background-image: linear-gradient($before, $before);
+    position: relative;
+    z-index: 0;
+    &:before {
+        background-image: linear-gradient($start, $end);
+        content: "";
+        display: block;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        opacity: 0;
+        width: 100%;
+        z-index: -100;
+        border-radius: $border-radius;
+        transition: opacity $transTime;
+    }
+    &:hover {
+        &:before {
+            opacity: 1;
+        }
+    }
+}

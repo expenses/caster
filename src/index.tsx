@@ -7,10 +7,13 @@ import * as serviceWorker from './serviceWorker';
 
 //import './react-audio-player.d.ts';
 import './podcast-feed-parser.d.ts';
+import './react-textfit.d.ts';
+import './react-scale-text.d.ts';
 
 //import './styling/layout.scss';
 //import './styling/styling.scss';
 import './styling/mobile.scss';
+import './Player.scss';
 
 
 import * as moment from 'moment';

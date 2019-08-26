@@ -1,0 +1,51 @@
+@import 'styling/constants';
+
+.sidenav-item {
+	display: flex;
+	align-items: center;
+  padding-left: 10px;
+  @include colourTransition();
+  @include gradientAnimation($main, $highlight-1, $highlight-2, 0.25s, $br);
+
+  & > * {
+    padding: 5px;
+  }
+}
+
+.sidenav-icon {
+  max-width: 40px;
+
+  & img {
+	  @include imageFit();
+  }
+}
+
+.bm-cross {
+	background-color: $highlight-1;
+
+  &:hover {
+    background-color: white;
+  }
+}
+
+.bm-overlay, .bm-menu-wrap {
+	left: 0px;
+	top: 0px;
+}
+
+.bm-menu-wrap {
+	background-color: $main;
+	transition: 0.25s all !important;
+  color: $highlight-1;
+}
+
+.bm-icon {
+	height: inherit;
+	width: inherit;
+}
+
+.bm-burger-button {
+	position: relative;
+
+	height: 24px;
+}
