@@ -11,8 +11,8 @@ interface Props {
 export default class Signin extends Component<Props> {
   render() {
     return (
-      <div className="signin">
-        <div className="signin-inner">
+      <div className='signin'>
+        <div className='signin-inner'>
           <h1>Caster is a encrypted, decentralised, syncing podcast player</h1>
           <p>(That's a mouthful)</p>
           <button onClick={this.props.signIn}><LogIn/>Create ID/Log In</button>

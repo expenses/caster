@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "tslint -c tslint.json 'src/**/*.tsx'",
+    "lint": "tslint -t verbose  -c tslint.json 'src/**/*.tsx'",
+    "fix": "tslint --fix -t verbose  -c tslint.json 'src/**/*.tsx'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

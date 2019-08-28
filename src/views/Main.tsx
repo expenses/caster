@@ -1,9 +1,9 @@
-import React, {Component, MouseEvent} from 'react';
 import moment from 'moment';
+import React, {Component, MouseEvent} from 'react';
 import {Plus, XCircle} from 'react-feather';
-import {Feeds} from '../types';
 import Item from '../Item';
 import TextEntry from '../TextEntry';
+import {Feeds} from '../types';
 
 interface Props {
   feeds: Feeds;
@@ -14,11 +14,11 @@ interface Props {
 
 export default class Main extends Component<Props> {
   render() {
-    let feeds = this.props.feeds;
+    const feeds = this.props.feeds;
 
-    let items = Object.keys(feeds)
+    const items = Object.keys(feeds)
       .map(url => {
-        let feed = feeds[url].data;
+        const feed = feeds[url].data;
 
         return <Item
           key={url}
@@ -36,9 +36,9 @@ export default class Main extends Component<Props> {
 
     return <>
       {items}
-      <div className="add-feed">
+      <div className='add-feed'>
         <Plus/>
-        <TextEntry placeholder="Podcast Feed URL" callback={this.props.addFeed}/>
+        <TextEntry placeholder='Podcast Feed URL' callback={this.props.addFeed}/>
       </div>
     </>;
   }

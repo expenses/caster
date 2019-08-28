@@ -7,7 +7,12 @@
   "rules": {
     "no-any": true,
     "quotemark": [true, "single"],
-    "interface-name": false
+    "interface-name": false,
+    "member-access": false,
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "trailing-comma": [true, "never"],
+    "object-literal-sort-keys": false,
+    "indent": [true, "spaces", 2]
   },
   "rulesDirectory": [],
   "linterOptions": {

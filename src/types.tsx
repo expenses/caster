@@ -1,4 +1,4 @@
-export type FeedState = {data: Feed, time: Date};
+export interface FeedState {data: Feed; time: Date; }
 export type Feeds = Record<string, FeedState>;
 
 export enum View {
@@ -20,7 +20,7 @@ export interface Feed {
     imageURL: string;
   };
   episodes: Episode[];
-};
+}
 
 export interface Episode {
   title: string;
@@ -32,9 +32,9 @@ export interface Episode {
     url: string;
   };
   guid: string;
-  duration: string | null
+  duration: string | null;
   imageURL: string | null;
-};
+}
 
 export interface Playing {
   epRef: EpisodeReference;

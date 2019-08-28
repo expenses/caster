@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
 import {UserSession} from 'blockstack';
 import update from 'immutability-helper';
-import {requestPodcast, saveData, loadData} from './utils';
-import SideNav from './SideNav';
-import {Feeds, View, EpisodeReference, Playing} from './types';
+import React, {Component, ReactElement} from 'react';
 import {RefreshCw} from 'react-feather';
+import SideNav from './SideNav';
+import {EpisodeReference, Feeds, Playing, View} from './types';
+import {loadData, requestPodcast, saveData} from './utils';
 
 import EpisodeItem from './EpisodeItem';
 import Player from './Player';
-import Search from './views/Search';
-import Main from './views/Main';
 import EpisodeView from './views/EpisodeView';
+import Main from './views/Main';
+import Search from './views/Search';
 
 import { Textfit } from 'react-textfit';
 
@@ -21,21 +21,25 @@ interface Props {
   signOut: () => (void);
 }
 
+interface Settings {
+  corsProxy: string;
+}
+
 interface State {
   feeds: Feeds;
   view: View;
   playing: Playing | undefined;
   playingDuration: number | undefined;
   viewing: string | EpisodeReference | undefined;
-  settings: Record<string, any>;
+  settings: Settings;
   sidenavOpen: boolean;
 }
 
 export default class Dashboard extends Component<Props, State> {
-  constructor(props: any) {
-  	super(props);
+  constructor(props: Props) {
+    super(props);
 
-  	this.state = {
+    this.state = {
       // Main State
       feeds: {},
       settings: {
@@ -46,7 +50,7 @@ export default class Dashboard extends Component<Props, State> {
       playingDuration: undefined,
       viewing: undefined,
       sidenavOpen: false
-  	};
+    };
 
     this.refresh = this.refresh.bind(this);
     this.addFeed = this.addFeed.bind(this);
@@ -58,8 +62,8 @@ export default class Dashboard extends Component<Props, State> {
 
   render() {
     return (
-      <div className="dashboard">
-        <div className="titlebar">
+      <div className='dashboard'>
+        <div className='titlebar'>
           <SideNav
             open={this.state.sidenavOpen}
             feeds={this.state.feeds}
@@ -70,16 +74,16 @@ export default class Dashboard extends Component<Props, State> {
             changeState={open => this.setState({sidenavOpen: open})}
             signOut={this.props.signOut}
           />
-          <div className="title">
+          <div className='title'>
               <Textfit>
-              <p className="title-text">{this.title()}</p>
+              <p className='title-text'>{this.title()}</p>
               </Textfit>
           </div>
-          <div className="refresh-button">
+          <div className='refresh-button'>
             <RefreshCw onClick={this.refresh} />
           </div>
         </div>
-        <div className="main">{this.inner()}</div>
+        <div className='main'>{this.inner()}</div>
         <Player
           playing={this.state.playing}
           feeds={this.state.feeds}
@@ -91,17 +95,17 @@ export default class Dashboard extends Component<Props, State> {
     );
   }
 
-  updatePlaying(updates: any) {
+  updatePlaying(updates: object) {
     if (this.state.playing === undefined) {
       return;
     }
 
-    let playing = update(this.state.playing, {$merge: updates});
+    const playing = update(this.state.playing, {$merge: updates});
     this.setState({playing});
   }
 
   title(): string {
-    let {view, viewing, feeds} = this.state;
+    const {view, viewing, feeds} = this.state;
 
     if (view === View.Main) {
       return 'Podcasts';
@@ -124,13 +128,13 @@ export default class Dashboard extends Component<Props, State> {
     }
   }
 
-  inner(): any {
-    let {feeds, view, playing, viewing} = this.state;
+  inner(): ReactElement | ReactElement[] {
+    const {feeds, view, playing, viewing} = this.state;
 
     if (view === View.Main) {
       return <Main
         feeds={feeds}
-        openFeed={viewing => this.setState({viewing, view: View.Viewing})}
+        openFeed={feed => this.setState({viewing: feed, view: View.Viewing})}
         addFeed={this.addFeed}
         deleteFeed={this.deleteFeed}
       />;
@@ -138,8 +142,8 @@ export default class Dashboard extends Component<Props, State> {
       return <p>Settingssettingssettings</p>;
     } else if (view === View.Viewing) {
       if (typeof viewing === 'string') {
-        let feedUrl: string = viewing;
-        let feed = feeds[feedUrl].data;
+        const feedUrl: string = viewing;
+        const feed = feeds[feedUrl].data;
 
         return feed.episodes.map(episode => <EpisodeItem
           key={episode.guid}
@@ -158,7 +162,9 @@ export default class Dashboard extends Component<Props, State> {
           updatePlaying={this.updatePlaying}
         />;
       } else {
-        console.error('View set to viewing but this.state.viewing is undefined');
+        const error = 'View set to viewing but this.state.viewing is undefined';
+        console.error(error);
+        return <p>{error}</p>;
       }
     } else if (view === View.Search) {
       return <Search
@@ -167,7 +173,9 @@ export default class Dashboard extends Component<Props, State> {
         playEpisode={this.playEpisode}
       />;
     } else {
-      console.log(`View ${view} not handled in inner()`);
+      const error = `View ${view} not handled in inner()`;
+      console.error(error);
+      return <p>{error}</p>;
     }
   }
 
@@ -181,7 +189,7 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   deleteFeed(url: string) {
-    let feeds = update(
+    const feeds = update(
       this.state.feeds,
       {$unset: [url]}
     );
@@ -200,7 +208,7 @@ export default class Dashboard extends Component<Props, State> {
   async addFeed(url: string) {
     return requestPodcast(this.state.settings.corsProxy, url)
       .then(data => {
-        let feeds = update(
+        const feeds = update(
           this.state.feeds,
           { $merge: {[url]: {time: Date.now(), data}} }
         );

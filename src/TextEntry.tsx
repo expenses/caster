@@ -17,27 +17,27 @@ export default class TextEntry extends Component<Props, {entered: string}> {
 
   render() {
     return <input
-    	type="text"
-    	value={this.state.entered}
-    	className={this.props.className}
-    	onChange={(e) => this.setState({entered: e.target.value})}
-    	onKeyDown={this.handleKey}
-    	placeholder = {this.props.placeholder}
+      type='text'
+      value={this.state.entered}
+      className={this.props.className}
+      onChange={e => this.setState({entered: e.target.value})}
+      onKeyDown={this.handleKey}
+      placeholder = {this.props.placeholder}
     />;
   }
 
   handleKey(e: KeyboardEvent) {
     e.stopPropagation();
 
-  	if (e.key !== 'Enter') {
-  		return;
-  	}
+    if (e.key !== 'Enter') {
+      return;
+    }
 
-  	let entered = this.state.entered;
+    const entered = this.state.entered;
 
-  	if (entered) {
-  		this.setState({entered: ''});
-  		this.props.callback(entered);
-  	}
+    if (entered) {
+      this.setState({entered: ''});
+      this.props.callback(entered);
+    }
   }
 }

@@ -1,31 +1,27 @@
+import {AppConfig, UserSession} from 'blockstack';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './Dashboard';
-import Signin from './Signin';
-import {UserSession, AppConfig} from 'blockstack';
 import * as serviceWorker from './serviceWorker';
+import Signin from './Signin';
 
-//import './react-audio-player.d.ts';
 import './podcast-feed-parser.d.ts';
-import './react-textfit.d.ts';
 import './react-scale-text.d.ts';
+import './react-textfit.d.ts';
 
-//import './styling/layout.scss';
-//import './styling/styling.scss';
 import './styling/mobile.scss';
 
 import * as moment from 'moment';
 import 'moment/min/locales';
 
-//todo: settings
-//todo: autotagging
-//todo: open episode save/load
-//todo: testing
+// todo: settings
+// todo: open episode save/load
+// todo: testing
 
 const appConfig = new AppConfig();
 if (process.env.NODE_ENV === 'production') {
-  appConfig.manifestPath = "/caster/manifest.json";
-  appConfig.redirectPath = "/caster";
+  appConfig.manifestPath = '/caster/manifest.json';
+  appConfig.redirectPath = '/caster';
 }
 
 console.log(`Manifest path: ${appConfig.manifestURI()}`);
@@ -35,7 +31,7 @@ const userSession = new UserSession({appConfig});
 // set locale
 moment.locale(window.navigator.language);
 
-class App extends Component<{}, {anonymous: boolean;}> {
+class App extends Component<{}, {anonymous: boolean; }> {
   constructor(props: {}) {
     super(props);
 
@@ -62,8 +58,8 @@ class App extends Component<{}, {anonymous: boolean;}> {
 
   componentDidMount() {
     if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then((userData) => {
-        window.history.replaceState({}, document.title, "/")
+      userSession.handlePendingSignIn().then(userData => {
+        window.history.replaceState({}, document.title, '/');
       });
     }
   }

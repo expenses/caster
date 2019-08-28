@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
 import moment from 'moment';
+import React, {Component} from 'react';
+import {MoreHorizontal, Play} from 'react-feather';
 import Item from './Item';
 import {EpisodeReference, Feeds} from './types';
 import {episodeImage} from './utils';
-import {Play, MoreHorizontal} from 'react-feather';
 
 interface Props {
   episode: EpisodeReference;
@@ -14,7 +14,7 @@ interface Props {
 
 export default class EpisodeItem extends Component<Props> {
   render() {
-    let {episode, feeds, openEpisode, playEpisode} = this.props;
+    const {episode, feeds, openEpisode, playEpisode} = this.props;
 
     return <Item
       title={episode.episode.title}
@@ -24,7 +24,7 @@ export default class EpisodeItem extends Component<Props> {
         <Play onClick={() => playEpisode(episode)}/>
         <MoreHorizontal onClick={() => openEpisode(episode)}/>
       </>}
-      className="episode"
+      className='episode'
     />;
   }
 }
