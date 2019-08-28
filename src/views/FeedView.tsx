@@ -14,12 +14,14 @@ export default class FeedView extends Component<Props> {
   render() {
     const {feeds, feedUrl, openEpisode, playEpisode} = this.props;
 
-    return feeds[feedUrl].data.episodes.map(episode => <EpisodeItem
-      key={episode.guid}
-      episode={{episode, feedUrl}}
-      feeds={feeds}
-      openEpisode={openEpisode}
-      playEpisode={playEpisode}
-    />);
+    return feeds[feedUrl].data.episodes.map(episode => (
+      <EpisodeItem
+        key={episode.guid}
+        episode={{episode, feedUrl}}
+        feeds={feeds}
+        openEpisode={openEpisode}
+        playEpisode={playEpisode}
+      />
+    ));
   }
 }

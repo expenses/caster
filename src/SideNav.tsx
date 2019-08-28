@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import { slide as Slide } from 'react-burger-menu';
 import {Home, LogOut, Menu, Search, Settings} from 'react-feather';
@@ -7,7 +7,7 @@ import {Feeds} from './types';
 
 import './SideNav.scss';
 
-interface Properties {
+interface Props {
   open: boolean;
   changeState: (open: boolean) => void;
   feeds: Feeds;
@@ -18,37 +18,37 @@ interface Properties {
   signOut: () => void;
 }
 
-export default class SideNavigation extends Component<Properties> {
-  render() {
-    const {
-      open, feeds, openSettings, openHome, openFeed, openSearch, changeState, signOut
-    } = this.props;
+export default function SideNav(props: Props) {
+  const {
+    open, feeds, openSettings, openHome, openFeed, openSearch, changeState, signOut
+  } = props;
 
-    return <div className='menu-button'>
+  return (
+    <div className='menu-button'>
       <Slide
         isOpen={open}
-        customBurgerIcon={<Menu/>}
+        customBurgerIcon={<Menu />}
         onStateChange={state => changeState(state.isOpen)}
       >
-        <SideNavItem icon={<Home/>} text='Home' onClick={openHome} />
-        <SideNavItem icon={<Search/>} text='Search' onClick={openSearch} />
+        <SideNavItem icon={<Home />} text='Home' onClick={openHome} />
+        <SideNavItem icon={<Search />} text='Search' onClick={openSearch} />
         {
-          Object.entries(feeds).map(([url, feed]) => {
-            return <SideNavItem
-              key={url}
-              icon={<img src={feed.data.meta.imageURL} alt=''/>}
-              text={feed.data.meta.title}
-              onClick={e => {
-                e.preventDefault();
-                e.stopPropagation();
-                openFeed(url);
-              }}
-            />;
-          })
-        }
-        <SideNavItem icon={<Settings/>} text='Settings' onClick={openSettings} />
-        <SideNavItem icon={<LogOut/>} text='Sign Out' onClick={e => signOut()} />
+        Object.entries(feeds).map(([url, feed]) => (
+          <SideNavItem
+            key={url}
+            icon={<img src={feed.data.meta.imageURL} alt='' />}
+            text={feed.data.meta.title}
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              openFeed(url);
+            }}
+          />
+        ))
+      }
+        <SideNavItem icon={<Settings />} text='Settings' onClick={openSettings} />
+        <SideNavItem icon={<LogOut />} text='Sign Out' onClick={e => signOut()} />
       </Slide>
-    </div>;
-  }
+    </div>
+  );
 }

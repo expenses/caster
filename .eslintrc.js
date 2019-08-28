@@ -24,7 +24,16 @@ module.exports = {
     'react',
   ],
   rules: {
-    "object-curly-spacing": 0
+    "object-curly-spacing": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "@typescript-eslint/no-use-before-define": "off",
+    "jsx-quotes": ["error", "prefer-single"],
+    "comma-dangle": ["error", "never"],
+    "object-curly-newline": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "import/no-unresolved": "off",
+    "react/sort-comp": ["off"]
   },
   settings:  {
     react:  {

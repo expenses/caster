@@ -18,13 +18,15 @@ export default class EpisodeView extends Component<Props> {
   render() {
     const {epRef, feeds} = this.props;
 
-    return <div className='episode-view'>
-      <h1>{epRef.episode.title}</h1>
-      <h2>{feeds[epRef.feedUrl].data.meta.title}</h2>
-      <img src={episodeImage(epRef, feeds)} alt=''/>
-      <p dangerouslySetInnerHTML={{__html: epRef.episode.description}}></p>
-      {this.player()}
-    </div>;
+    return (
+      <div className='episode-view'>
+        <h1>{epRef.episode.title}</h1>
+        <h2>{feeds[epRef.feedUrl].data.meta.title}</h2>
+        <img src={episodeImage(epRef, feeds)} alt='' />
+        <p dangerouslySetInnerHTML={{__html: epRef.episode.description}} />
+        {this.player()}
+      </div>
+    );
   }
 
   player(): ReactElement {
@@ -32,22 +34,25 @@ export default class EpisodeView extends Component<Props> {
     const same = this.props.playing ? this.props.playing.epRef === epRef : false;
 
     if (this.props.playing !== undefined && same) {
-      const playing: Playing = this.props.playing;
+      const {playing} = this.props;
 
-      return <div className='episode-player'>
-        <p>{timestamp(playing.time)}</p>
-        <Rewind onClick={() => updatePlaying({time: playing.time - 5})} size='32px'/>
-        {this.button()}
-        <FastForward onClick={() => updatePlaying({time: playing.time + 5})} size='32px'/>
-        <p>{timestamp(playingDuration || 0)}</p>
-      </div>;
-    } else {
-      return <div className='episode-player'>
-        <Rewind size='32px'/>
-        {this.button()}
-        <FastForward size='32px'/>
-      </div>;
+      return (
+        <div className='episode-player'>
+          <p>{timestamp(playing.time)}</p>
+          <Rewind onClick={() => updatePlaying({time: playing.time - 5})} size='32px' />
+          {this.button()}
+          <FastForward onClick={() => updatePlaying({time: playing.time + 5})} size='32px' />
+          <p>{timestamp(playingDuration || 0)}</p>
+        </div>
+      );
     }
+    return (
+      <div className='episode-player'>
+        <Rewind size='32px' />
+        {this.button()}
+        <FastForward size='32px' />
+      </div>
+    );
   }
 
   button(): ReactElement {
@@ -56,11 +61,9 @@ export default class EpisodeView extends Component<Props> {
     if (playing !== undefined && playing.epRef === epRef) {
       if (playing.paused) {
         return <Play onClick={() => updatePlaying({paused: false})} size='36px' />;
-      } else {
-        return <Pause onClick={() => updatePlaying({paused: true})} size='36px'/>;
       }
-    } else {
-      return <Play onClick={(e => playEpisode(epRef))} size='36px'/>;
+      return <Pause onClick={() => updatePlaying({paused: true})} size='36px' />;
     }
+    return <Play onClick={() => playEpisode(epRef)} size='36px' />;
   }
 }

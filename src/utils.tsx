@@ -3,7 +3,6 @@ import {getPodcastFromURL} from 'podcast-feed-parser';
 import {EpisodeReference, Feed, Feeds} from './types';
 
 // https://github.com/jbierfeldt/podcast-feed-parser/blob/master/index.js#L17
-// removed category and added guid
 const options = {
   fields: {
     meta: ['title', 'description', 'imageURL'],
@@ -32,9 +31,8 @@ export async function loadData<T>(userSession: UserSession, filename: string): P
       if (content instanceof ArrayBuffer) {
         // todo: error
         return {};
-      } else {
-        return JSON.parse(content) || {};
       }
+      return JSON.parse(content) || {};
     });
 }
 

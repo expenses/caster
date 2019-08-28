@@ -75,9 +75,9 @@ export default class Dashboard extends Component<Props, State> {
             signOut={this.props.signOut}
           />
           <div className='title'>
-              <Textfit>
+            <Textfit>
               <p className='title-text'>{this.title()}</p>
-              </Textfit>
+            </Textfit>
           </div>
           <div className='refresh-button'>
             <RefreshCw onClick={this.refresh} />
@@ -96,8 +96,12 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   updateSettings(updates: object, valid: boolean) {
-    const settings = update(this.state.settings, {$merge: updates});
-    this.setState({settings}, () => valid ? this.saveSettings() : null);
+    this.setState(
+      prevState => {
+        update(prevState.settings, {$merge: updates});
+      },
+      () => (valid ? this.saveSettings() : null)
+    );
   }
 
   updatePlaying(updates: object) {
@@ -105,8 +109,9 @@ export default class Dashboard extends Component<Props, State> {
       return;
     }
 
-    const playing = update(this.state.playing, {$merge: updates});
-    this.setState({playing});
+    this.setState(prevState => {
+      update(prevState.playing, {$merge: updates});
+    });
   }
 
   title(): string {
@@ -114,73 +119,79 @@ export default class Dashboard extends Component<Props, State> {
 
     if (view === View.Feeds) {
       return 'Podcasts';
-    } else if (view === View.Settings) {
+    } if (view === View.Settings) {
       return 'Settings';
-    } else if (view === View.Search) {
+    } if (view === View.Search) {
       return 'Search';
-    } else if (view === View.Viewing) {
+    } if (view === View.Viewing) {
       if (typeof viewing === 'string') {
         return feeds[viewing].data.meta.title;
-      } else if (typeof viewing !== 'undefined') {
+      } if (typeof viewing !== 'undefined') {
         return viewing.episode.title;
-      } else {
-        console.error('View set to viewing but this.state.viewing is undefined');
-        return '';
       }
-    } else {
-      console.log(`View ${view} not handled in title()`);
+      console.error('View set to viewing but this.state.viewing is undefined');
       return '';
     }
+    console.log(`View ${view} not handled in title()`);
+    return '';
   }
 
   inner(): ReactElement | ReactElement[] {
     const {feeds, view, playing, viewing, settings} = this.state;
 
     if (view === View.Feeds) {
-      return <FeedsView
-        feeds={feeds}
-        openFeed={feed => this.setState({viewing: feed, view: View.Viewing})}
-        addFeed={this.addFeed}
-        deleteFeed={this.deleteFeed}
-      />;
-    } else if (view === View.Settings) {
-      return <SettingsView
-        settings={settings}
-        updateSettings={this.updateSettings}
-      />;
-    } else if (view === View.Viewing) {
+      return (
+        <FeedsView
+          feeds={feeds}
+          openFeed={feed => this.setState({viewing: feed, view: View.Viewing})}
+          addFeed={this.addFeed}
+          deleteFeed={this.deleteFeed}
+        />
+      );
+    } if (view === View.Settings) {
+      return (
+        <SettingsView
+          settings={settings}
+          updateSettings={this.updateSettings}
+        />
+      );
+    } if (view === View.Viewing) {
       if (typeof viewing === 'string') {
-        return <FeedView
-          feedUrl={viewing}
-          feeds={feeds}
-          openEpisode={this.openEpisode}
-          playEpisode={this.playEpisode}
-        />;
-      } else if (typeof viewing !== 'undefined') {
-        return <EpisodeView
-          epRef={viewing}
-          feeds={feeds}
-          playEpisode={this.playEpisode}
-          playing={playing}
-          playingDuration={this.state.playingDuration}
-          updatePlaying={this.updatePlaying}
-        />;
-      } else {
-        const error = 'View set to viewing but this.state.viewing is undefined';
-        console.error(error);
-        return <p>{error}</p>;
+        return (
+          <FeedView
+            feedUrl={viewing}
+            feeds={feeds}
+            openEpisode={this.openEpisode}
+            playEpisode={this.playEpisode}
+          />
+        );
+      } if (typeof viewing !== 'undefined') {
+        return (
+          <EpisodeView
+            epRef={viewing}
+            feeds={feeds}
+            playEpisode={this.playEpisode}
+            playing={playing}
+            playingDuration={this.state.playingDuration}
+            updatePlaying={this.updatePlaying}
+          />
+        );
       }
-    } else if (view === View.Search) {
-      return <SearchView
-        feeds={this.state.feeds}
-        openEpisode={this.openEpisode}
-        playEpisode={this.playEpisode}
-      />;
-    } else {
-      const error = `View ${view} not handled in inner()`;
+      const error = 'View set to viewing but this.state.viewing is undefined';
       console.error(error);
       return <p>{error}</p>;
+    } if (view === View.Search) {
+      return (
+        <SearchView
+          feeds={this.state.feeds}
+          openEpisode={this.openEpisode}
+          playEpisode={this.playEpisode}
+        />
+      );
     }
+    const error = `View ${view} not handled in inner()`;
+    console.error(error);
+    return <p>{error}</p>;
   }
 
   playEpisode(epRef: EpisodeReference) {

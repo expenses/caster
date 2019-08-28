@@ -18,12 +18,15 @@ function playerBar(time: number, duration: number | undefined) {
   let percentage = 0;
 
   if (duration) {
-    percentage = time / duration * 100;
+    const fraction = time / duration;
+    percentage = fraction * 100;
   }
 
-  return <div className='player-bar-inner'>
-    <div className='player-bar-progress' style={{width: `${percentage}%`}}></div>
-  </div>;
+  return (
+    <div className='player-bar-inner'>
+      <div className='player-bar-progress' style={{width: `${percentage}%`}} />
+    </div>
+  );
 }
 
 export default class Player extends Component<Props> {
@@ -35,54 +38,56 @@ export default class Player extends Component<Props> {
     const epRef = playing ? playing.epRef : null;
     const episode = epRef ? epRef.episode : null;
 
-    return <div className='player'>
-      <div className='player-bar'>
-        {playerBar(this.time(), duration)}
-      </div>
-      <div className='player-image'>
-        {epRef ? <img src={episodeImage(epRef, this.props.feeds)} alt=''/> : null}
-      </div>
-      <div className='player-description'>
-        <div>
-          <p><strong>{episode ? episode.title : null}</strong></p>
-          <p>{epRef ? feeds[epRef.feedUrl].data.meta.title : null}</p>
+    return (
+      <div className='player'>
+        <div className='player-bar'>
+          {playerBar(this.time(), duration)}
         </div>
-      </div>
-      <div className='player-button'>
-        {this.playerButton()}
-      </div>
-      <div className='desktop-player'>
-        <Rewind/>
-        {this.playerButton() || <Play/>}
-        <FastForward/>
-        <p>{timestamp(this.time())}</p>
-        <input
-          className='player-range-bar'
-          type='range'
-          min='0'
-          value={this.time()}
-          max={duration || 0}
-          step='any'
-          onChange={e => updatePlaying({time: e.target.value})}
+        <div className='player-image'>
+          {epRef ? <img src={episodeImage(epRef, this.props.feeds)} alt='' /> : null}
+        </div>
+        <div className='player-description'>
+          <div>
+            <p><strong>{episode ? episode.title : null}</strong></p>
+            <p>{epRef ? feeds[epRef.feedUrl].data.meta.title : null}</p>
+          </div>
+        </div>
+        <div className='player-button'>
+          {this.playerButton()}
+        </div>
+        <div className='desktop-player'>
+          <Rewind />
+          {this.playerButton() || <Play />}
+          <FastForward />
+          <p>{timestamp(this.time())}</p>
+          <input
+            className='player-range-bar'
+            type='range'
+            min='0'
+            value={this.time()}
+            max={duration || 0}
+            step='any'
+            onChange={e => updatePlaying({time: e.target.value})}
+          />
+          <p>{timestamp(duration || 0)}</p>
+        </div>
+        <div className='desktop-player-description'>
+          <h2>{episode ? episode.title : null}</h2>
+          <h3>{epRef ? feeds[epRef.feedUrl].data.meta.title : null}</h3>
+          <p
+            dangerouslySetInnerHTML={{__html: episode ? episode.description : ''}}
+          />
+        </div>
+        <ReactAudioPlayer
+          time={playing ? playing.time : 0}
+          playing={!paused}
+          src={episode ? episode.enclosure.url : undefined}
+          listenInterval={100}
+          onListen={(time: number) => this.props.updatePlaying({time})}
+          onLoad={this.props.setDuration}
         />
-        <p>{timestamp(duration || 0)}</p>
       </div>
-      <div className='desktop-player-description'>
-        <h2>{episode ? episode.title : null}</h2>
-        <h3>{epRef ? feeds[epRef.feedUrl].data.meta.title : null}</h3>
-        <p
-          dangerouslySetInnerHTML={{__html: episode ? episode.description : ''}}
-        ></p>
-      </div>
-      <ReactAudioPlayer
-        time={playing ? playing.time : 0}
-        playing={!paused}
-        src={episode ? episode.enclosure.url : undefined}
-        listenInterval={100}
-        onListen={(time: number) => this.props.updatePlaying({time})}
-        onLoad={this.props.setDuration}
-      />
-    </div>;
+    );
   }
 
   time(): number {
@@ -94,10 +99,9 @@ export default class Player extends Component<Props> {
 
     if (playing) {
       if (playing.paused) {
-        return <Play onClick={() => playing ? updatePlaying({paused: false}) : null}/>;
-      } else {
-        return <Pause onClick={() => playing ? updatePlaying({paused: true}) : null}/>;
+        return <Play onClick={() => (playing ? updatePlaying({paused: false}) : null)} />;
       }
+      return <Pause onClick={() => (playing ? updatePlaying({paused: true}) : null)} />;
     }
   }
 }

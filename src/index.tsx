@@ -30,7 +30,11 @@ const userSession = new UserSession({appConfig});
 // set locale
 moment.locale(window.navigator.language);
 
-class App extends Component<{}, {anonymous: boolean; }> {
+interface State {
+  anonymous: boolean;
+}
+
+class App extends Component<{}, State> {
   constructor(props: {}) {
     super(props);
 
@@ -50,9 +54,8 @@ class App extends Component<{}, {anonymous: boolean; }> {
   render() {
     if (userSession.isUserSignedIn() || this.state.anonymous) {
       return <Dashboard userSession={userSession} signOut={this.signOut} />;
-    } else {
-      return <Signin signIn={this.signIn} tryAnonymously={() => this.setState({anonymous: true})}/>;
     }
+    return <Signin signIn={this.signIn} tryAnonymously={() => this.setState({anonymous: true})} />;
   }
 
   componentDidMount() {
@@ -64,7 +67,7 @@ class App extends Component<{}, {anonymous: boolean; }> {
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

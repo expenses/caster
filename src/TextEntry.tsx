@@ -16,14 +16,16 @@ export default class TextEntry extends Component<Props, {entered: string}> {
   }
 
   render() {
-    return <input
-      type='text'
-      value={this.state.entered}
-      className={this.props.className}
-      onChange={e => this.setState({entered: e.target.value})}
-      onKeyDown={this.handleKey}
-      placeholder = {this.props.placeholder}
-    />;
+    return (
+      <input
+        type='text'
+        value={this.state.entered}
+        className={this.props.className}
+        onChange={e => this.setState({entered: e.target.value})}
+        onKeyDown={this.handleKey}
+        placeholder={this.props.placeholder}
+      />
+    );
   }
 
   handleKey(e: KeyboardEvent) {
@@ -33,7 +35,7 @@ export default class TextEntry extends Component<Props, {entered: string}> {
       return;
     }
 
-    const entered = this.state.entered;
+    const {entered} = this.state;
 
     if (entered) {
       this.setState({entered: ''});

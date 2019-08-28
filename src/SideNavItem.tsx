@@ -1,4 +1,4 @@
-import React, {Component, MouseEvent, ReactElement} from 'react';
+import React, {MouseEvent, ReactElement} from 'react';
 
 interface Props {
   icon: ReactElement;
@@ -6,18 +6,18 @@ interface Props {
   onClick: (e: MouseEvent) => void;
 }
 
-export default class SideNavItem extends Component<Props> {
-    public render() {
-      return (
-        <div
-          onClick={this.props.onClick}
-          className='sidenav-item'
-        >
-          <div className='sidenav-icon'>
-            {this.props.icon}
-          </div>
-          <p>{this.props.text}</p>
-        </div>
-      );
-    }
+export default function SideNavItem(props: Props): ReactElement {
+  const {onClick, icon, text} = props;
+
+  return (
+    <div
+      onClick={onClick}
+      className='sidenav-item'
+    >
+      <div className='sidenav-icon'>
+        {icon}
+      </div>
+      <p>{text}</p>
+    </div>
+  );
 }

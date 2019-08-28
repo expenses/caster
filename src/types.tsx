@@ -1,4 +1,4 @@
-export interface FeedState {data: Feed; time: Date; }
+export interface FeedState {data: Feed; time: Date }
 export type Feeds = Record<string, FeedState>;
 
 export enum View {

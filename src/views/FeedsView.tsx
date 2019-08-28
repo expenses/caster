@@ -14,35 +14,41 @@ interface Props {
   deleteFeed: (url: string) => void;
 }
 
-export default class Main extends Component<Props> {
+export default class FeedsView extends Component<Props> {
   render() {
-    const feeds = this.props.feeds;
+    const {feeds, openFeed, addFeed} = this.props;
 
     const items = Object.keys(feeds)
       .map(url => {
         const feed = feeds[url].data;
 
-        return <Item
-          key={url}
-          title={feed.meta.title}
-          image={feed.meta.imageURL}
-          body={<>
-            <p>{feed.meta.description}</p>
-            <p>{feed.episodes.length} episodes</p>
-            <p>Last refreshed {moment(feeds[url].time).fromNow()}</p>
-          </>}
-          onClick={() => this.props.openFeed(url)}
-          icons={<XCircle onClick={e => this.deleteUrl(e, url)}/>}
-        />;
+        return (
+          <Item
+            key={url}
+            title={feed.meta.title}
+            image={feed.meta.imageURL}
+            body={(
+              <>
+                <p>{feed.meta.description}</p>
+                <p>{feed.episodes.length} episodes</p>
+                <p>Last refreshed {moment(feeds[url].time).fromNow()}</p>
+              </>
+)}
+            onClick={() => openFeed(url)}
+            icons={<XCircle onClick={e => this.deleteUrl(e, url)} />}
+          />
+        );
       });
 
-    return <>
-      {items}
-      <div className='add-feed'>
-        <Plus/>
-        <TextEntry placeholder='Podcast Feed URL' callback={this.props.addFeed}/>
-      </div>
-    </>;
+    return (
+      <>
+        {items}
+        <div className='add-feed'>
+          <Plus />
+          <TextEntry placeholder='Podcast Feed URL' callback={addFeed} />
+        </div>
+      </>
+    );
   }
 
   deleteUrl(e: MouseEvent, url: string) {
