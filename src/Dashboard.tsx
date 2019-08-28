@@ -11,7 +11,6 @@ import Player from './Player';
 import Search from './views/Search';
 import Main from './views/Main';
 import EpisodeView from './views/EpisodeView';
-import ScaleText from "react-scale-text";
 
 import { Textfit } from 'react-textfit';
 
@@ -19,7 +18,7 @@ const FEEDS_FILENAME = 'feeds.json';
 
 interface Props {
   userSession: UserSession;
-  handleSignOut: (e: Event) => (void);
+  signOut: () => (void);
 }
 
 interface State {
@@ -54,6 +53,7 @@ export default class Dashboard extends Component<Props, State> {
     this.openEpisode = this.openEpisode.bind(this);
     this.playEpisode = this.playEpisode.bind(this);
     this.updatePlaying = this.updatePlaying.bind(this);
+    this.deleteFeed = this.deleteFeed.bind(this);
   }
 
   render() {
@@ -68,6 +68,7 @@ export default class Dashboard extends Component<Props, State> {
             openSettings={() => this.setState({view: View.Settings, sidenavOpen: false})}
             openSearch={() => this.setState({view: View.Search, sidenavOpen: false})}
             changeState={open => this.setState({sidenavOpen: open})}
+            signOut={this.props.signOut}
           />
           <div className="title">
               <Textfit>
@@ -131,6 +132,7 @@ export default class Dashboard extends Component<Props, State> {
         feeds={feeds}
         openFeed={viewing => this.setState({viewing, view: View.Viewing})}
         addFeed={this.addFeed}
+        deleteFeed={this.deleteFeed}
       />;
     } else if (view === View.Settings) {
       return <p>Settingssettingssettings</p>;
@@ -144,6 +146,7 @@ export default class Dashboard extends Component<Props, State> {
           episode={{episode, feedUrl}}
           feeds={feeds}
           openEpisode={this.openEpisode}
+          playEpisode={this.playEpisode}
         />);
       } else if (typeof viewing !== 'undefined') {
         return <EpisodeView
@@ -158,7 +161,11 @@ export default class Dashboard extends Component<Props, State> {
         console.error('View set to viewing but this.state.viewing is undefined');
       }
     } else if (view === View.Search) {
-      return <Search feeds={this.state.feeds} openEpisode={this.openEpisode} />;
+      return <Search
+        feeds={this.state.feeds}
+        openEpisode={this.openEpisode}
+        playEpisode={this.playEpisode}
+      />;
     } else {
       console.log(`View ${view} not handled in inner()`);
     }
@@ -173,14 +180,13 @@ export default class Dashboard extends Component<Props, State> {
     this.saveFeeds();
   }
 
-  deleteUrl(url: string) {
+  deleteFeed(url: string) {
     let feeds = update(
       this.state.feeds,
       {$unset: [url]}
     );
 
     this.setState({feeds}, this.saveFeeds);
-
   }
 
   openEpisode(viewing: EpisodeReference) {

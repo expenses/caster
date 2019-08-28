@@ -19,7 +19,6 @@
     "react-burger-menu": "^2.6.11",
     "react-dom": "^16.9.0",
     "react-feather": "^2.0.3",
-    "react-scale-text": "^1.2.2",
     "react-scripts": "3.1.1",
     "react-textfit": "^1.1.0",
     "typescript": "3.5.3"
@@ -28,6 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "tslint -c tslint.json 'src/**/*.tsx'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -3,6 +3,8 @@ import {Play, Pause, FastForward, Rewind} from 'react-feather';
 import {EpisodeReference, Feeds, Playing} from '../types';
 import {episodeImage, timestamp} from '../utils';
 
+import './EpisodeView.scss';
+
 interface Props {
   epRef: EpisodeReference;
   feeds: Feeds;

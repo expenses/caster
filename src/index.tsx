@@ -13,24 +13,10 @@ import './react-scale-text.d.ts';
 //import './styling/layout.scss';
 //import './styling/styling.scss';
 import './styling/mobile.scss';
-import './Player.scss';
-
 
 import * as moment from 'moment';
 import 'moment/min/locales';
 
-// todo: mobile first restyling
-// - Hamburger menu
-// -- <home> main
-// -- <Pod A>
-// -- <Pod B>
-// -- Search
-// -- Settings
-// -- Add Podcast
-// - Top menu
-// -- Refresh
-// - Bottom Menu
-// -- Currently Planing
 //todo: settings
 //todo: autotagging
 //todo: open episode save/load
@@ -45,27 +31,32 @@ if (process.env.NODE_ENV === 'production') {
 console.log(`Manifest path: ${appConfig.manifestURI()}`);
 console.log(`Redirect path: ${appConfig.redirectURI()}`);
 
-const userSession = new UserSession({ appConfig: appConfig });
+const userSession = new UserSession({appConfig});
 // set locale
 moment.locale(window.navigator.language);
 
+class App extends Component<{}, {anonymous: boolean;}> {
+  constructor(props: {}) {
+    super(props);
 
-class App extends Component {
-  handleSignIn(e: Event) {
-    e.preventDefault();
+    this.state = {
+      anonymous: false
+    };
+  }
+
+  signIn() {
     userSession.redirectToSignIn();
   }
 
-  handleSignOut(e: Event) {
-    e.preventDefault();
+  signOut() {
     userSession.signUserOut(window.location.origin);
   }
 
   render() {
-    if (userSession.isUserSignedIn()) {
-      return <Dashboard userSession={userSession} handleSignOut={this.handleSignOut} />;
+    if (userSession.isUserSignedIn() || this.state.anonymous) {
+      return <Dashboard userSession={userSession} signOut={this.signOut} />;
     } else {
-      return <Signin signIn={this.handleSignIn} />;
+      return <Signin signIn={this.signIn} tryAnonymously={() => this.setState({anonymous: true})}/>;
     }
   }
 
@@ -73,7 +64,6 @@ class App extends Component {
     if (userSession.isSignInPending()) {
       userSession.handlePendingSignIn().then((userData) => {
         window.history.replaceState({}, document.title, "/")
-        this.setState({ userData: userData})
       });
     }
   }
@@ -84,4 +74,5 @@ ReactDOM.render(<App/>, document.getElementById('root'));
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// Done :^)
+serviceWorker.register();

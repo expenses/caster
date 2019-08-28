@@ -1,10 +1,11 @@
 @import 'styling/constants';
 
 .sidenav-item {
-	display: flex;
-	align-items: center;
+	display: grid;
+  grid-template-columns: 50px 1fr;
+
   padding-left: 10px;
-  @include colourTransition();
+  @include colourTransition($highlight-1, white);
   @include gradientAnimation($main, $highlight-1, $highlight-2, 0.25s, $br);
 
   & > * {
@@ -13,11 +14,7 @@
 }
 
 .sidenav-icon {
-  max-width: 40px;
-
-  & img {
-	  @include imageFit();
-  }
+  @include centerContent();
 }
 
 .bm-cross {

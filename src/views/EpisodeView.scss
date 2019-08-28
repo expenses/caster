@@ -1,0 +1,19 @@
+
+.episode-view {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.episode-view img {
+	width: 50%;
+}
+
+.episode-player {
+	display: flex;
+	align-items: center;
+
+	& > * {
+		margin: 5px;
+	}
+}

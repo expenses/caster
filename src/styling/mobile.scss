@@ -1,8 +1,13 @@
 @import 'constants';
 
+
 * {
-  font-family: "Helvetica Neue";
+  font-family: 'Montserrat', sans-serif;
   font-weight: 400;
+}
+
+a {
+	color: $highlight-2;
 }
 
 body {
@@ -28,6 +33,7 @@ body {
 
 .refresh-button, .menu-button {
 	@include centerContent();
+	@include colourTransition($main, white);
 }
 
 .titlebar {
@@ -38,6 +44,7 @@ body {
 
 	background-image: linear-gradient($highlight-1, $highlight-2);
 	color: $main;
+	cursor: default;
 }
 
 .title {
@@ -55,85 +62,7 @@ body {
 	color: $highlight-1;
 }
 
-.item {
-	display: flex;
-	align-items: center;
-	transition: 0.25s all;
-	@include gradientAnimation($main, $highlight-1, $highlight-2, 0.25s, $br);
-
-	&:hover {
-		color: white;
-	}
-}
-
-.item, .item-inner {
-	padding: 5px;
-}
-
-.item img {
-	height: 75px;
-	width: 75px;
-	object-fit: contain;
-}
-
-.item-inner p, .item-inner h2 {
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
-
-.search {
-	display: grid;
-	grid-template-rows: 1fr 50px;
-	grid-template-areas:
-		"search-body"
-		"search-input";
-
-	height: 100%;
-	overflow-y: scroll;
-	width: 100%;
-}
-
-.search-body {
-	grid-area: search-body;
-	width: 100%;
-	overflow-y: scroll;
-
-}
-
-.search-input {
-	grid-area: search-input;
-	padding: 10px;
-}
-
-.search-input-inner {
-	border: 0px;
-	border-radius: 10px;
-	background-color: $border;
-	width: 100%;
-	height: 100%;
-	color: $highlight-1;
-}
-
-.episode-view {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.episode-view img {
-	width: 50%;
-}
-
-.episode-player {
-	display: flex;
-	align-items: center;
-
-	& > * {
-		margin: 5px;
-	}
-}
-
-@media only screen and (min-width: 46.875em) {
+@media only screen and (min-width: $breakpoint) {
 	.dashboard {
 	  grid-template-rows: 50px 1fr;
 		grid-template-columns: 1fr 1fr;
@@ -173,8 +102,14 @@ body {
 
 .add-feed {
 	display: flex;
+	justify-content: space-around;
 	align-items: center;
+
 	padding: 10px;
+
+	& svg {
+		margin-right: 5px;
+	}
 
 	& input {
 		border: 0px;
