@@ -20,6 +20,7 @@ export default class EpisodeView extends Component<Props> {
 
     return <div className='episode-view'>
       <h1>{epRef.episode.title}</h1>
+      <h2>{feeds[epRef.feedUrl].data.meta.title}</h2>
       <img src={episodeImage(epRef, feeds)} alt=''/>
       <p dangerouslySetInnerHTML={{__html: epRef.episode.description}}></p>
       {this.player()}

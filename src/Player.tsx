@@ -77,7 +77,7 @@ export default class Player extends Component<Props> {
       <ReactAudioPlayer
         time={playing ? playing.time : 0}
         playing={!paused}
-        src={episode ? episode.enclosure.url : null}
+        src={episode ? episode.enclosure.url : undefined}
         listenInterval={100}
         onListen={(time: number) => this.props.updatePlaying({time})}
         onLoad={this.props.setDuration}

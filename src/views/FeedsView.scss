@@ -1,0 +1,24 @@
+@import '../styling/constants';
+
+.add-feed {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+
+	padding: 10px;
+
+	& svg {
+		margin-right: 5px;
+	}
+
+	& input {
+		border: 0px;
+		border-radius: 10px;
+		background-color: $border;
+		width: 100%;
+		height: 100%;
+		color: $highlight-1;
+		height: 25px;
+		padding: 5px;
+	}
+}

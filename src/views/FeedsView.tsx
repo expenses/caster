@@ -5,6 +5,8 @@ import Item from '../Item';
 import TextEntry from '../TextEntry';
 import {Feeds} from '../types';
 
+import './FeedsView.scss';
+
 interface Props {
   feeds: Feeds;
   openFeed: (url: string) => void;

@@ -1,10 +1,10 @@
 import fuzzysort from 'fuzzysort';
 import React, {Component} from 'react';
-import {Search as SearchIcon} from 'react-feather';
+import {Search} from 'react-feather';
 import EpisodeItem from '../EpisodeItem';
 import {EpisodeReference, Feeds} from '../types';
 
-import './Search.scss';
+import './SearchView.scss';
 
 interface Props {
   feeds: Feeds;
@@ -12,7 +12,11 @@ interface Props {
   playEpisode: (ref: EpisodeReference) => void;
 }
 
-export default class Search extends Component<Props, {searchTerm: string}> {
+interface State {
+  searchTerm: string;
+}
+
+export default class SearchView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -51,7 +55,7 @@ export default class Search extends Component<Props, {searchTerm: string}> {
     return <div className='search'>
       <div className='search-body'>{renderedEpisodes}</div>
       <div className='search-input'>
-        <SearchIcon/>
+        <Search/>
         <input
           type='text'
           placeholder='Search Term'

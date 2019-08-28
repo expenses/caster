@@ -2,27 +2,26 @@ import {UserSession} from 'blockstack';
 import update from 'immutability-helper';
 import React, {Component, ReactElement} from 'react';
 import {RefreshCw} from 'react-feather';
-import SideNav from './SideNav';
-import {EpisodeReference, Feeds, Playing, View} from './types';
-import {loadData, requestPodcast, saveData} from './utils';
-
-import EpisodeItem from './EpisodeItem';
-import Player from './Player';
-import EpisodeView from './views/EpisodeView';
-import Main from './views/Main';
-import Search from './views/Search';
-
 import { Textfit } from 'react-textfit';
 
+import Player from './Player';
+import SideNav from './SideNav';
+import {DEFAULT_SETTINGS, EpisodeReference, Feeds, Playing, Settings, View} from './types';
+import {loadData, requestPodcast, saveData} from './utils';
+import EpisodeView from './views/EpisodeView';
+import FeedsView from './views/FeedsView';
+import FeedView from './views/FeedView';
+import SearchView from './views/SearchView';
+import SettingsView from './views/SettingsView';
+
+import './Dashboard.scss';
+
 const FEEDS_FILENAME = 'feeds.json';
+const SETTINGS_FILENAME = 'settings.json';
 
 interface Props {
   userSession: UserSession;
   signOut: () => (void);
-}
-
-interface Settings {
-  corsProxy: string;
 }
 
 interface State {
@@ -36,16 +35,16 @@ interface State {
 }
 
 export default class Dashboard extends Component<Props, State> {
+  saveTimer: NodeJS.Timer | null = null;
+
   constructor(props: Props) {
     super(props);
 
     this.state = {
       // Main State
       feeds: {},
-      settings: {
-        corsProxy: 'https://caster-cors-proxy.herokuapp.com',
-      },
-      view: View.Main,
+      settings: DEFAULT_SETTINGS,
+      view: View.Feeds,
       playing: undefined,
       playingDuration: undefined,
       viewing: undefined,
@@ -58,6 +57,7 @@ export default class Dashboard extends Component<Props, State> {
     this.playEpisode = this.playEpisode.bind(this);
     this.updatePlaying = this.updatePlaying.bind(this);
     this.deleteFeed = this.deleteFeed.bind(this);
+    this.updateSettings = this.updateSettings.bind(this);
   }
 
   render() {
@@ -67,7 +67,7 @@ export default class Dashboard extends Component<Props, State> {
           <SideNav
             open={this.state.sidenavOpen}
             feeds={this.state.feeds}
-            openHome={() => this.setState({view: View.Main, sidenavOpen: false})}
+            openHome={() => this.setState({view: View.Feeds, sidenavOpen: false})}
             openFeed={viewing => this.setState({view: View.Viewing, viewing, sidenavOpen: false})}
             openSettings={() => this.setState({view: View.Settings, sidenavOpen: false})}
             openSearch={() => this.setState({view: View.Search, sidenavOpen: false})}
@@ -95,6 +95,11 @@ export default class Dashboard extends Component<Props, State> {
     );
   }
 
+  updateSettings(updates: object, valid: boolean) {
+    const settings = update(this.state.settings, {$merge: updates});
+    this.setState({settings}, () => valid ? this.saveSettings() : null);
+  }
+
   updatePlaying(updates: object) {
     if (this.state.playing === undefined) {
       return;
@@ -107,7 +112,7 @@ export default class Dashboard extends Component<Props, State> {
   title(): string {
     const {view, viewing, feeds} = this.state;
 
-    if (view === View.Main) {
+    if (view === View.Feeds) {
       return 'Podcasts';
     } else if (view === View.Settings) {
       return 'Settings';
@@ -129,29 +134,28 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   inner(): ReactElement | ReactElement[] {
-    const {feeds, view, playing, viewing} = this.state;
+    const {feeds, view, playing, viewing, settings} = this.state;
 
-    if (view === View.Main) {
-      return <Main
+    if (view === View.Feeds) {
+      return <FeedsView
         feeds={feeds}
         openFeed={feed => this.setState({viewing: feed, view: View.Viewing})}
         addFeed={this.addFeed}
         deleteFeed={this.deleteFeed}
       />;
     } else if (view === View.Settings) {
-      return <p>Settingssettingssettings</p>;
+      return <SettingsView
+        settings={settings}
+        updateSettings={this.updateSettings}
+      />;
     } else if (view === View.Viewing) {
       if (typeof viewing === 'string') {
-        const feedUrl: string = viewing;
-        const feed = feeds[feedUrl].data;
-
-        return feed.episodes.map(episode => <EpisodeItem
-          key={episode.guid}
-          episode={{episode, feedUrl}}
+        return <FeedView
+          feedUrl={viewing}
           feeds={feeds}
           openEpisode={this.openEpisode}
           playEpisode={this.playEpisode}
-        />);
+        />;
       } else if (typeof viewing !== 'undefined') {
         return <EpisodeView
           epRef={viewing}
@@ -167,7 +171,7 @@ export default class Dashboard extends Component<Props, State> {
         return <p>{error}</p>;
       }
     } else if (view === View.Search) {
-      return <Search
+      return <SearchView
         feeds={this.state.feeds}
         openEpisode={this.openEpisode}
         playEpisode={this.playEpisode}
@@ -213,15 +217,23 @@ export default class Dashboard extends Component<Props, State> {
           { $merge: {[url]: {time: Date.now(), data}} }
         );
         return this.setState({feeds});
-      });
+      })
+      .then(() => this.saveFeeds());
   }
 
   saveFeeds() {
     saveData(this.props.userSession, FEEDS_FILENAME, this.state.feeds);
   }
 
+  saveSettings() {
+    saveData(this.props.userSession, SETTINGS_FILENAME, this.state.settings);
+  }
+
   componentDidMount() {
     loadData<Feeds>(this.props.userSession, FEEDS_FILENAME)
       .then(feeds => this.setState({feeds}));
+
+    loadData<Settings>(this.props.userSession, SETTINGS_FILENAME)
+      .then(settings => this.updateSettings(settings, true));
   }
 }

@@ -1,20 +1,19 @@
 import {AppConfig, UserSession} from 'blockstack';
+import * as moment from 'moment';
+import 'moment/min/locales';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './Dashboard';
 import * as serviceWorker from './serviceWorker';
 import Signin from './Signin';
 
+// type definitions for js modules
 import './podcast-feed-parser.d.ts';
 import './react-scale-text.d.ts';
 import './react-textfit.d.ts';
+// css
+import './styling/basic.scss';
 
-import './styling/mobile.scss';
-
-import * as moment from 'moment';
-import 'moment/min/locales';
-
-// todo: settings
 // todo: open episode save/load
 // todo: testing
 

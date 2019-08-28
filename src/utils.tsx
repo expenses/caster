@@ -17,7 +17,9 @@ const options = {
 };
 
 export async function requestPodcast(proxy: string, url: string): Promise<Feed> {
-  return getPodcastFromURL(`${proxy}/${url}`, options);
+  console.log(`Requesting '${url}' via '${proxy}'`);
+  const combined = proxy.endsWith('/') ? proxy + url : `${proxy}/${url}`;
+  return getPodcastFromURL(combined, options);
 }
 
 export function saveData<T>(userSession: UserSession, filename: string, data: T): Promise<string> {

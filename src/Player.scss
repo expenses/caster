@@ -129,7 +129,7 @@
 	width: 50%;
 	border-radius: 5px;
 	-webkit-appearance: none;
-	background-image: linear-gradient($highlight-1, $highlight-2);
+	@include gradientBg();
 
 	//https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
   &::-webkit-slider-thumb, &::-moz-range-thumb {
@@ -138,7 +138,7 @@
     -webkit-appearance: none;
     border: none;
     border-radius: 15px;
-    background-image: linear-gradient($highlight-1, $highlight-2);
+    @include gradientBg();
 
 		box-shadow: 0px 0px 2.5px rgba(0, 0, 0, 0.5);
   }

@@ -2,7 +2,7 @@ export interface FeedState {data: Feed; time: Date; }
 export type Feeds = Record<string, FeedState>;
 
 export enum View {
-  Main = 'Main',
+  Feeds = 'Feeds',
   Settings = 'Settings',
   Viewing = 'Viewing',
   Search = 'Search',
@@ -41,3 +41,17 @@ export interface Playing {
   time: number;
   paused: boolean;
 }
+
+export interface Settings {
+  corsProxy: string;
+  toggle: string;
+  seekBackwards: string;
+  seekForwards: string;
+}
+
+export const DEFAULT_SETTINGS = {
+  corsProxy: 'https://caster-cors-proxy.herokuapp.com',
+  toggle: 'p',
+  seekBackwards: ',',
+  seekForwards: '.'
+};

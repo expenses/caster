@@ -33,11 +33,11 @@ export default class SideNavigation extends Component<Properties> {
         <SideNavItem icon={<Home/>} text='Home' onClick={openHome} />
         <SideNavItem icon={<Search/>} text='Search' onClick={openSearch} />
         {
-          Object.keys(feeds).map(url => {
+          Object.entries(feeds).map(([url, feed]) => {
             return <SideNavItem
               key={url}
-              icon={<img src={feeds[url].data.meta.imageURL} alt=''/>}
-              text={feeds[url].data.meta.title}
+              icon={<img src={feed.data.meta.imageURL} alt=''/>}
+              text={feed.data.meta.title}
               onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();

@@ -11,18 +11,16 @@
   & > * {
     padding: 5px;
   }
+
+  margin-bottom: 10px;
 }
 
 .sidenav-icon {
   @include centerContent();
 }
 
-.bm-cross {
-	background-color: $highlight-1;
-
-  &:hover {
-    background-color: white;
-  }
+.bm-cross-button {
+  display: none;
 }
 
 .bm-overlay, .bm-menu-wrap {
@@ -34,11 +32,6 @@
 	background-color: $main;
 	transition: 0.25s all !important;
   color: $highlight-1;
-}
-
-.bm-icon {
-	height: inherit;
-	width: inherit;
 }
 
 .bm-burger-button {

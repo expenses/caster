@@ -1,0 +1,14 @@
+@import 'constants';
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+a {
+	color: $highlight-2;
+}
+
+body {
+	margin: 0px;
+	overflow-y: hidden;
+}
