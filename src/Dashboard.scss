@@ -1,0 +1,85 @@
+@import 'styling/constants';
+
+.dashboard {
+  display: grid;
+
+  grid-template-rows: 50px 1fr 50px;
+  grid-template-areas:
+    "titlebar"
+    "main"
+		"player";
+
+  height: 100vh;
+}
+
+.refresh-button {
+	grid-area: refresh-button;
+}
+
+.refresh-button, .menu-button {
+	@include centerContent();
+	@include colourTransition($main, white);
+}
+
+.titlebar {
+	grid-area: titlebar;
+  display: grid;
+	grid-template-columns: 50px 1fr 50px;
+	grid-template-areas: "menu-button title refresh-button";
+
+	@include gradientBg();
+	color: $main;
+	cursor: default;
+}
+
+.title {
+	grid-area: title;
+	width: calc(100vw - 50px * 2);
+	height: 45px;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.main {
+	grid-area: main;
+  background-color: $main;
+	overflow-y: scroll;
+	color: $highlight-1;
+}
+
+.title-text {
+	margin: 0px;
+	height: 45px;
+	display: flex;
+	align-items: center;
+}
+
+@media only screen and (min-width: $breakpoint) {
+	.dashboard {
+	  grid-template-rows: 50px 1fr;
+		grid-template-columns: 1fr 1fr;
+	  grid-template-areas:
+	    "titlebar player"
+	    "main player";
+
+		padding: 5px;
+		background-color: $border;
+	}
+
+	.main, .titlebar {
+		margin-right: 5px;
+	}
+
+	.titlebar {
+		@include topRounded();
+	}
+
+	.main {
+		height: calc(100% - 5px * 2);
+		@include bottomRounded();
+	}
+
+	.title {
+		width: calc(50vw - 50px * 2 - 5px * 2);
+	}
+}

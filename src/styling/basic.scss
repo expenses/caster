@@ -1,0 +1,32 @@
+@import 'constants';
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+a {
+	color: $highlight-2;
+}
+
+body {
+	margin: 0px;
+	overflow-y: hidden;
+}
+
+$placeholder: mix($highlight-1, $border, 75%);
+
+::-webkit-input-placeholder {
+  color: $placeholder;
+}
+
+::-moz-placeholder {
+  color: $placeholder;
+}
+
+::-ms-placeholder {
+  color: $placeholder;
+}
+
+::placeholder {
+  color: $placeholder;
+}
