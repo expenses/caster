@@ -44,19 +44,15 @@ class App extends Component<{}, State> {
 
   render() {
     if (userSession.isUserSignedIn() || this.state.anonymous) {
-      return (
-        <Dashboard
-          userSession={userSession}
-          signOut={() => userSession.signUserOut(window.location.origin)}
-        />
-      );
+      return <Dashboard
+        userSession={userSession}
+        signOut={() => userSession.signUserOut(appConfig.redirectURI())}
+      />;
     }
-    return (
-      <Signin
-        signIn={() => userSession.redirectToSignIn()}
-        tryAnonymously={() => this.setState({anonymous: true})}
-      />
-    );
+    return <Signin
+      signIn={() => userSession.redirectToSignIn()}
+      tryAnonymously={() => this.setState({anonymous: true})}
+    />;
   }
 
   componentDidMount() {
