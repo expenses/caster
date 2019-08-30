@@ -47,11 +47,13 @@ export interface Settings {
   toggle: string;
   seekBackwards: string;
   seekForwards: string;
+  seekAmount: number;
 }
 
 export const DEFAULT_SETTINGS = {
   corsProxy: 'https://caster-cors-proxy.herokuapp.com',
   toggle: 'p',
   seekBackwards: ',',
-  seekForwards: '.'
+  seekForwards: '.',
+  seekAmount: 5
 };

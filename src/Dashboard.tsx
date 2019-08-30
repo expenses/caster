@@ -3,6 +3,7 @@ import update from 'immutability-helper';
 import React, {Component, ReactElement} from 'react';
 import {RefreshCw} from 'react-feather';
 import { Textfit } from 'react-textfit';
+import Hotkeys from 'react-hot-keys';
 
 import Player from './Player';
 import SideNav from './SideNav';
@@ -18,6 +19,7 @@ import './Dashboard.scss';
 
 const FEEDS_FILENAME = 'feeds.json';
 const SETTINGS_FILENAME = 'settings.json';
+const PLAYING_FILENAME = 'playing.json';
 
 interface Props {
   userSession: UserSession;
@@ -58,48 +60,91 @@ export default class Dashboard extends Component<Props, State> {
     this.updatePlaying = this.updatePlaying.bind(this);
     this.deleteFeed = this.deleteFeed.bind(this);
     this.updateSettings = this.updateSettings.bind(this);
+    this.savePlaying = this.savePlaying.bind(this);
   }
 
   render() {
     return (
-      <div className='dashboard'>
-        <div className='titlebar'>
-          <SideNav
-            open={this.state.sidenavOpen}
+      <Hotkeys
+        keyName='*'
+        onKeyDown={(key, e, handle) => this.handleKey(e.key)}
+      >
+        <div className='dashboard'>
+          <div className='titlebar'>
+            <SideNav
+              open={this.state.sidenavOpen}
+              feeds={this.state.feeds}
+              openHome={() => this.setState({view: View.Feeds, sidenavOpen: false})}
+              openFeed={viewing => this.setState({view: View.Viewing, viewing, sidenavOpen: false})}
+              openSettings={() => this.setState({view: View.Settings, sidenavOpen: false})}
+              openSearch={() => this.setState({view: View.Search, sidenavOpen: false})}
+              changeState={open => this.setState({sidenavOpen: open})}
+              signOut={this.props.signOut}
+            />
+            <div className='title'>
+              <Textfit>
+                <p className='title-text'>{this.title()}</p>
+              </Textfit>
+            </div>
+            <div className='refresh-button'>
+              <RefreshCw onClick={this.refresh} />
+            </div>
+          </div>
+          <div className='main'>{this.inner()}</div>
+          <Player
+            playing={this.state.playing}
             feeds={this.state.feeds}
-            openHome={() => this.setState({view: View.Feeds, sidenavOpen: false})}
-            openFeed={viewing => this.setState({view: View.Viewing, viewing, sidenavOpen: false})}
-            openSettings={() => this.setState({view: View.Settings, sidenavOpen: false})}
-            openSearch={() => this.setState({view: View.Search, sidenavOpen: false})}
-            changeState={open => this.setState({sidenavOpen: open})}
-            signOut={this.props.signOut}
+            duration={this.state.playingDuration}
+            updatePlaying={this.updatePlaying}
+            settings={this.state.settings}
+            setDuration={playingDuration => this.setState({playingDuration})}
+            endPlaying={() => this.updatePlaying({paused: true})}
           />
-          <div className='title'>
-            <Textfit>
-              <p className='title-text'>{this.title()}</p>
-            </Textfit>
-          </div>
-          <div className='refresh-button'>
-            <RefreshCw onClick={this.refresh} />
-          </div>
         </div>
-        <div className='main'>{this.inner()}</div>
-        <Player
-          playing={this.state.playing}
-          feeds={this.state.feeds}
-          duration={this.state.playingDuration}
-          updatePlaying={this.updatePlaying}
-          setDuration={playingDuration => this.setState({playingDuration})}
-        />
-      </div>
+      </Hotkeys>
     );
+  }
+
+  handleKey(key: string) {
+    const {playing, settings} = this.state;
+    const {toggle, seekBackwards, seekForwards, seekAmount} = settings;
+
+    if (playing) {
+      if (key === toggle) {
+        this.updatePlaying({paused: !playing.paused});
+      }
+
+      if (key === seekBackwards) {
+        this.updatePlaying({time: playing.time - seekAmount});
+      }
+
+      if (key === seekForwards) {
+        this.updatePlaying({time: playing.time + seekAmount});
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State, snapshot?: any) {
+    const statePlaying = (state: State) => state.playing && !state.playing.paused;
+
+    if (!statePlaying(prevState) && statePlaying(this.state)) {
+      this.savePlaying();
+      this.saveTimer = setInterval(this.savePlaying, 60000);
+    }
+
+    if (statePlaying(prevState) && !statePlaying(this.state)) {
+      if (this.saveTimer) {
+        clearInterval(this.saveTimer);
+        this.saveTimer = null;
+      }
+
+      this.savePlaying();
+    }
   }
 
   updateSettings(updates: object, valid: boolean) {
     this.setState(
-      prevState => {
-        update(prevState.settings, {$merge: updates});
-      },
+      {settings: update(this.state.settings, {$merge: updates})},
       () => (valid ? this.saveSettings() : null)
     );
   }
@@ -109,9 +154,9 @@ export default class Dashboard extends Component<Props, State> {
       return;
     }
 
-    this.setState(prevState => {
-      update(prevState.playing, {$merge: updates});
-    });
+    this.setState(
+      {playing: update(this.state.playing, {$merge: updates})}
+    );
   }
 
   title(): string {
@@ -174,6 +219,7 @@ export default class Dashboard extends Component<Props, State> {
             playing={playing}
             playingDuration={this.state.playingDuration}
             updatePlaying={this.updatePlaying}
+            settings={settings}
           />
         );
       }
@@ -240,11 +286,22 @@ export default class Dashboard extends Component<Props, State> {
     saveData(this.props.userSession, SETTINGS_FILENAME, this.state.settings);
   }
 
-  componentDidMount() {
-    loadData<Feeds>(this.props.userSession, FEEDS_FILENAME)
-      .then(feeds => this.setState({feeds}));
+  savePlaying() {
+    saveData(this.props.userSession, PLAYING_FILENAME, this.state.playing);
+  }
 
-    loadData<Settings>(this.props.userSession, SETTINGS_FILENAME)
-      .then(settings => this.updateSettings(settings, true));
+  componentDidMount() {
+    const {userSession} = this.props;
+
+    loadData<Feeds>(userSession, FEEDS_FILENAME)
+      .then(feeds => this.setState({feeds}))
+      .then(() => loadData<Playing | undefined>(userSession, PLAYING_FILENAME))
+      .then(playing => this.setState({playing}));
+
+    loadData<Settings>(userSession, SETTINGS_FILENAME)
+      .then(settings => this.setState({
+        // Merge in settings (convenient because it allows me to update whats in settings)
+        settings: update(this.state.settings, {$merge: settings})
+      }));
   }
 }

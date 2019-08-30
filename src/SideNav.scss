@@ -17,6 +17,10 @@
 
 .sidenav-icon {
   @include centerContent();
+
+  & img {
+    @include imageFit();
+  }
 }
 
 .bm-cross-button {

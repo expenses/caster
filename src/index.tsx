@@ -14,7 +14,6 @@ import './react-textfit.d.ts';
 // css
 import './styling/basic.scss';
 
-// todo: open episode save/load
 // todo: testing
 
 const appConfig = new AppConfig();

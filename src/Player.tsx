@@ -1,7 +1,7 @@
 import React, {Component, ReactElement} from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import {FastForward, Pause, Play, Rewind} from 'react-feather';
-import {Feeds, Playing} from './types';
+import {Feeds, Playing, Settings} from './types';
 import {episodeImage, timestamp} from './utils';
 
 import './Player.scss';
@@ -12,6 +12,8 @@ interface Props {
   duration: number | undefined;
   updatePlaying: (update: object) => void;
   setDuration: (duration: number) => void;
+  endPlaying: () => void;
+  settings: Settings;
 }
 
 function playerBar(time: number, duration: number | undefined) {
@@ -31,7 +33,8 @@ function playerBar(time: number, duration: number | undefined) {
 
 export default class Player extends Component<Props> {
   render() {
-    const {playing, feeds, updatePlaying, duration} = this.props;
+    const {playing, feeds, updatePlaying, duration, endPlaying} = this.props;
+    const {seekAmount} = this.props.settings;
 
     // Eww
     const paused = playing ? playing.paused : true;
@@ -56,9 +59,9 @@ export default class Player extends Component<Props> {
           {this.playerButton()}
         </div>
         <div className='desktop-player'>
-          <Rewind />
-          {this.playerButton() || <Play />}
-          <FastForward />
+          <Rewind onClick={() => this.seek(-seekAmount)} />
+          {this.playerButton()}
+          <FastForward onClick={() => this.seek(+seekAmount)} />
           <p>{timestamp(this.time())}</p>
           <input
             className='player-range-bar'
@@ -79,15 +82,24 @@ export default class Player extends Component<Props> {
           />
         </div>
         <ReactAudioPlayer
-          time={playing ? playing.time : 0}
+          time={this.time()}
           playing={!paused}
           src={episode ? episode.enclosure.url : undefined}
           listenInterval={100}
           onListen={(time: number) => this.props.updatePlaying({time})}
-          onLoad={this.props.setDuration}
+          onLoad={audio => this.props.setDuration(audio.duration)}
+          onEnded={endPlaying}
         />
       </div>
     );
+  }
+
+  seek(relative: number) {
+    const {playing, updatePlaying} = this.props;
+
+    if (playing) {
+      updatePlaying({time: playing.time + relative});
+    }
   }
 
   time(): number {
@@ -99,9 +111,11 @@ export default class Player extends Component<Props> {
 
     if (playing) {
       if (playing.paused) {
-        return <Play onClick={() => (playing ? updatePlaying({paused: false}) : null)} />;
+        return <Play onClick={() => updatePlaying({paused: false})} />;
       }
-      return <Pause onClick={() => (playing ? updatePlaying({paused: true}) : null)} />;
+      return <Pause onClick={() => updatePlaying({paused: true})} />;
     }
+
+    return <Play />;
   }
 }

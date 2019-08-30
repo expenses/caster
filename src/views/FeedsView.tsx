@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {Component, MouseEvent} from 'react';
+import React, {Component} from 'react';
 import {Plus, XCircle} from 'react-feather';
 import Item from '../Item';
 import TextEntry from '../TextEntry';
@@ -16,7 +16,7 @@ interface Props {
 
 export default class FeedsView extends Component<Props> {
   render() {
-    const {feeds, openFeed, addFeed} = this.props;
+    const {feeds, openFeed, addFeed, deleteFeed} = this.props;
 
     const items = Object.keys(feeds)
       .map(url => {
@@ -33,9 +33,15 @@ export default class FeedsView extends Component<Props> {
                 <p>{feed.episodes.length} episodes</p>
                 <p>Last refreshed {moment(feeds[url].time).fromNow()}</p>
               </>
-)}
+            )}
             onClick={() => openFeed(url)}
-            icons={<XCircle onClick={e => this.deleteUrl(e, url)} />}
+            icons={(
+              <XCircle onClick={e => {
+                e.stopPropagation();
+                deleteFeed(url);
+              }}
+              />
+)}
           />
         );
       });
@@ -49,10 +55,5 @@ export default class FeedsView extends Component<Props> {
         </div>
       </>
     );
-  }
-
-  deleteUrl(e: MouseEvent, url: string) {
-    e.stopPropagation();
-    this.props.deleteFeed(url);
   }
 }

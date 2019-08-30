@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
 import EpisodeItem from '../EpisodeItem';
 import {EpisodeReference, Feeds} from '../types';
@@ -10,7 +10,7 @@ interface Props {
   playEpisode: (ref: EpisodeReference) => void;
 }
 
-export default class FeedView extends Component<Props> {
+export default class FeedView extends PureComponent<Props> {
   render() {
     const {feeds, feedUrl, openEpisode, playEpisode} = this.props;
 

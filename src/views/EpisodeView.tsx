@@ -1,6 +1,6 @@
 import React, {Component, ReactElement} from 'react';
 import {FastForward, Pause, Play, Rewind} from 'react-feather';
-import {EpisodeReference, Feeds, Playing} from '../types';
+import {EpisodeReference, Feeds, Playing, Settings} from '../types';
 import {episodeImage, timestamp} from '../utils';
 
 import './EpisodeView.scss';
@@ -12,6 +12,7 @@ interface Props {
   playing: Playing | undefined;
   playingDuration: number | undefined;
   updatePlaying: (updates: object) => void;
+  settings: Settings;
 }
 
 export default class EpisodeView extends Component<Props> {
@@ -32,6 +33,7 @@ export default class EpisodeView extends Component<Props> {
   player(): ReactElement {
     const {epRef, updatePlaying, playingDuration} = this.props;
     const same = this.props.playing ? this.props.playing.epRef === epRef : false;
+    const {seekAmount} = this.props.settings;
 
     if (this.props.playing !== undefined && same) {
       const {playing} = this.props;
@@ -39,9 +41,9 @@ export default class EpisodeView extends Component<Props> {
       return (
         <div className='episode-player'>
           <p>{timestamp(playing.time)}</p>
-          <Rewind onClick={() => updatePlaying({time: playing.time - 5})} size='32px' />
+          <Rewind onClick={() => updatePlaying({time: playing.time - seekAmount})} size='32px' />
           {this.button()}
-          <FastForward onClick={() => updatePlaying({time: playing.time + 5})} size='32px' />
+          <FastForward onClick={() => updatePlaying({time: playing.time + seekAmount})} size='32px' />
           <p>{timestamp(playingDuration || 0)}</p>
         </div>
       );

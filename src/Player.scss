@@ -69,8 +69,11 @@
 
 .desktop-player {
 	grid-area: desktop-player;
-
 	display: none;
+
+	& svg {
+		@include colourTransition($highlight-1, white);
+	}
 }
 
 .desktop-player-description {

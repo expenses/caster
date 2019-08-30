@@ -1,5 +1,5 @@
 import fuzzysort from 'fuzzysort';
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {Search} from 'react-feather';
 import EpisodeItem from '../EpisodeItem';
 import {EpisodeReference, Feeds} from '../types';
@@ -16,7 +16,7 @@ interface State {
   searchTerm: string;
 }
 
-export default class SearchView extends Component<Props, State> {
+export default class SearchView extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
