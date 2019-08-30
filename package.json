@@ -1,7 +1,17 @@
 {
   "name": "Caster",
   "version": "0.1.0",
+  "description": "An online podcast player",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockstack/caster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/expenses/caster/issues"
+  },
+  "homepage": "https://expenses.github.io/caster",
+  "author": "Ashley",
   "dependencies": {
     "@types/jest": "24.0.18",
     "@types/node": "12.7.2",
@@ -32,7 +42,8 @@
     "lint": "eslint 'src/**'",
     "fix": "tslint --fix -t verbose  -c tslint.json 'src/**/*.tsx'",
     "analyse": "source-map-explorer 'build/static/js/*.js'",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "yarn build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
