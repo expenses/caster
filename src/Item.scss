@@ -50,13 +50,12 @@
   align-items: center;
   justify-content: space-around;
 
-  &, & * {
+  & * {
     transition: 0.25s color;
-  }
 
-  & *:hover {
-    color: white !important;
-    cursor: pointer;
+    &:hover {
+      color: white !important;
+    }
   }
 }
 

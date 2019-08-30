@@ -47,7 +47,7 @@ export default function SideNav(props: Props) {
         ))
       }
         <SideNavItem icon={<Settings />} text='Settings' onClick={openSettings} />
-        <SideNavItem icon={<LogOut />} text='Sign Out' onClick={e => signOut()} />
+        <SideNavItem icon={<LogOut />} text='Sign Out' onClick={signOut} />
       </Slide>
     </div>
   );

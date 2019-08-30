@@ -33,7 +33,12 @@ module.exports = {
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
     "import/no-unresolved": "off",
-    "react/sort-comp": ["off"]
+    "react/sort-comp": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "react/destructuring-assignment": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "react/no-access-state-in-setstate": "off",
+    "no-console": "off"
   },
   settings:  {
     react:  {

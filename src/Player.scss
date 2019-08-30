@@ -97,6 +97,8 @@
 		border-radius: $br;
 		height: calc(100% - 5px * 2);
 		color: $highlight-1;
+
+		margin: 5px;
 	}
 
 	.player-bar, .player-button, .player-description {
@@ -135,14 +137,6 @@
 	@include gradientBg();
 
 	//https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
-  &::-webkit-slider-thumb, &::-moz-range-thumb {
-		height: 15px;
-		width: 15px;
-    -webkit-appearance: none;
-    border: none;
-    border-radius: 15px;
-    @include gradientBg();
-
-		box-shadow: 0px 0px 2.5px rgba(0, 0, 0, 0.5);
-  }
+  &::-webkit-slider-thumb {@include sliderThumb();}
+	&::-moz-range-thumb     {@include sliderThumb();}
 }

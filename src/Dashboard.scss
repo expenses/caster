@@ -62,12 +62,15 @@
 	    "titlebar player"
 	    "main player";
 
-		padding: 5px;
 		background-color: $border;
 	}
 
+  .titlebar {
+    margin-top: 5px;
+  }
+
 	.main, .titlebar {
-		margin-right: 5px;
+    margin-left: 5px;
 	}
 
 	.titlebar {
@@ -75,7 +78,7 @@
 	}
 
 	.main {
-		height: calc(100% - 5px * 2);
+		height: calc(100% - 5px);
 		@include bottomRounded();
 	}
 

@@ -67,7 +67,7 @@ export default class Dashboard extends Component<Props, State> {
     return (
       <Hotkeys
         keyName='*'
-        onKeyDown={(key, e, handle) => this.handleKey(e.key)}
+        onKeyDown={(_key, e, _handle) => this.handleKey(e.key)}
       >
         <div className='dashboard'>
           <div className='titlebar'>
@@ -124,7 +124,7 @@ export default class Dashboard extends Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State, snapshot?: any) {
+  componentDidUpdate(_prevProps: Props, prevState: State) {
     const statePlaying = (state: State) => state.playing && !state.playing.paused;
 
     if (!statePlaying(prevState) && statePlaying(this.state)) {

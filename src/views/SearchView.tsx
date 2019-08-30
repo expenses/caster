@@ -54,7 +54,9 @@ export default class SearchView extends PureComponent<Props, State> {
 
     return (
       <div className='search'>
-        <div className='search-body'>{renderedEpisodes}</div>
+        <div className='search-body'>
+          {renderedEpisodes.length ? renderedEpisodes : <h1>No Search Term Entered</h1>}
+        </div>
         <div className='search-input'>
           <Search />
           <input
