@@ -1,7 +1,7 @@
 {
   "name": "Caster",
   "version": "0.1.0",
-  "description": "An online podcast player",
+  "description": "A Blockstack podcast player",
   "private": true,
   "repository": {
     "type": "git",
