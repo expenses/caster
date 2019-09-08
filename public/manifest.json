@@ -1,23 +1,24 @@
 {
   "name": "Caster",
+  "short_name": "Caster",
   "description": "A Blockstack podcast player",
   "start_url": ".",
   "display": "standalone",
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "https://expenses.github.io/caster/favicon.svg",
       "sizes": "512x512"
     },
     {
-      "src": "favicon.ico",
+      "src": "https://expenses.github.io/caster/favicon.ico",
       "sizes": "16x16 24x24 32x32 40x40 64x64 96x96 128x128 192x192 256x256"
     },
     {
-      "src": "favicon_512.png",
+      "src": "https://expenses.github.io/caster/favicon_512.png",
       "sizes": "512x512"
     },
     {
-      "src": "favicon_192.png",
+      "src": "https://expenses.github.io/caster/favicon_192.png",
       "sizes": "192x192"
     }
   ],
