@@ -44,21 +44,26 @@ class App extends Component<{}, State> {
 
   render() {
     if (userSession.isUserSignedIn() || this.state.anonymous) {
-      return <Dashboard
-        userSession={userSession}
-        signOut={() => userSession.signUserOut(appConfig.redirectURI())}
-      />;
+      return (
+        <Dashboard
+          userSession={userSession}
+          signOut={() => userSession.signUserOut(appConfig.redirectURI())}
+        />
+      );
     }
-    return <Signin
-      signIn={() => userSession.redirectToSignIn()}
-      tryAnonymously={() => this.setState({anonymous: true})}
-    />;
+    return (
+      <Signin
+        signIn={() => userSession.redirectToSignIn()}
+        tryAnonymously={() => this.setState({anonymous: true})}
+      />
+    );
   }
 
   componentDidMount() {
     if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then(userData => {
-        window.history.replaceState({}, document.title, '/');
+      userSession.handlePendingSignIn().then(() => {
+        // There is probably a better way of thing this
+        window.location.href = appConfig.redirectURI();
       });
     }
   }
