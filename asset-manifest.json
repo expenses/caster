@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/caster/static/css/main.6d10b27a.chunk.css",
-    "main.js": "/caster/static/js/main.59b24463.chunk.js",
-    "main.js.map": "/caster/static/js/main.59b24463.chunk.js.map",
+    "main.js": "/caster/static/js/main.507dfb82.chunk.js",
+    "main.js.map": "/caster/static/js/main.507dfb82.chunk.js.map",
     "runtime~main.js": "/caster/static/js/runtime~main.4f6b7562.js",
     "runtime~main.js.map": "/caster/static/js/runtime~main.4f6b7562.js.map",
     "static/js/2.a78fe5a7.chunk.js": "/caster/static/js/2.a78fe5a7.chunk.js",
     "static/js/2.a78fe5a7.chunk.js.map": "/caster/static/js/2.a78fe5a7.chunk.js.map",
     "index.html": "/caster/index.html",
-    "precache-manifest.97a5ae0e9e9a3680076e25f6c4126bd1.js": "/caster/precache-manifest.97a5ae0e9e9a3680076e25f6c4126bd1.js",
+    "precache-manifest.78447cfd63d7434d51d8d1292e122d29.js": "/caster/precache-manifest.78447cfd63d7434d51d8d1292e122d29.js",
     "service-worker.js": "/caster/service-worker.js",
     "static/css/main.6d10b27a.chunk.css.map": "/caster/static/css/main.6d10b27a.chunk.css.map"
   }
