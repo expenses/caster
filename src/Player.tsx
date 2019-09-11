@@ -51,7 +51,9 @@ export default class Player extends Component<Props> {
         </div>
         <div className='player-description'>
           <div>
-            <p><strong>{episode ? episode.title : null}</strong></p>
+            <p className="player-description-title">
+              {episode ? episode.title : null}
+            </p>
             <p>{epRef ? feeds[epRef.feedUrl].data.meta.title : null}</p>
           </div>
         </div>

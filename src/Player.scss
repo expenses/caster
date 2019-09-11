@@ -27,7 +27,6 @@
 	& p {
 		margin-top: 0px;
 		margin-bottom: 0px;
-		font-size: 0.75em;
 	}
 
 	display: flex;
@@ -40,6 +39,13 @@
 	@include centerContent();
 }
 
+.player-description-title {
+	font-weight: bold;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	white-space: nowrap;
+	width: calc(100vw - 50px * 2 - 5px);
+}
 
 .player-image {
 	grid-area: player-image;
