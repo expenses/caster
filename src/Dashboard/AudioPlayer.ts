@@ -22,6 +22,9 @@ export default class AudioPlayer {
     this.refresh = refresh;
     this.syncCallback = syncCallback;
 
+    // Refresh on duration change (e.g. when it first loads)
+    this.audio.ondurationchange = refresh;
+
     if (navigator.mediaSession) {
       navigator.mediaSession.setActionHandler('play',  this.play.bind(this));
       navigator.mediaSession.setActionHandler('pause', this.pause.bind(this));
