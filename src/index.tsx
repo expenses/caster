@@ -1,9 +1,8 @@
 import {AppConfig, UserSession} from 'blockstack';
 import * as moment from 'moment';
 import 'moment/min/locales';
-import React, {Component} from 'react';
+import React, {Component, Suspense} from 'react';
 import ReactDOM from 'react-dom';
-import Dashboard from './Dashboard';
 import * as serviceWorker from './serviceWorker';
 import Signin from './Signin';
 
@@ -28,6 +27,8 @@ console.log(`Redirect path: ${appConfig.redirectURI()}`);
 const userSession = new UserSession({appConfig});
 // set locale
 moment.locale(window.navigator.language);
+// Lazy load the dashboard
+const Dashboard = React.lazy(() => import('./Dashboard'));
 
 interface State {
   anonymous: boolean;
@@ -45,10 +46,12 @@ class App extends Component<{}, State> {
   render() {
     if (userSession.isUserSignedIn() || this.state.anonymous) {
       return (
-        <Dashboard
-          userSession={userSession}
-          signOut={() => userSession.signUserOut(appConfig.redirectURI())}
-        />
+        <Suspense fallback={<></>}>
+          <Dashboard
+            userSession={userSession}
+            signOut={() => userSession.signUserOut(appConfig.redirectURI())}
+          />
+        </Suspense>
       );
     }
     return (
