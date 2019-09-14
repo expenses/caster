@@ -16,14 +16,16 @@ export default class TextEntry extends Component<Props, {entered: string}> {
   }
 
   render() {
+    const {className, placeholder} = this.props;
+
     return (
       <input
         type='text'
         value={this.state.entered}
-        className={this.props.className}
+        className={className}
         onChange={e => this.setState({entered: e.target.value})}
         onKeyDown={this.handleKey}
-        placeholder={this.props.placeholder}
+        placeholder={placeholder}
       />
     );
   }

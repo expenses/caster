@@ -47,10 +47,8 @@ export default class Player extends Component<Props> {
           <PlayerButton playing={playing} updatePlaying={updatePlaying} />
         </div>
         <DesktopPlayer
-          playing={playing}
-          duration={duration}
+          {...this.props}
           seek={this.seek}
-          updatePlaying={updatePlaying}
           seekAmount={settings.seekAmount}
         />
         <div className='desktop-player-description'>

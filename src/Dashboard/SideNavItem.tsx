@@ -14,9 +14,7 @@ export default function SideNavItem(props: Props): ReactElement {
       onClick={onClick}
       className='sidenav-item'
     >
-      <div className='sidenav-icon'>
-        {icon}
-      </div>
+      <div className='sidenav-icon'>{icon}</div>
       <p>{text}</p>
     </div>
   );

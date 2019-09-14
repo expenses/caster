@@ -12,15 +12,13 @@ interface Props {
 
 export default class FeedView extends PureComponent<Props> {
   render() {
-    const {feeds, feedUrl, openEpisode, playEpisode} = this.props;
+    const {feeds, feedUrl} = this.props;
 
     return feeds[feedUrl].data.episodes.map(episode => (
       <EpisodeItem
         key={episode.guid}
         episode={{episode, feedUrl}}
-        feeds={feeds}
-        openEpisode={openEpisode}
-        playEpisode={playEpisode}
+        {...this.props}
       />
     ));
   }

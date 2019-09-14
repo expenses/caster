@@ -1,4 +1,4 @@
-import React, {Component, ReactElement} from 'react';
+import React from 'react';
 import {FastForward, Pause, Play, Rewind} from 'react-feather';
 import {EpisodeReference, Feeds, Playing, Settings} from '../types';
 import {episodeImage, timestamp} from '../utils';
@@ -15,57 +15,53 @@ interface Props {
   settings: Settings;
 }
 
-export default class EpisodeView extends Component<Props> {
-  render() {
-    const {epRef, feeds} = this.props;
+export default function EpisodeView(props: Props) {
+  const {epRef, feeds} = props;
 
-    return (
-      <div className='episode-view'>
-        <h1>{epRef.episode.title}</h1>
-        <h2>{feeds[epRef.feedUrl].data.meta.title}</h2>
-        <img src={episodeImage(epRef, feeds)} alt='' />
-        <p dangerouslySetInnerHTML={{__html: epRef.episode.description}} />
-        {this.player()}
-      </div>
-    );
-  }
+  return (
+    <div className='episode-view'>
+      <h1>{epRef.episode.title}</h1>
+      <h2>{feeds[epRef.feedUrl].data.meta.title}</h2>
+      <img src={episodeImage(epRef, feeds)} alt='' />
+      <p dangerouslySetInnerHTML={{__html: epRef.episode.description}} />
+      <Player {...props} />
+    </div>
+  );
+}
 
-  player(): ReactElement {
-    const {epRef, updatePlaying, playingDuration} = this.props;
-    const same = this.props.playing ? this.props.playing.epRef === epRef : false;
-    const {seekAmount} = this.props.settings;
+function Player(props: Props) {
+  const {epRef, updatePlaying, playingDuration, playing, settings} = props;
+  const same = playing ? playing.epRef === epRef : false;
+  const {seekAmount} = settings;
 
-    if (this.props.playing !== undefined && same) {
-      const {playing} = this.props;
-
-      return (
-        <div className='episode-player'>
-          <p>{timestamp(playing.time)}</p>
-          <Rewind onClick={() => updatePlaying({time: playing.time - seekAmount})} size='32px' />
-          {this.button()}
-          <FastForward onClick={() => updatePlaying({time: playing.time + seekAmount})} size='32px' />
-          <p>{timestamp(playingDuration || 0)}</p>
-        </div>
-      );
-    }
+  if (playing !== undefined && same) {
     return (
       <div className='episode-player'>
-        <Rewind size='32px' />
-        {this.button()}
-        <FastForward size='32px' />
+        <p>{timestamp(playing.time)}</p>
+        <Rewind onClick={() => updatePlaying({time: playing.time - seekAmount})} size='32px' />
+        <PlayButton {...props} />
+        <FastForward onClick={() => updatePlaying({time: playing.time + seekAmount})} size='32px' />
+        <p>{timestamp(playingDuration || 0)}</p>
       </div>
     );
   }
+  return (
+    <div className='episode-player'>
+      <Rewind size='32px' />
+      <PlayButton {...props} />
+      <FastForward size='32px' />
+    </div>
+  );
+}
 
-  button(): ReactElement {
-    const {playing, updatePlaying, playEpisode, epRef} = this.props;
+function PlayButton(props: Props) {
+  const {playing, updatePlaying, playEpisode, epRef} = props;
 
-    if (playing !== undefined && playing.epRef === epRef) {
-      if (playing.paused) {
-        return <Play onClick={() => updatePlaying({paused: false})} size='36px' />;
-      }
-      return <Pause onClick={() => updatePlaying({paused: true})} size='36px' />;
+  if (playing !== undefined && playing.epRef === epRef) {
+    if (playing.paused) {
+      return <Play onClick={() => updatePlaying({paused: false})} size='36px' />;
     }
-    return <Play onClick={() => playEpisode(epRef)} size='36px' />;
+    return <Pause onClick={() => updatePlaying({paused: true})} size='36px' />;
   }
+  return <Play onClick={() => playEpisode(epRef)} size='36px' />;
 }

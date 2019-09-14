@@ -15,7 +15,6 @@
 
 .refresh-button, .menu-button, .resync-button {
 	@include centerContent();
-	@include colourTransition($main, white);
 }
 
 .titlebar {
@@ -81,4 +80,8 @@
 	.title {
 		width: calc(50vw - 50px * 3 - 5px * 2);
 	}
+
+  .refresh-button, .menu-button, .resync-button {
+    @include colourTransition($main, white);
+  }
 }

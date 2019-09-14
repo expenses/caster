@@ -46,9 +46,7 @@ export default class SearchView extends PureComponent<Props, State> {
         <EpisodeItem
           key={result.obj.ref.episode.guid}
           episode={result.obj.ref}
-          feeds={feeds}
-          openEpisode={this.props.openEpisode}
-          playEpisode={this.props.playEpisode}
+          {...this.props}
         />
       ));
 

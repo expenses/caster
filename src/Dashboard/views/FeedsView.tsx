@@ -14,21 +14,12 @@ interface Props {
 }
 
 export default function FeedsView(props: Props) {
-  const {feeds, openFeed, addFeed, deleteFeed} = props;
+  const {feeds, addFeed} = props;
 
   return (
     <>
       {
-        Object.keys(feeds)
-          .map(url => (
-            <FeedItem
-              key={url}
-              url={url}
-              feeds={feeds}
-              openFeed={openFeed}
-              deleteFeed={deleteFeed}
-            />
-          ))
+        Object.keys(feeds).map(url => <FeedItem key={url} url={url} {...props} />)
       }
       <div className='add-feed'>
         <TextEntry placeholder='Podcast Feed URL' callback={addFeed} />

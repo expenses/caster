@@ -38,7 +38,8 @@ module.exports = {
     "react/destructuring-assignment": "off",
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "react/no-access-state-in-setstate": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "react/jsx-props-no-spreading": ["error", {"html": "enforce", "custom": "ignore"}]
   },
   settings:  {
     react:  {

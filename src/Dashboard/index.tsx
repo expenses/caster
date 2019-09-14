@@ -61,6 +61,7 @@ export default class Dashboard extends Component<Props, State> {
     this.deleteFeed = this.deleteFeed.bind(this);
     this.updateSettings = this.updateSettings.bind(this);
     this.savePlaying = this.savePlaying.bind(this);
+    this.sync = this.sync.bind(this);
   }
 
   render() {
@@ -95,14 +96,11 @@ export default class Dashboard extends Component<Props, State> {
           </div>
           <div className='main'>{this.inner()}</div>
           <Player
-            playing={this.state.playing}
-            feeds={this.state.feeds}
+            {...this.state}
+            {...this}
             duration={this.state.playingDuration}
-            updatePlaying={this.updatePlaying}
-            settings={this.state.settings}
             setDuration={playingDuration => this.setState({playingDuration})}
             endPlaying={() => this.updatePlaying({paused: true})}
-            openEpisode={this.openEpisode}
           />
         </div>
       </Hotkeys>
@@ -186,15 +184,14 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   inner(): ReactElement | ReactElement[] {
-    const {feeds, view, playing, viewing, settings} = this.state;
+    const {feeds, view, viewing, settings} = this.state;
 
     if (view === View.Feeds) {
       return (
         <FeedsView
           feeds={feeds}
           openFeed={feed => this.setState({viewing: feed, view: View.Viewing})}
-          addFeed={this.addFeed}
-          deleteFeed={this.deleteFeed}
+          {...this}
         />
       );
     } if (view === View.Settings) {
@@ -208,22 +205,17 @@ export default class Dashboard extends Component<Props, State> {
       if (typeof viewing === 'string') {
         return (
           <FeedView
-            feedUrl={viewing}
             feeds={feeds}
-            openEpisode={this.openEpisode}
-            playEpisode={this.playEpisode}
+            {...this}
+            feedUrl={viewing}
           />
         );
       } if (typeof viewing !== 'undefined') {
         return (
           <EpisodeView
             epRef={viewing}
-            feeds={feeds}
-            playEpisode={this.playEpisode}
-            playing={playing}
-            playingDuration={this.state.playingDuration}
-            updatePlaying={this.updatePlaying}
-            settings={settings}
+            {...this.state}
+            {...this}
           />
         );
       }
@@ -233,9 +225,8 @@ export default class Dashboard extends Component<Props, State> {
     } if (view === View.Search) {
       return (
         <SearchView
-          feeds={this.state.feeds}
-          openEpisode={this.openEpisode}
-          playEpisode={this.playEpisode}
+          feeds={feeds}
+          {...this}
         />
       );
     }
