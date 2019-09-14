@@ -11,6 +11,7 @@ import './podcast-feed-parser.d.ts';
 import './react-scale-text.d.ts';
 import './react-textfit.d.ts';
 // css
+import 'typeface-montserrat';
 import './styling/basic.scss';
 
 // todo: testing

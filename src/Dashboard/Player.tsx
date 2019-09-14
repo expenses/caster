@@ -16,7 +16,9 @@ interface Props {
   settings: Settings;
 }
 
-function playerBar(time: number, duration: number | undefined) {
+function PlayerBar(props: {time: number, duration: number | undefined}) {
+  let {time, duration} = props;
+  
   let percentage = 0;
 
   if (duration) {
@@ -25,8 +27,10 @@ function playerBar(time: number, duration: number | undefined) {
   }
 
   return (
-    <div className='player-bar-inner'>
-      <div className='player-bar-progress' style={{width: `${percentage}%`}} />
+    <div className='player-bar'>
+      <div className='player-bar-inner'>
+        <div className='player-bar-progress' style={{width: `${percentage}%`}} />
+      </div>
     </div>
   );
 }
@@ -43,9 +47,7 @@ export default class Player extends Component<Props> {
 
     return (
       <div className='player'>
-        <div className='player-bar'>
-          {playerBar(this.time(), duration)}
-        </div>
+        <PlayerBar time={this.time()} duration={duration}/>
         <div className='player-image'>
           {epRef ? <img src={episodeImage(epRef, this.props.feeds)} alt='' /> : null}
         </div>
