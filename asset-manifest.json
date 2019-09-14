@@ -1,15 +1,21 @@
 {
   "files": {
-    "main.css": "/caster/static/css/main.816914fa.chunk.css",
-    "main.js": "/caster/static/js/main.9167117b.chunk.js",
-    "main.js.map": "/caster/static/js/main.9167117b.chunk.js.map",
-    "runtime~main.js": "/caster/static/js/runtime~main.3fdd728b.js",
-    "runtime~main.js.map": "/caster/static/js/runtime~main.3fdd728b.js.map",
-    "static/js/2.a527aff9.chunk.js": "/caster/static/js/2.a527aff9.chunk.js",
-    "static/js/2.a527aff9.chunk.js.map": "/caster/static/js/2.a527aff9.chunk.js.map",
+    "main.css": "/caster/static/css/main.002247d8.chunk.css",
+    "main.js": "/caster/static/js/main.9f9f6a25.chunk.js",
+    "main.js.map": "/caster/static/js/main.9f9f6a25.chunk.js.map",
+    "runtime~main.js": "/caster/static/js/runtime~main.ea757285.js",
+    "runtime~main.js.map": "/caster/static/js/runtime~main.ea757285.js.map",
+    "static/js/2.bd988b90.chunk.js": "/caster/static/js/2.bd988b90.chunk.js",
+    "static/js/2.bd988b90.chunk.js.map": "/caster/static/js/2.bd988b90.chunk.js.map",
+    "static/js/3.55ec7f68.chunk.js": "/caster/static/js/3.55ec7f68.chunk.js",
+    "static/js/3.55ec7f68.chunk.js.map": "/caster/static/js/3.55ec7f68.chunk.js.map",
+    "static/css/4.e72b03c4.chunk.css": "/caster/static/css/4.e72b03c4.chunk.css",
+    "static/js/4.4b6eff28.chunk.js": "/caster/static/js/4.4b6eff28.chunk.js",
+    "static/js/4.4b6eff28.chunk.js.map": "/caster/static/js/4.4b6eff28.chunk.js.map",
     "index.html": "/caster/index.html",
-    "precache-manifest.8c9f42a405358b8a5cffc0ead3ec8065.js": "/caster/precache-manifest.8c9f42a405358b8a5cffc0ead3ec8065.js",
+    "precache-manifest.e97bbdd78d4bcb94a7c44939a8540cd7.js": "/caster/precache-manifest.e97bbdd78d4bcb94a7c44939a8540cd7.js",
     "service-worker.js": "/caster/service-worker.js",
-    "static/css/main.816914fa.chunk.css.map": "/caster/static/css/main.816914fa.chunk.css.map"
+    "static/css/4.e72b03c4.chunk.css.map": "/caster/static/css/4.e72b03c4.chunk.css.map",
+    "static/css/main.002247d8.chunk.css.map": "/caster/static/css/main.002247d8.chunk.css.map"
   }
 }
