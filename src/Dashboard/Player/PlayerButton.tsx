@@ -1,30 +1,30 @@
 import React, {Component, MouseEvent, ReactElement} from 'react';
 import {Play, Pause} from 'react-feather';
-import {Playing} from '../types';
+import AudioPlayer from '../AudioPlayer';
 
 interface Props {
-  playing: Playing | undefined;
-  updatePlaying: (updates: Partial<Playing>) => void;
+  audioPlayer: AudioPlayer;
   fallback?: ReactElement;
 }
 
 export default class PlayerButton extends Component<Props> {
   render() {
-    const {playing, fallback} = this.props;
+    const {audioPlayer, fallback} = this.props;
+    const toggle = this.toggle.bind(this);
 
-    if (playing) {
-      if (playing.paused) {
-        return <Play onClick={e => this.setPaused(e, false)} />;
+    if (audioPlayer.isLoaded()) {
+      if (audioPlayer.isPaused()) {
+        return <Play onClick={toggle} />;
       }
-      return <Pause onClick={e => this.setPaused(e, true)} />;
+      return <Pause onClick={toggle} />;
     }
 
     return fallback || null;
   }
 
-  setPaused(e: MouseEvent, paused: boolean) {
-    const {updatePlaying} = this.props;
+  toggle(e: MouseEvent) {
+    const {audioPlayer} = this.props;
     e.stopPropagation();
-    updatePlaying({paused});
+    audioPlayer.toggle();
   }
 }

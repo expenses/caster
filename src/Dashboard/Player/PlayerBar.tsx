@@ -1,24 +1,17 @@
 import React from 'react';
+import AudioPlayer from '../AudioPlayer';
 
 interface Props {
-  time: number;
-  duration: number | undefined;
+  audioPlayer: AudioPlayer;
 }
 
 export default function PlayerBar(props: Props) {
-  const {time, duration} = props;
-
-  let percentage = 0;
-
-  if (duration) {
-    const fraction = time / duration;
-    percentage = fraction * 100;
-  }
+  const {audioPlayer} = props;
 
   return (
-    <div className='player-bar' style={{display: duration ? 'inherit' : 'none'}}>
+    <div className='player-bar' style={{display: audioPlayer.isLoaded() ? 'inherit' : 'none'}}>
       <div className='player-bar-inner'>
-        <div className='player-bar-progress' style={{width: `${percentage}%`}} />
+        <div className='player-bar-progress' style={{width: `${audioPlayer.fraction() * 100}%`}} />
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import FeedsView from './views/FeedsView';
 import FeedView from './views/FeedView';
 import SearchView from './views/SearchView';
 import SettingsView from './views/SettingsView';
+import AudioPlayer from './AudioPlayer';
 
 import './Dashboard.scss';
 
@@ -29,8 +30,6 @@ interface Props {
 interface State {
   feeds: Feeds;
   view: View;
-  playing: Playing | undefined;
-  playingDuration: number | undefined;
   viewing: string | EpisodeReference | undefined;
   settings: Settings;
   sidenavOpen: boolean;
@@ -38,6 +37,8 @@ interface State {
 
 export default class Dashboard extends Component<Props, State> {
   saveTimer: NodeJS.Timer | null = null;
+
+  audioPlayer: AudioPlayer;
 
   constructor(props: Props) {
     super(props);
@@ -47,8 +48,6 @@ export default class Dashboard extends Component<Props, State> {
       feeds: {},
       settings: DEFAULT_SETTINGS,
       view: View.Feeds,
-      playing: undefined,
-      playingDuration: undefined,
       viewing: undefined,
       sidenavOpen: false
     };
@@ -57,11 +56,15 @@ export default class Dashboard extends Component<Props, State> {
     this.addFeed = this.addFeed.bind(this);
     this.openEpisode = this.openEpisode.bind(this);
     this.playEpisode = this.playEpisode.bind(this);
-    this.updatePlaying = this.updatePlaying.bind(this);
     this.deleteFeed = this.deleteFeed.bind(this);
     this.updateSettings = this.updateSettings.bind(this);
-    this.savePlaying = this.savePlaying.bind(this);
     this.sync = this.sync.bind(this);
+
+    this.audioPlayer = new AudioPlayer(
+      // Callback to refresh dashboard. Possibly hackier than it needs to be.
+      () => this.setState({}),
+      playing => this.savePlaying(playing)
+    );
   }
 
   render() {
@@ -98,9 +101,6 @@ export default class Dashboard extends Component<Props, State> {
           <Player
             {...this.state}
             {...this}
-            duration={this.state.playingDuration}
-            setDuration={playingDuration => this.setState({playingDuration})}
-            endPlaying={() => this.updatePlaying({paused: true})}
           />
         </div>
       </Hotkeys>
@@ -108,39 +108,18 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   handleKey(key: string) {
-    const {playing, settings} = this.state;
-    const {toggle, seekBackwards, seekForwards, seekAmount} = settings;
+    const {toggle, seekBackwards, seekForwards, seekAmount} = this.state.settings;
 
-    if (playing) {
-      if (key === toggle) {
-        this.updatePlaying({paused: !playing.paused});
-      }
-
-      if (key === seekBackwards) {
-        this.updatePlaying({time: playing.time - seekAmount});
-      }
-
-      if (key === seekForwards) {
-        this.updatePlaying({time: playing.time + seekAmount});
-      }
-    }
-  }
-
-  componentDidUpdate(_prevProps: Props, prevState: State) {
-    const statePlaying = (state: State) => state.playing && !state.playing.paused;
-
-    if (!statePlaying(prevState) && statePlaying(this.state)) {
-      this.savePlaying();
-      this.saveTimer = setInterval(this.savePlaying, 60000);
+    if (key === toggle) {
+      this.audioPlayer.toggle();
     }
 
-    if (statePlaying(prevState) && !statePlaying(this.state)) {
-      if (this.saveTimer) {
-        clearInterval(this.saveTimer);
-        this.saveTimer = null;
-      }
+    if (key === seekBackwards) {
+      this.audioPlayer.seekRelative(-seekAmount);
+    }
 
-      this.savePlaying();
+    if (key === seekForwards) {
+      this.audioPlayer.seekRelative(+seekAmount);
     }
   }
 
@@ -148,16 +127,6 @@ export default class Dashboard extends Component<Props, State> {
     this.setState(
       {settings: update(this.state.settings, {$merge: updates})},
       () => (valid ? this.saveSettings() : null)
-    );
-  }
-
-  updatePlaying(updates: Partial<Playing>) {
-    if (this.state.playing === undefined) {
-      return;
-    }
-
-    this.setState(
-      {playing: update(this.state.playing, {$merge: updates})}
     );
   }
 
@@ -236,7 +205,7 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   playEpisode(epRef: EpisodeReference) {
-    this.setState({playing: {epRef, time: 0, paused: false}});
+    this.audioPlayer.loadEp(epRef, true, 0);
   }
 
   async refresh() {
@@ -281,8 +250,8 @@ export default class Dashboard extends Component<Props, State> {
     saveData(this.props.userSession, SETTINGS_FILENAME, this.state.settings);
   }
 
-  savePlaying() {
-    saveData(this.props.userSession, PLAYING_FILENAME, this.state.playing);
+  savePlaying(playing: Playing | undefined) {
+    saveData(this.props.userSession, PLAYING_FILENAME, playing);
   }
 
   sync() {
@@ -291,7 +260,11 @@ export default class Dashboard extends Component<Props, State> {
     loadData<Feeds>(userSession, FEEDS_FILENAME)
       .then(feeds => this.setState({feeds}))
       .then(() => loadData<Playing | undefined>(userSession, PLAYING_FILENAME))
-      .then(playing => this.setState({playing}));
+      .then(playing => {
+        if (playing) {
+          this.audioPlayer.loadEp(playing.epRef, false, playing.time);
+        }
+      });
 
     loadData<Settings>(userSession, SETTINGS_FILENAME)
       .then(settings => this.setState({

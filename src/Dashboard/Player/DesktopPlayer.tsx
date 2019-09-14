@@ -1,20 +1,16 @@
 import React from 'react';
 import {Rewind, FastForward, Play} from 'react-feather';
-import {Playing} from '../types';
 import {timestamp} from '../utils';
 import PlayerButton from './PlayerButton';
+import AudioPlayer from '../AudioPlayer';
 
 interface Props {
-  playing: Playing | undefined;
-  duration: number | undefined;
-  seek: (amount: number) => void;
-  updatePlaying: (updates: Partial<Playing>) => void;
   seekAmount: number;
+  audioPlayer: AudioPlayer;
 }
 
 export default function DesktopPlayer(props: Props) {
-  const {playing, duration, seek, updatePlaying, seekAmount} = props;
-  const time = playing ? playing.time : 0;
+  const {seekAmount, audioPlayer} = props;
 
   return (
     <div className='desktop-player'>
@@ -26,12 +22,12 @@ export default function DesktopPlayer(props: Props) {
         className='player-range-bar'
         type='range'
         min='0'
-        value={time}
-        max={duration || 0}
+        value={audioPlayer.time()}
+        max={audioPlayer.duration()}
         step='any'
-        onChange={e => updatePlaying({time: e.target.value as any as number})}
+        onChange={e => audioPlayer.seekTo(e.target.value as any as number)}
       />
-      <p>{timestamp(duration || 0)}</p>
+      <p>{timestamp(audioPlayer.duration())}</p>
     </div>
   );
 }

@@ -39,7 +39,6 @@ export interface Episode {
 export interface Playing {
   epRef: EpisodeReference;
   time: number;
-  paused: boolean;
 }
 
 export interface Settings {

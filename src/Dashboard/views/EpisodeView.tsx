@@ -1,6 +1,7 @@
 import React from 'react';
 import {FastForward, Pause, Play, Rewind} from 'react-feather';
-import {EpisodeReference, Feeds, Playing, Settings} from '../types';
+import {EpisodeReference, Feeds, Settings} from '../types';
+import AudioPlayer from '../AudioPlayer';
 import {episodeImage, timestamp} from '../utils';
 
 import './EpisodeView.scss';
@@ -9,9 +10,7 @@ interface Props {
   epRef: EpisodeReference;
   feeds: Feeds;
   playEpisode: (ref: EpisodeReference) => void;
-  playing: Playing | undefined;
-  playingDuration: number | undefined;
-  updatePlaying: (updates: object) => void;
+  audioPlayer: AudioPlayer;
   settings: Settings;
 }
 
@@ -30,18 +29,18 @@ export default function EpisodeView(props: Props) {
 }
 
 function Player(props: Props) {
-  const {epRef, updatePlaying, playingDuration, playing, settings} = props;
-  const same = playing ? playing.epRef === epRef : false;
+  const {epRef, audioPlayer, settings} = props;
+  const same = audioPlayer.getEpRef() === epRef;
   const {seekAmount} = settings;
 
-  if (playing !== undefined && same) {
+  if (same) {
     return (
       <div className='episode-player'>
-        <p>{timestamp(playing.time)}</p>
-        <Rewind onClick={() => updatePlaying({time: playing.time - seekAmount})} size='32px' />
+        <p>{timestamp(audioPlayer.time())}</p>
+        <Rewind onClick={() => audioPlayer.seekRelative(-seekAmount)} size='32px' />
         <PlayButton {...props} />
-        <FastForward onClick={() => updatePlaying({time: playing.time + seekAmount})} size='32px' />
-        <p>{timestamp(playingDuration || 0)}</p>
+        <FastForward onClick={() => audioPlayer.seekRelative(+seekAmount)} size='32px' />
+        <p>{timestamp(audioPlayer.duration())}</p>
       </div>
     );
   }
@@ -55,13 +54,13 @@ function Player(props: Props) {
 }
 
 function PlayButton(props: Props) {
-  const {playing, updatePlaying, playEpisode, epRef} = props;
+  const {audioPlayer, playEpisode, epRef} = props;
 
-  if (playing !== undefined && playing.epRef === epRef) {
-    if (playing.paused) {
-      return <Play onClick={() => updatePlaying({paused: false})} size='36px' />;
+  if (audioPlayer.getEpRef() === epRef) {
+    if (audioPlayer.isPaused()) {
+      return <Play onClick={() => audioPlayer.toggle()} size='36px' />;
     }
-    return <Pause onClick={() => updatePlaying({paused: true})} size='36px' />;
+    return <Pause onClick={() => audioPlayer.toggle()} size='36px' />;
   }
   return <Play onClick={() => playEpisode(epRef)} size='36px' />;
 }
