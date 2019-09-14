@@ -205,7 +205,8 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   playEpisode(epRef: EpisodeReference) {
-    this.audioPlayer.loadEp(epRef, true, 0);
+    const {feeds} = this.state;
+    this.audioPlayer.loadEp(epRef, feeds, true, 0);
   }
 
   async refresh() {
@@ -262,7 +263,8 @@ export default class Dashboard extends Component<Props, State> {
       .then(() => loadData<Playing | undefined>(userSession, PLAYING_FILENAME))
       .then(playing => {
         if (playing) {
-          this.audioPlayer.loadEp(playing.epRef, false, playing.time);
+          const {feeds} = this.state;
+          this.audioPlayer.loadEp(playing.epRef, feeds, false, playing.time);
         }
       });
 

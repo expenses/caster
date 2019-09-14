@@ -1,4 +1,5 @@
-import {EpisodeReference, Playing} from './types';
+import {EpisodeReference, Feeds, Playing} from './types';
+import {episodeImage} from './utils';
 
 export default class AudioPlayer {
   audio: HTMLAudioElement;
@@ -20,43 +21,43 @@ export default class AudioPlayer {
     this.syncTimer = null;
     this.refresh = refresh;
     this.syncCallback = syncCallback;
+
+    if (navigator.mediaSession) {
+      navigator.mediaSession.setActionHandler('play',  this.play.bind(this));
+      navigator.mediaSession.setActionHandler('pause', this.pause.bind(this));
+      // todo: allow seek times to change
+      navigator.mediaSession.setActionHandler('seekbackward', () => this.seekRelative(-5));
+      navigator.mediaSession.setActionHandler('seekforward',  () => this.seekRelative(+5));
+    }
   }
 
   getEpRef(): EpisodeReference | null {
     return this.epRef;
   }
 
-  loadEp(epRef: EpisodeReference, playing: boolean, time: number) {
+  loadEp(epRef: EpisodeReference, feeds: Feeds, playing: boolean, time: number) {
     this.audio.src = epRef.episode.enclosure.url;
     this.epRef = epRef;
     this.audio.currentTime = time;
 
     if (playing) {
-      this.audio.play();
-      this.setTimers();
+      this.playNoCallback();
     } else {
-      this.audio.pause();
-      this.clearTimers();
+      this.pauseNoCallback();
     }
+
+    if (navigator.mediaSession) {
+      const {meta} = feeds[epRef.feedUrl].data;
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: epRef.episode.title,
+        album: meta.title,
+        artwork: [{src: episodeImage(epRef, feeds)}]
+      });
+    }
+
 
     this.refresh();
-  }
-
-  setTimers() {
-    this.timer = window.setInterval(this.refresh, 100);
-    this.syncTimer = window.setInterval(this.sync, 30 * 1000);
-  }
-
-  clearTimers() {
-    if (this.timer !== null) {
-      window.clearInterval(this.timer);
-      this.timer = null;
-    }
-
-    if (this.syncTimer !== null) {
-      window.clearInterval(this.syncTimer);
-      this.syncTimer = null;
-    }
   }
 
   isLoaded(): boolean {
@@ -83,15 +84,38 @@ export default class AudioPlayer {
     if (this.epRef !== null) this.syncCallback({epRef: this.epRef, time: this.time()});
   }
 
-  play() {
+  playNoCallback() {
     this.audio.play();
-    this.setTimers();
+
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
+
+    this.timer = window.setInterval(this.refresh, 100);
+    this.syncTimer = window.setInterval(this.sync, 30 * 1000);
+  }
+
+  pauseNoCallback() {
+    this.audio.pause();
+
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'paused';
+
+    if (this.timer !== null) {
+      window.clearInterval(this.timer);
+      this.timer = null;
+    }
+
+    if (this.syncTimer !== null) {
+      window.clearInterval(this.syncTimer);
+      this.syncTimer = null;
+    }
+  }
+
+  play() {
+    this.playNoCallback();
     this.refresh();
   }
 
   pause() {
-    this.audio.pause();
-    this.clearTimers();
+    this.pauseNoCallback();
     this.refresh();
     this.sync();
   }

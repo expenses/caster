@@ -18,6 +18,7 @@
     "@types/react": "16.9.2",
     "@types/react-burger-menu": "^2.2.5",
     "@types/react-dom": "16.9.0",
+    "@types/wicg-mediasession": "^1.0.3",
     "blockstack": "^19.2.5",
     "fuzzysort": "^1.1.4",
     "immutability-helper": "^3.0.1",
