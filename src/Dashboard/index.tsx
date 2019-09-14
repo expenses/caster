@@ -1,7 +1,7 @@
 import {UserSession} from 'blockstack';
 import update from 'immutability-helper';
 import React, {Component, ReactElement} from 'react';
-import {RefreshCw} from 'react-feather';
+import {RefreshCw, DownloadCloud} from 'react-feather';
 import { Textfit } from 'react-textfit';
 import Hotkeys from 'react-hot-keys';
 
@@ -86,7 +86,10 @@ export default class Dashboard extends Component<Props, State> {
                 <p className='title-text'>{this.title()}</p>
               </Textfit>
             </div>
-            <div className='refresh-button'>
+            <div className='resync-button' title='Redownload podcast data'>
+              <DownloadCloud onClick={this.sync} />
+            </div>
+            <div className='refresh-button' title='Refresh the feeds'>
               <RefreshCw onClick={this.refresh} />
             </div>
           </div>
@@ -99,6 +102,7 @@ export default class Dashboard extends Component<Props, State> {
             settings={this.state.settings}
             setDuration={playingDuration => this.setState({playingDuration})}
             endPlaying={() => this.updatePlaying({paused: true})}
+            openEpisode={this.openEpisode}
           />
         </div>
       </Hotkeys>
@@ -142,14 +146,14 @@ export default class Dashboard extends Component<Props, State> {
     }
   }
 
-  updateSettings(updates: object, valid: boolean) {
+  updateSettings(updates: Partial<Settings>, valid: boolean) {
     this.setState(
       {settings: update(this.state.settings, {$merge: updates})},
       () => (valid ? this.saveSettings() : null)
     );
   }
 
-  updatePlaying(updates: object) {
+  updatePlaying(updates: Partial<Playing>) {
     if (this.state.playing === undefined) {
       return;
     }
@@ -290,7 +294,7 @@ export default class Dashboard extends Component<Props, State> {
     saveData(this.props.userSession, PLAYING_FILENAME, this.state.playing);
   }
 
-  componentDidMount() {
+  sync() {
     const {userSession} = this.props;
 
     loadData<Feeds>(userSession, FEEDS_FILENAME)
@@ -303,5 +307,9 @@ export default class Dashboard extends Component<Props, State> {
         // Merge in settings (convenient because it allows me to update whats in settings)
         settings: update(this.state.settings, {$merge: settings})
       }));
+  }
+
+  componentDidMount() {
+    this.sync();
   }
 }
