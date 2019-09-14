@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/caster/static/css/main.4c7209c8.chunk.css",
+    "main.css": "/caster/static/css/main.90c09230.chunk.css",
     "main.js": "/caster/static/js/main.9bd3ed59.chunk.js",
     "main.js.map": "/caster/static/js/main.9bd3ed59.chunk.js.map",
-    "runtime~main.js": "/caster/static/js/runtime~main.b621e6d2.js",
-    "runtime~main.js.map": "/caster/static/js/runtime~main.b621e6d2.js.map",
+    "runtime~main.js": "/caster/static/js/runtime~main.fc68c886.js",
+    "runtime~main.js.map": "/caster/static/js/runtime~main.fc68c886.js.map",
     "static/css/2.fdb08bb6.chunk.css": "/caster/static/css/2.fdb08bb6.chunk.css",
     "static/js/2.85fe4c8b.chunk.js": "/caster/static/js/2.85fe4c8b.chunk.js",
     "static/js/2.85fe4c8b.chunk.js.map": "/caster/static/js/2.85fe4c8b.chunk.js.map",
     "static/js/3.0d6b38e8.chunk.js": "/caster/static/js/3.0d6b38e8.chunk.js",
     "static/js/3.0d6b38e8.chunk.js.map": "/caster/static/js/3.0d6b38e8.chunk.js.map",
-    "static/css/4.45520e89.chunk.css": "/caster/static/css/4.45520e89.chunk.css",
-    "static/js/4.0bb32037.chunk.js": "/caster/static/js/4.0bb32037.chunk.js",
-    "static/js/4.0bb32037.chunk.js.map": "/caster/static/js/4.0bb32037.chunk.js.map",
+    "static/css/4.219e7ce9.chunk.css": "/caster/static/css/4.219e7ce9.chunk.css",
+    "static/js/4.3e985cf8.chunk.js": "/caster/static/js/4.3e985cf8.chunk.js",
+    "static/js/4.3e985cf8.chunk.js.map": "/caster/static/js/4.3e985cf8.chunk.js.map",
     "index.html": "/caster/index.html",
-    "precache-manifest.4dcc898458833b05143c40c3c5e98d90.js": "/caster/precache-manifest.4dcc898458833b05143c40c3c5e98d90.js",
+    "precache-manifest.d83364de52c22fb69e7b9341555d8bc0.js": "/caster/precache-manifest.d83364de52c22fb69e7b9341555d8bc0.js",
     "service-worker.js": "/caster/service-worker.js",
     "static/css/2.fdb08bb6.chunk.css.map": "/caster/static/css/2.fdb08bb6.chunk.css.map",
-    "static/css/4.45520e89.chunk.css.map": "/caster/static/css/4.45520e89.chunk.css.map",
-    "static/css/main.4c7209c8.chunk.css.map": "/caster/static/css/main.4c7209c8.chunk.css.map",
+    "static/css/4.219e7ce9.chunk.css.map": "/caster/static/css/4.219e7ce9.chunk.css.map",
+    "static/css/main.90c09230.chunk.css.map": "/caster/static/css/main.90c09230.chunk.css.map",
     "static/media/index.css": "/caster/static/media/montserrat-latin-900italic.a8ec4957.woff"
   }
 }
