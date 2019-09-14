@@ -22,6 +22,8 @@ export default class AudioPlayer {
     this.refresh = refresh;
     this.syncCallback = syncCallback;
 
+    this.sync = this.sync.bind(this);
+
     // Refresh on duration change (e.g. when it first loads)
     this.audio.ondurationchange = refresh;
 
