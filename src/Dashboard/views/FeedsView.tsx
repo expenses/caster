@@ -1,5 +1,5 @@
 import React from 'react';
-// import {Plus} from 'react-feather';
+import {Plus} from 'react-feather';
 import TextEntry from '../TextEntry';
 import {Feeds} from '../types';
 import FeedItem from '../FeedItem';
@@ -22,8 +22,8 @@ export default function FeedsView(props: Props) {
         Object.keys(feeds).map(url => <FeedItem key={url} url={url} {...props} />)
       }
       <div className='add-feed'>
+        <Plus />
         <TextEntry placeholder='Podcast Feed URL' callback={addFeed} />
-        {/* <div className='add-feed-button' onClick={addFeed}><Plus /></div> */}
       </div>
     </>
   );

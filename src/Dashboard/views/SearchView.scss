@@ -3,17 +3,12 @@
 .search {
 	display: grid;
 	grid-template-rows: 1fr 50px;
-	grid-template-areas:
-		"search-body"
-		"search-input";
-
 	height: 100%;
 	overflow-y: scroll;
 	width: 100%;
 }
 
 .search-body {
-	grid-area: search-body;
 	width: 100%;
 	overflow-y: scroll;
 
@@ -24,13 +19,12 @@
 }
 
 .search-input {
-	grid-area: search-input;
 	padding: 10px;
 	display: flex;
 	align-items: center;
 
   & svg {
-    margin-right: 5px;
+    margin-right: 10px;
   }
 
   & input {

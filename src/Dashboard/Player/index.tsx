@@ -24,19 +24,20 @@ export default function Player(props: Props) {
   const episodeTitle = episode ? episode.title : null;
   const feedTitle = epRef ? feeds[epRef.feedUrl].data.meta.title : null;
 
+  const loadEp = () => (epRef ? openEpisode(epRef) : null);
 
   return (
-    <div className='player' onClick={() => (epRef ? openEpisode(epRef) : null)}>
-      <PlayerBar audioPlayer={audioPlayer} />
-      <div className='player-image'>
-        {epRef ? <img src={episodeImage(epRef, feeds)} alt='' /> : null}
-      </div>
-      <div className='player-description'>
-        <div>
-          <p className='player-description-title'>{episodeTitle}</p>
-          <p>{feedTitle}</p>
+    <div className='player'>
+        <PlayerBar audioPlayer={audioPlayer} />
+        <div className='player-image' onClick={loadEp}>
+          {epRef ? <img src={episodeImage(epRef, feeds)} alt='' /> : null}
         </div>
-      </div>
+        <div className='player-description' onClick={loadEp}>
+          <div>
+            <p className='player-description-title'>{episodeTitle}</p>
+            <p>{feedTitle}</p>
+          </div>
+        </div>
       <div className='player-button'>
         <PlayerButton audioPlayer={audioPlayer} />
       </div>

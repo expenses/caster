@@ -3,10 +3,7 @@
 .sidenav-item {
 	display: grid;
   grid-template-columns: 50px 1fr;
-
   padding-left: 10px;
-  @include colourTransition($highlight-1, white);
-  @include gradientAnimation($main, $highlight-1, $highlight-2, 0.25s, $br);
 
   & > * {
     padding: 5px;
@@ -42,4 +39,11 @@
 	position: relative;
 
 	height: 24px;
+}
+
+@media only screen and (min-width: $breakpoint) {
+	.sidenav-item {
+		@include colourTransition($highlight-1, white);
+	  @include gradientAnimation($main, $highlight-1, $highlight-2, 0.25s, $br);
+	}
 }

@@ -16,14 +16,6 @@
 		color: $highlight-1;
 		height: 25px;
 		padding: 5px;
+		margin-left: 10px;
 	}
-}
-
-.add-feed-button {
-  margin-left: 5px;
-  border-radius: 1000px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-  @include centerContent();
-  padding: 5px;
-  @include colourTransition($highlight-1, white);
 }

@@ -15,7 +15,6 @@
 		"player-image player-description player-button";
 
 	color: $main;
-	cursor: pointer;
 }
 
 .player-description {
@@ -38,6 +37,10 @@
 .player-button {
 	grid-area: player-button;
 	@include centerContent();
+
+	& svg {
+		cursor: pointer;
+	}
 }
 
 .player-description-title {
@@ -74,6 +77,10 @@
 	border-radius: $br;
 }
 
+.player-image, .player-description {
+	cursor: pointer;
+}
+
 .desktop-player {
 	grid-area: desktop-player;
 	display: none;
@@ -99,13 +106,15 @@
 			"desktop-player-description desktop-player-description";
 
 		width: inherit;
-
 		background: $main;
 		border-radius: $br;
 		height: calc(100% - 5px * 2);
 		color: $highlight-1;
-
 		margin: 5px;
+	}
+
+	.player-image, .player-description {
+		cursor: inherit;
 	}
 
 	.player-bar, .player-button, .player-description {

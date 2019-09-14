@@ -1,3 +1,4 @@
+@import 'styling/constants';
 
 .episode-view {
 	display: flex;
@@ -17,5 +18,11 @@
 
 	& > * {
 		margin: 5px;
+	}
+}
+
+@media only screen and (min-width: $breakpoint) {
+	.episode-player svg {
+		@include colourTransition($highlight-1, white);
 	}
 }

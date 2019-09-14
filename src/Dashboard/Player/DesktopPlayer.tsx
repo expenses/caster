@@ -14,10 +14,10 @@ export default function DesktopPlayer(props: Props) {
 
   return (
     <div className='desktop-player'>
-      <Rewind onClick={() => seek(-seekAmount)} />
-      <PlayerButton playing={playing} updatePlaying={updatePlaying} fallback={<Play />} />
-      <FastForward onClick={() => seek(+seekAmount)} />
-      <p>{timestamp(time)}</p>
+      <Rewind onClick={() => audioPlayer.seekRelative(-seekAmount)} />
+      <PlayerButton audioPlayer={audioPlayer} fallback={<Play />} />
+      <FastForward onClick={() => audioPlayer.seekRelative(+seekAmount)} />
+      <p>{timestamp(audioPlayer.time())}</p>
       <input
         className='player-range-bar'
         type='range'

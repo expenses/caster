@@ -25,7 +25,6 @@ $padding: 10px;
     @include centerContent();
     @include gradientBg();
     border: 0px;
-    @include colourTransition($main, white);
     padding: 10px;
     border-radius: $br;
     margin-bottom: 10px;
@@ -64,6 +63,10 @@ $padding: 10px;
 @media only screen and (min-width: $breakpoint) {
   .signin-inner {
     width: $breakpoint;
+
+    & button {
+      @include colourTransition($main, white);
+    }
   }
 
   .intro {

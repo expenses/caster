@@ -51,7 +51,7 @@ export default class AudioPlayer {
 
       navigator.mediaSession.metadata = new MediaMetadata({
         title: epRef.episode.title,
-        album: meta.title,
+        artist: meta.title,
         artwork: [{src: episodeImage(epRef, feeds)}]
       });
     }
