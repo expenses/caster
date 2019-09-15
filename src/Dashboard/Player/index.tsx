@@ -5,7 +5,7 @@ import DesktopPlayer from './DesktopPlayer';
 import PlayerButton from './PlayerButton';
 import PlayerBar from './PlayerBar';
 import AudioPlayer from '../AudioPlayer';
-import './Player.scss';
+import './index.scss';
 
 interface Props {
   feeds: Feeds;

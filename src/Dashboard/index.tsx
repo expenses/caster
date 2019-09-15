@@ -16,7 +16,7 @@ import SearchView from './views/SearchView';
 import SettingsView from './views/SettingsView';
 import AudioPlayer from './AudioPlayer';
 
-import './Dashboard.scss';
+import './index.scss';
 
 const FEEDS_FILENAME = 'feeds.json';
 const SETTINGS_FILENAME = 'settings.json';

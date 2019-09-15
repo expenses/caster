@@ -1,7 +1,7 @@
 import React from 'react';
 import {CloudOff, Key} from 'react-feather';
 
-import './Signin.scss';
+import './index.scss';
 import Picture from './Picture';
 
 interface Props {
