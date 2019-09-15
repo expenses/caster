@@ -70,6 +70,12 @@ $breakpoint: 46.875em;
     }
 }
 
+@mixin overflowEllipse() {
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	white-space: nowrap;
+}
+
 @mixin sliderThumb() {
 	height: 15px;
 	width: 15px;

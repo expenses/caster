@@ -1,6 +1,6 @@
 import React from 'react';
 import {Feeds, Settings, EpisodeReference} from '../types';
-import {episodeImage} from '../utils';
+import {episodeImage, timestamp} from '../utils';
 import DesktopPlayer from './DesktopPlayer';
 import PlayerButton from './PlayerButton';
 import PlayerBar from './PlayerBar';
@@ -33,10 +33,11 @@ export default function Player(props: Props) {
           {epRef ? <img src={episodeImage(epRef, feeds)} alt='' /> : null}
         </div>
         <div className='player-description' onClick={loadEp}>
-          <div>
-            <p className='player-description-title'>{episodeTitle}</p>
-            <p>{feedTitle}</p>
-          </div>
+          <p className='player-description-title'>{episodeTitle}</p>
+          <p className='player-description-subtitle'>{feedTitle}</p>
+          <p className='player-description-time'>
+            {epRef ? `${timestamp(audioPlayer.time())}/${timestamp(audioPlayer.duration())}` : null}
+          </p>
         </div>
       <div className='player-button'>
         <PlayerButton audioPlayer={audioPlayer} />

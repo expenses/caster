@@ -19,6 +19,7 @@
 
 .player-description {
 	grid-area: player-description;
+	padding-left: 5px;
 
 	& h2 {
 		font-weight: bold;
@@ -29,9 +30,25 @@
 		margin-bottom: 0px;
 	}
 
-	display: flex;
-	align-items: center;
-	padding-left: 5px;
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+	grid-template-columns: 1fr auto;
+
+	grid-template-areas:
+		"player-description-title player-description-title"
+		"player-description-subtitle none";
+
+	& .player-description-title {
+		grid-area: player-description-title;
+
+		font-weight: bold;
+		@include overflowEllipse();
+	}
+
+	& .player-description-subtitle {
+		grid-area: player-description-subtitle;
+		@include overflowEllipse();
+	}
 }
 
 .player-button {
@@ -41,14 +58,6 @@
 	& svg {
 		cursor: pointer;
 	}
-}
-
-.player-description-title {
-	font-weight: bold;
-	text-overflow: ellipsis;
-	overflow-x: hidden;
-	white-space: nowrap;
-	width: calc(100vw - 50px * 2 - 5px);
 }
 
 .player-image {
