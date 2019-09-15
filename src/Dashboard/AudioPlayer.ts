@@ -24,9 +24,11 @@ export default class AudioPlayer {
     this.syncCallback = syncCallback;
 
     this.sync = this.sync.bind(this);
+    this.end = this.end.bind(this);
 
     // Refresh on duration change (e.g. when it first loads)
     this.audio.ondurationchange = refresh;
+    this.audio.onended = this.end;
 
     if (navigator.mediaSession) {
       navigator.mediaSession.setActionHandler('play',  this.play.bind(this));
@@ -35,6 +37,12 @@ export default class AudioPlayer {
       navigator.mediaSession.setActionHandler('seekbackward', () => this.seekRelative(-seekAmount));
       navigator.mediaSession.setActionHandler('seekforward',  () => this.seekRelative(+seekAmount));
     }
+  }
+
+  end() {
+    console.log('stopped');
+    this.pause();
+    if (navigator.mediaSession) navigator.mediaSession.playbackState = 'none';
   }
 
   getEpRef(): EpisodeReference | null {
@@ -94,7 +102,7 @@ export default class AudioPlayer {
 
     if (navigator.mediaSession) navigator.mediaSession.playbackState = 'playing';
 
-    this.timer = window.setInterval(this.refresh, 100);
+    this.timer = window.setInterval(this.refresh, 1000);
     this.syncTimer = window.setInterval(this.sync, 30 * 1000);
   }
 
