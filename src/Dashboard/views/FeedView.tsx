@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 
 import EpisodeItem from '../EpisodeItem';
 import {EpisodeReference, Feeds} from '../types';
@@ -10,16 +10,16 @@ interface Props {
   playEpisode: (ref: EpisodeReference) => void;
 }
 
-export default class FeedView extends PureComponent<Props> {
-  render() {
-    const {feeds, feedUrl} = this.props;
+export default React.memo((props: Props) => {
+  const {feeds, feedUrl} = props;
 
-    return feeds[feedUrl].data.episodes.map(episode => (
-      <EpisodeItem
-        key={episode.guid}
-        episode={{episode, feedUrl}}
-        {...this.props}
-      />
-    ));
-  }
-}
+  const episodes = feeds[feedUrl].data.episodes.map(episode => (
+    <EpisodeItem
+      key={episode.guid}
+      episode={{episode, feedUrl}}
+      {...props}
+    />
+  ));
+
+  return <>{episodes}</>;
+});

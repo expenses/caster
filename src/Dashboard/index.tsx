@@ -56,7 +56,6 @@ export default class Dashboard extends Component<Props, State> {
 
     this.refresh = this.refresh.bind(this);
     this.addFeed = this.addFeed.bind(this);
-    this.openEpisode = this.openEpisode.bind(this);
     this.playEpisode = this.playEpisode.bind(this);
     this.deleteFeed = this.deleteFeed.bind(this);
     this.updateSettings = this.updateSettings.bind(this);
@@ -70,8 +69,19 @@ export default class Dashboard extends Component<Props, State> {
     );
   }
 
+  openHome     = ()                => this.setState({view: View.Feeds, sidenavOpen: false});
+
+  openSettings = ()                => this.setState({view: View.Settings, sidenavOpen: false});
+
+  openSearch   = ()                => this.setState({view: View.Search, sidenavOpen: false});
+
+  setSideNav   = (open: boolean)   => this.setState({sidenavOpen: open});
+
+  openViewing = (viewing: string | EpisodeReference) => this.setState({view: View.Viewing, viewing, sidenavOpen: false});
+
+
   render() {
-    const {sidenavOpen, feeds, loading} = this.state;
+    const {sidenavOpen, loading} = this.state;
 
     // todo: consider putting loading rss feeds and blockstack data into the same button.
     // do I even need to store feed data on server?
@@ -79,18 +89,16 @@ export default class Dashboard extends Component<Props, State> {
     return (
       <Hotkeys
         keyName='*'
-        onKeyDown={(_key, e, _handle) => this.handleKey(e.key)}
+        onKeyDown={(_key, e) => this.handleKey(e.key)}
       >
         <div className='dashboard'>
           <div className='titlebar'>
             <SideNav
               open={sidenavOpen}
-              feeds={feeds}
-              openHome={() => this.setState({view: View.Feeds, sidenavOpen: false})}
-              openFeed={viewing => this.setState({view: View.Viewing, viewing, sidenavOpen: false})}
-              openSettings={() => this.setState({view: View.Settings, sidenavOpen: false})}
-              openSearch={() => this.setState({view: View.Search, sidenavOpen: false})}
-              changeState={open => this.setState({sidenavOpen: open})}
+              openHome={this.openHome}
+              openSettings={this.openSettings}
+              openSearch={this.openSearch}
+              changeState={this.setSideNav}
               signOut={this.props.signOut}
             />
             <div className='title'>
@@ -111,7 +119,8 @@ export default class Dashboard extends Component<Props, State> {
           <div className='main'>{this.inner()}</div>
           <Player
             {...this.state}
-            {...this}
+            openEpisode={this.openViewing}
+            audioPlayer={this.audioPlayer}
           />
         </div>
       </Hotkeys>
@@ -163,15 +172,16 @@ export default class Dashboard extends Component<Props, State> {
     return '';
   }
 
-  inner(): ReactElement | ReactElement[] {
+  inner(): ReactElement {
     const {feeds, view, viewing, settings} = this.state;
 
     if (view === View.Feeds) {
       return (
         <FeedsView
           feeds={feeds}
-          openFeed={feed => this.setState({viewing: feed, view: View.Viewing})}
-          {...this}
+          openFeed={this.openViewing}
+          addFeed={this.addFeed}
+          deleteFeed={this.deleteFeed}
         />
       );
     } if (view === View.Settings) {
@@ -186,8 +196,9 @@ export default class Dashboard extends Component<Props, State> {
         return (
           <FeedView
             feeds={feeds}
-            {...this}
             feedUrl={viewing}
+            playEpisode={this.playEpisode}
+            openEpisode={this.openViewing}
           />
         );
       } if (typeof viewing !== 'undefined') {
@@ -195,7 +206,8 @@ export default class Dashboard extends Component<Props, State> {
           <EpisodeView
             epRef={viewing}
             {...this.state}
-            {...this}
+            playEpisode={this.playEpisode}
+            audioPlayer={this.audioPlayer}
           />
         );
       }
@@ -206,7 +218,8 @@ export default class Dashboard extends Component<Props, State> {
       return (
         <SearchView
           feeds={feeds}
-          {...this}
+          playEpisode={this.playEpisode}
+          openEpisode={this.openViewing}
         />
       );
     }
@@ -234,24 +247,17 @@ export default class Dashboard extends Component<Props, State> {
     this.setState({feeds}, this.saveFeeds);
   }
 
-  openEpisode(viewing: EpisodeReference) {
-    this.setState({viewing, view: View.Viewing});
-  }
-
-  clearFeeds() {
-    this.setState({feeds: {}}, this.saveFeeds);
-  }
-
   async addFeed(url: string) {
-    return requestPodcast(this.state.settings.corsProxy, url)
-      .then(data => {
-        const feeds = update(
-          this.state.feeds,
-          { $merge: {[url]: {time: Date.now(), data}} }
-        );
-        return this.setState({feeds});
-      })
-      .then(() => this.saveFeeds());
+    const {settings, feeds} = this.state;
+
+    const data = await requestPodcast(settings.corsProxy, url);
+
+    const newFeeds = update(
+      feeds,
+      { $merge: {[url]: {time: Date.now(), data}} }
+    );
+
+    this.setState({feeds: newFeeds}, this.saveFeeds);
   }
 
   saveFeeds() {
@@ -267,12 +273,10 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   sync() {
-    const {userSession} = this.props;
-
-    loadData<Settings>(userSession, SETTINGS_FILENAME)
-      .then(settings => this.setState({
+    loadData<Settings>(this.props.userSession, SETTINGS_FILENAME)
+      .then(newSettings => this.setState({
         // Merge in settings (convenient because it allows me to update whats in settings)
-        settings: update(this.state.settings, {$merge: settings})
+        settings: update(this.state.settings, {$merge: newSettings})
       }));
 
     this.syncFeeds();
@@ -293,7 +297,6 @@ export default class Dashboard extends Component<Props, State> {
     const playing = await playingPromise;
 
     if (playing) {
-      const {feeds} = this.state;
       this.audioPlayer.loadEp(playing.epRef, feeds, false, playing.time);
     }
 

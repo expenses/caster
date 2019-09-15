@@ -28,17 +28,17 @@ export default function Player(props: Props) {
 
   return (
     <div className='player'>
-        <PlayerBar audioPlayer={audioPlayer} />
-        <div className='player-image' onClick={loadEp}>
-          {epRef ? <img src={episodeImage(epRef, feeds)} alt='' /> : null}
-        </div>
-        <div className='player-description' onClick={loadEp}>
-          <p className='player-description-title'>{episodeTitle}</p>
-          <p className='player-description-subtitle'>{feedTitle}</p>
-          <p className='player-description-time'>
-            {epRef ? `${timestamp(audioPlayer.time())}/${timestamp(audioPlayer.duration())}` : null}
-          </p>
-        </div>
+      <PlayerBar audioPlayer={audioPlayer} />
+      <div className='player-image' onClick={loadEp}>
+        {epRef ? <img src={episodeImage(epRef, feeds)} alt='' /> : null}
+      </div>
+      <div className='player-description' onClick={loadEp}>
+        <p className='player-description-title'>{episodeTitle}</p>
+        <p className='player-description-subtitle'>{feedTitle}</p>
+        <p className='player-description-time'>
+          {epRef ? `${timestamp(audioPlayer.time())}/${timestamp(audioPlayer.duration())}` : null}
+        </p>
+      </div>
       <div className='player-button'>
         <PlayerButton audioPlayer={audioPlayer} />
       </div>
