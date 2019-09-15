@@ -18,13 +18,13 @@ export default function Signin(props: Props) {
     <div className='signin'>
       <div className='signin-inner'>
         <h1>Caster is a encrypted, decentralised, syncing podcast player</h1>
-        <p>(That's a mouthful)</p>
+        <p>(That&apos;s a mouthful)</p>
         <div className='intro'>
           <Picture className='intro-image' src='mobile_30_08_2019' />
           <div className='intro-text'>
-            <h2>Here's how it works:</h2>
-            <p>You can try out Caster by clicking the button below. In order to sync podcasts though, you'll need a {blockstack} identity. Making one is the same as signing up for any other online account, a process you've probably done hundreds of times.</p>
-            <p>This will provide you with a <a href={tryBlockstack}>universal login</a> which you can use to access any Blockstack app. You'll also get a private encryption key, which is used to encrypt infomation about your podcast feeds.</p>
+            <h2>Here&apos;s how it works:</h2>
+            <p>You can try out Caster by clicking the button below. In order to sync podcasts though, you&apos;ll need a {blockstack} identity. Making one is the same as signing up for any other online account, a process you&apos;ve probably done hundreds of times.</p>
+            <p>This will provide you with a <a href={tryBlockstack}>universal login</a> which you can use to access any Blockstack app. You&apos;ll also get a private encryption key, which is used to encrypt infomation about your podcast feeds.</p>
             <button onClick={signIn} type='button'>
               <Key />Create ID/Log In
             </button>

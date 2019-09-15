@@ -27,6 +27,7 @@ export default class SearchView extends PureComponent<Props, State> {
 
   render() {
     const {feeds} = this.props;
+    const {searchTerm} = this.state;
 
     const episodes = Object.keys(feeds)
       .flatMap(feedUrl => feeds[feedUrl].data.episodes.map(episode => ({
@@ -41,7 +42,7 @@ export default class SearchView extends PureComponent<Props, State> {
       threshold: -500
     };
 
-    const renderedEpisodes = fuzzysort.go(this.state.searchTerm, episodes, options)
+    const renderedEpisodes = fuzzysort.go(searchTerm, episodes, options)
       .map(result => (
         <EpisodeItem
           key={result.obj.ref.episode.guid}
@@ -61,7 +62,7 @@ export default class SearchView extends PureComponent<Props, State> {
             type='text'
             placeholder='Search Term'
             onChange={e => this.setState({searchTerm: e.target.value})}
-            value={this.state.searchTerm}
+            value={searchTerm}
           />
         </div>
       </div>

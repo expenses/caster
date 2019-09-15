@@ -23,7 +23,7 @@ export default class SettingsView extends Component<Props> {
 
     return (
       <div className='settings'>
-        <p>Many websites do not allow you to request RSS feeds from inside a browser, so you need to use a proxy to access them. I've set up {defaultUrl} which you are totally free to use, but if you want to setup a proxy yourself you can follow <a href={helpUrl}>this guide</a> with the <a href={corsAnywhere}>CORS Anywhere</a>.</p>
+        <p>Many websites do not allow you to request RSS feeds from inside a browser, so you need to use a proxy to access them. I&apos;ve set up {defaultUrl} which you are totally free to use, but if you want to setup a proxy yourself you can follow <a href={helpUrl}>this guide</a> with the <a href={corsAnywhere}>CORS Anywhere</a>.</p>
         <label>CORS Proxy:</label>
         <input
           type='url'
@@ -53,10 +53,7 @@ export default class SettingsView extends Component<Props> {
           style={style(fixCharacter(seekForwards)[1])}
           onChange={e => this.updateCharacter('seekForwards', e.target.value)}
         />
-        <button
-          type='reset'
-          onClick={() => updateSettings(DEFAULT_SETTINGS, true)}
-        >
+        <button onClick={() => updateSettings(DEFAULT_SETTINGS, true)} type='button'>
           <RotateCcw />
         Reset
         </button>

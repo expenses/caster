@@ -229,8 +229,7 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   playEpisode(epRef: EpisodeReference) {
-    const {feeds} = this.state;
-    this.audioPlayer.loadEp(epRef, feeds, true, 0);
+    this.audioPlayer.loadEp(epRef, this.state.feeds, true, 0);
   }
 
   async refresh() {
@@ -239,12 +238,12 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   deleteFeed(url: string) {
-    const feeds = update(
+    const newFeeds = update(
       this.state.feeds,
       {$unset: [url]}
     );
 
-    this.setState({feeds}, this.saveFeeds);
+    this.setState({feeds: newFeeds}, this.saveFeeds);
   }
 
   async addFeed(url: string) {
