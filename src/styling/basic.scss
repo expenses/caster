@@ -20,20 +20,17 @@ body {
 	margin: 0px;
 }
 
+// spin animation
+@keyframes spin {
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
+// Input placeholder colour.
 $placeholder: mix($highlight-1, $border, 75%);
-
-::-webkit-input-placeholder {
-  color: $placeholder;
-}
-
-::-moz-placeholder {
-  color: $placeholder;
-}
-
-::-ms-placeholder {
-  color: $placeholder;
-}
-
-::placeholder {
-  color: $placeholder;
-}
+// These have to be seperate :^(
+::-webkit-input-placeholder {color: $placeholder;}
+::-moz-placeholder          {color: $placeholder;}
+::-ms-placeholder           {color: $placeholder;}
+::placeholder               {color: $placeholder;}

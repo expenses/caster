@@ -1,7 +1,7 @@
 import {UserSession} from 'blockstack';
 import update from 'immutability-helper';
 import React, {Component, ReactElement} from 'react';
-import {RefreshCw, DownloadCloud} from 'react-feather';
+import {RefreshCw, Rss} from 'react-feather';
 import { Textfit } from 'react-textfit';
 import Hotkeys from 'react-hot-keys';
 
@@ -33,6 +33,7 @@ interface State {
   viewing: string | EpisodeReference | undefined;
   settings: Settings;
   sidenavOpen: boolean;
+  loading: boolean;
 }
 
 export default class Dashboard extends Component<Props, State> {
@@ -49,7 +50,8 @@ export default class Dashboard extends Component<Props, State> {
       settings: DEFAULT_SETTINGS,
       view: View.Feeds,
       viewing: undefined,
-      sidenavOpen: false
+      sidenavOpen: false,
+      loading: false
     };
 
     this.refresh = this.refresh.bind(this);
@@ -69,6 +71,11 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   render() {
+    const {sidenavOpen, feeds, loading} = this.state;
+
+    // todo: consider putting loading rss feeds and blockstack data into the same button.
+    // do I even need to store feed data on server?
+
     return (
       <Hotkeys
         keyName='*'
@@ -77,8 +84,8 @@ export default class Dashboard extends Component<Props, State> {
         <div className='dashboard'>
           <div className='titlebar'>
             <SideNav
-              open={this.state.sidenavOpen}
-              feeds={this.state.feeds}
+              open={sidenavOpen}
+              feeds={feeds}
               openHome={() => this.setState({view: View.Feeds, sidenavOpen: false})}
               openFeed={viewing => this.setState({view: View.Viewing, viewing, sidenavOpen: false})}
               openSettings={() => this.setState({view: View.Settings, sidenavOpen: false})}
@@ -91,11 +98,14 @@ export default class Dashboard extends Component<Props, State> {
                 <p className='title-text'>{this.title()}</p>
               </Textfit>
             </div>
-            <div className='resync-button' title='Redownload podcast data'>
-              <DownloadCloud onClick={this.sync} />
+            <div className='resync-button' title='Refresh blockstack data'>
+              <RefreshCw
+                onClick={this.sync}
+                style={loading ? {animation: 'spin 1.5s linear infinite'} : {}}
+              />
             </div>
-            <div className='refresh-button' title='Refresh the feeds'>
-              <RefreshCw onClick={this.refresh} />
+            <div className='refresh-button' title='Update the feeds'>
+              <Rss onClick={this.refresh} />
             </div>
           </div>
           <div className='main'>{this.inner()}</div>
@@ -259,21 +269,35 @@ export default class Dashboard extends Component<Props, State> {
   sync() {
     const {userSession} = this.props;
 
-    loadData<Feeds>(userSession, FEEDS_FILENAME)
-      .then(feeds => this.setState({feeds}))
-      .then(() => loadData<Playing | undefined>(userSession, PLAYING_FILENAME))
-      .then(playing => {
-        if (playing) {
-          const {feeds} = this.state;
-          this.audioPlayer.loadEp(playing.epRef, feeds, false, playing.time);
-        }
-      });
-
     loadData<Settings>(userSession, SETTINGS_FILENAME)
       .then(settings => this.setState({
         // Merge in settings (convenient because it allows me to update whats in settings)
         settings: update(this.state.settings, {$merge: settings})
       }));
+
+    this.syncFeeds();
+  }
+
+  async syncFeeds() {
+    const {userSession} = this.props;
+
+    this.setState({loading: true});
+
+    const feedsPromise = loadData<Feeds>(userSession, FEEDS_FILENAME);
+    const playingPromise = loadData<Playing | undefined>(userSession, PLAYING_FILENAME);
+
+    // make sure we're set the feeds before setting playing
+    const feeds = await feedsPromise;
+    await this.setState({feeds});
+
+    const playing = await playingPromise;
+
+    if (playing) {
+      const {feeds} = this.state;
+      this.audioPlayer.loadEp(playing.epRef, feeds, false, playing.time);
+    }
+
+    this.setState({loading: false});
   }
 
   componentDidMount() {
