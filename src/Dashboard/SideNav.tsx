@@ -15,7 +15,7 @@ interface Props {
   signOut: () => void;
 }
 
-export default React.memo((props: Props) => {
+function SideNav(props: Props) {
   const {
     open, openSettings, openHome, openSearch, changeState, signOut
   } = props;
@@ -34,4 +34,6 @@ export default React.memo((props: Props) => {
       </Slide>
     </div>
   );
-});
+}
+
+export default React.memo(SideNav);

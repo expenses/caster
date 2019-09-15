@@ -13,7 +13,7 @@ interface Props {
   deleteFeed: (url: string) => void;
 }
 
-export default React.memo((props: Props) => {
+function FeedsView(props: Props) {
   const {feeds, addFeed} = props;
 
   return (
@@ -27,4 +27,6 @@ export default React.memo((props: Props) => {
       </div>
     </>
   );
-});
+}
+
+export default React.memo(FeedsView);

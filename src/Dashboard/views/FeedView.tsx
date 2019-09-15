@@ -10,7 +10,7 @@ interface Props {
   playEpisode: (ref: EpisodeReference) => void;
 }
 
-export default React.memo((props: Props) => {
+function FeedView(props: Props) {
   const {feeds, feedUrl} = props;
 
   const episodes = feeds[feedUrl].data.episodes.map(episode => (
@@ -22,4 +22,6 @@ export default React.memo((props: Props) => {
   ));
 
   return <>{episodes}</>;
-});
+}
+
+export default React.memo(FeedView);
