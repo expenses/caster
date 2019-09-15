@@ -63,7 +63,8 @@ export default class Dashboard extends Component<Props, State> {
     this.audioPlayer = new AudioPlayer(
       // Callback to refresh dashboard. Possibly hackier than it needs to be.
       () => this.setState({}),
-      playing => this.savePlaying(playing)
+      playing => this.savePlaying(playing),
+      this.state.settings.seekAmount
     );
   }
 

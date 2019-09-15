@@ -14,11 +14,12 @@ export default class AudioPlayer {
 
   syncCallback: (playing: Playing) => void;
 
-  constructor(refresh: () => void, syncCallback: (playing: Playing) => void) {
+  constructor(refresh: () => void, syncCallback: (playing: Playing) => void, seekAmount: number) {
     this.audio = document.createElement('audio');
     this.epRef = null;
     this.timer = null;
     this.syncTimer = null;
+
     this.refresh = refresh;
     this.syncCallback = syncCallback;
 
@@ -31,8 +32,8 @@ export default class AudioPlayer {
       navigator.mediaSession.setActionHandler('play',  this.play.bind(this));
       navigator.mediaSession.setActionHandler('pause', this.pause.bind(this));
       // todo: allow seek times to change
-      navigator.mediaSession.setActionHandler('seekbackward', () => this.seekRelative(-5));
-      navigator.mediaSession.setActionHandler('seekforward',  () => this.seekRelative(+5));
+      navigator.mediaSession.setActionHandler('seekbackward', () => this.seekRelative(-seekAmount));
+      navigator.mediaSession.setActionHandler('seekforward',  () => this.seekRelative(+seekAmount));
     }
   }
 
@@ -60,7 +61,6 @@ export default class AudioPlayer {
         artwork: [{src: episodeImage(epRef, feeds)}]
       });
     }
-
 
     this.refresh();
   }
