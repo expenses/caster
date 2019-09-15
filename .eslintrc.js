@@ -25,21 +25,38 @@ module.exports = {
   ],
   rules: {
     "object-curly-spacing": "off",
-    "arrow-parens": ["error", "as-needed"],
+    // We're not coding in C anymore
     "@typescript-eslint/no-use-before-define": "off",
-    "jsx-quotes": ["error", "prefer-single"],
-    "comma-dangle": ["error", "never"],
-    "object-curly-newline": "off",
-    "react/jsx-one-expression-per-line": "off",
+
+    // Clarify styling
+    "jsx-quotes": ["warn", "prefer-single"],
+    "comma-dangle": ["warn", "never"],
+    "arrow-parens": ["warn", "as-needed"],
+
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
-    "import/no-unresolved": "off",
+    // Allow {...props} for custom components but not regular html ones
+    "react/jsx-props-no-spreading": ["error", {"html": "enforce", "custom": "ignore"}],
+
+    // Annoying
+    "max-len": "off",
     "react/sort-comp": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "object-curly-newline": "off",
     "react/destructuring-assignment": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "react/no-access-state-in-setstate": "off",
-    "no-console": "off",
-    "react/jsx-props-no-spreading": ["error", {"html": "enforce", "custom": "ignore"}]
+    "no-multi-spaces": "off",
+    // This doesn't pickup that './Module' is './Module.tsx'
+    "import/no-unresolved": "off",
+    // I'd like to turn this on but exclude 'render' functions
+    "@typescript-eslint/explicit-function-return-type": "off",
+
+    // I don't know what these mean
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+
+    // These might be a good reason to enable these in the future
+    "react/no-danger": "off",
+    "no-console": "off"
   },
   settings:  {
     react:  {
