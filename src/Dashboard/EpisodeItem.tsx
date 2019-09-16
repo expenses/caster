@@ -19,7 +19,9 @@ export default function EpisodeItem(props: Props) {
     <Item
       title={episode.episode.title}
       image={episodeImage(episode, feeds)}
-      body={moment(episode.episode.pubDate).format('L LT')}
+      body={(
+        <p>{moment(episode.episode.pubDate).format('L LT')}</p>
+      )}
       icons={(
         <>
           <Play onClick={() => playEpisode(episode)} />

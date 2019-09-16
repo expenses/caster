@@ -44,22 +44,23 @@
 @media only screen and (min-width: $breakpoint) {
 	.item {
 		@include gradientAnimation($main, $highlight-1, $highlight-2, 0.25s, $br);
-	  transition: 0.25s color;
+
+		// Only apply colour change transitions to elements that actually use 'color'
+		// due to an odd visual in chrome
+		& h2, p, svg {
+			transition: 0.25s color;
+		}
 
 	  &:hover {
 	    color: white;
 
-	    & .item-icons {
+	    & svg {
 	      color: $main;
 	    }
 	  }
-	}
 
-	.item-icons * {
-		transition: 0.25s color;
-
-    &:hover {
-      color: white !important;
-    }
+		& svg:hover {
+			color: white;
+		}
 	}
 }
