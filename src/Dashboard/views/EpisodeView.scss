@@ -8,13 +8,18 @@
   padding: 10px;
 }
 
-.episode-view img {
+.episode-view-image {
 	width: 50%;
+
+	& img {
+		@include imageFit();
+	}
 }
 
 .episode-player {
 	display: flex;
 	align-items: center;
+	font-family: 'Roboto Mono';
 
 	& > * {
 		margin: 5px;

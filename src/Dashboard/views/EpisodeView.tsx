@@ -17,13 +17,17 @@ interface Props {
 export default function EpisodeView(props: Props) {
   const {epRef, feeds} = props;
 
+  const feed = feeds[epRef.feedUrl].data;
+
   return (
     <div className='episode-view'>
-      <h1>{epRef.episode.title}</h1>
-      <h2>{feeds[epRef.feedUrl].data.meta.title}</h2>
-      <img src={episodeImage(epRef, feeds)} alt='' />
-      <p dangerouslySetInnerHTML={{__html: epRef.episode.description}} />
+      <h2>{epRef.episode.title}</h2>
+      <h3>{feed.meta.title}</h3>
+      <div className='episode-view-image'>
+        <img src={episodeImage(epRef, feeds)} alt='' />
+      </div>
       <Player {...props} />
+      <p dangerouslySetInnerHTML={{__html: epRef.episode.description}} />
     </div>
   );
 }

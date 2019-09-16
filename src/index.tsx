@@ -13,6 +13,7 @@ import './react-scale-text.d.ts';
 import './react-textfit.d.ts';
 // css
 import 'typeface-montserrat';
+import 'typeface-roboto-mono';
 import './styling/basic.scss';
 
 // todo: testing

@@ -36,7 +36,7 @@
 
 	grid-template-areas:
 		"player-description-title player-description-title"
-		"player-description-subtitle none";
+		"player-description-subtitle player-description-time";
 
 	& .player-description-title {
 		grid-area: player-description-title;
@@ -48,6 +48,12 @@
 	& .player-description-subtitle {
 		grid-area: player-description-subtitle;
 		@include overflowEllipse();
+	}
+
+	& .player-description-time {
+		grid-area: player-description-time;
+		font-family: 'Roboto Mono';
+		font-size: 0.75rem;
 	}
 }
 
@@ -93,6 +99,7 @@
 .desktop-player {
 	grid-area: desktop-player;
 	display: none;
+	font-family: 'Roboto Mono';
 
 	& svg {
 		@include colourTransition($highlight-1, white);
