@@ -1,4 +1,5 @@
-// import {AppConfig, UserSession} from 'blockstack';
+// This only imports the interfaces afaik
+import {AppConfig, UserSession} from 'blockstack';
 import * as moment from 'moment';
 import 'moment/min/locales';
 import React, {Component, Suspense} from 'react';
@@ -23,9 +24,8 @@ const Dashboard = React.lazy(() => import('./Dashboard'));
 
 interface State {
   anonymous: boolean;
-  // Should use UserSession | null and AppConfig | null but I can't import the types (I think)
-  userSession: any;
-  appConfig: any;
+  userSession: UserSession | null;
+  appConfig: AppConfig | null;
 }
 
 class App extends Component<{}, State> {
@@ -49,14 +49,18 @@ class App extends Component<{}, State> {
         <Suspense fallback={<></>}>
           <Dashboard
             userSession={userSession}
-            signOut={() => userSession.signUserOut(appConfig.redirectURI())}
+            signOut={() => (
+              userSession && appConfig ? userSession.signUserOut(appConfig.redirectURI()) : null
+            )}
           />
         </Suspense>
       );
     }
     return (
       <Signin
-        signIn={() => userSession.redirectToSignIn()}
+        signIn={() => (
+          userSession ? userSession.redirectToSignIn() : null
+        )}
         tryAnonymously={() => this.setState({anonymous: true})}
       />
     );
@@ -65,8 +69,8 @@ class App extends Component<{}, State> {
   componentDidMount() {
     // Dynamically import blockstack
     import('blockstack')
-      .then(({AppConfig, UserSession}) => {
-        const appConfig = new AppConfig();
+      .then(blockstack => {
+        const appConfig = new blockstack.AppConfig();
 
         if (process.env.NODE_ENV === 'production') {
           appConfig.manifestPath = '/caster/manifest.json';
@@ -76,7 +80,7 @@ class App extends Component<{}, State> {
         console.log(`Manifest path: ${appConfig.manifestURI()}`);
         console.log(`Redirect path: ${appConfig.redirectURI()}`);
 
-        const userSession = new UserSession({appConfig});
+        const userSession = new blockstack.UserSession({appConfig});
 
         if (userSession.isSignInPending()) {
           userSession.handlePendingSignIn().then(() => {

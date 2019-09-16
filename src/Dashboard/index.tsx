@@ -23,7 +23,7 @@ const SETTINGS_FILENAME = 'settings.json';
 const PLAYING_FILENAME = 'playing.json';
 
 interface Props {
-  userSession: UserSession;
+  userSession: UserSession | null;
   signOut: () => (void);
 }
 
@@ -260,19 +260,26 @@ export default class Dashboard extends Component<Props, State> {
   }
 
   saveFeeds() {
-    saveData(this.props.userSession, FEEDS_FILENAME, this.state.feeds);
+    const {userSession} = this.props;
+    if (userSession) saveData(userSession, FEEDS_FILENAME, this.state.feeds);
   }
 
   saveSettings() {
-    saveData(this.props.userSession, SETTINGS_FILENAME, this.state.settings);
+    const {userSession} = this.props;
+    if (userSession) saveData(userSession, SETTINGS_FILENAME, this.state.settings);
   }
 
   savePlaying(playing: Playing | undefined) {
-    saveData(this.props.userSession, PLAYING_FILENAME, playing);
+    const {userSession} = this.props;
+    if (userSession) saveData(userSession, PLAYING_FILENAME, playing);
   }
 
   sync() {
-    loadData<Settings>(this.props.userSession, SETTINGS_FILENAME)
+    const {userSession} = this.props;
+
+    if (!userSession) return;
+
+    loadData<Settings>(userSession, SETTINGS_FILENAME)
       .then(newSettings => this.setState({
         // Merge in settings (convenient because it allows me to update whats in settings)
         settings: update(this.state.settings, {$merge: newSettings})
@@ -283,6 +290,8 @@ export default class Dashboard extends Component<Props, State> {
 
   async syncFeeds() {
     const {userSession} = this.props;
+
+    if (!userSession) return;
 
     this.setState({loading: true});
 
