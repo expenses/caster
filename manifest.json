@@ -4,24 +4,52 @@
   "description": "A Blockstack podcast player",
   "start_url": ".",
   "display": "standalone",
+  "theme_color": "#fd3777",
+  "background_color": "#2e2157",
   "icons": [
     {
-      "src": "https://expenses.github.io/caster/favicon.svg",
-      "sizes": "512x512"
+      "src": "https://expenses.github.io/caster/favicons/48.png",
+      "sizes": "48x48"
     },
     {
-      "src": "https://expenses.github.io/caster/favicon.ico",
-      "sizes": "16x16 24x24 32x32 40x40 64x64 96x96 128x128 192x192 256x256"
+      "src": "https://expenses.github.io/caster/favicons/72.png",
+      "sizes": "72x72"
     },
     {
-      "src": "https://expenses.github.io/caster/favicon_512.png",
-      "sizes": "512x512"
+      "src": "https://expenses.github.io/caster/favicons/96.png",
+      "sizes": "96x96"
     },
     {
-      "src": "https://expenses.github.io/caster/favicon_192.png",
+      "src": "https://expenses.github.io/caster/favicons/144.png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "https://expenses.github.io/caster/favicons/192.png",
       "sizes": "192x192"
+    },
+    {
+      "src": "https://expenses.github.io/caster/favicons/512.png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "https://expenses.github.io/caster/favicons/76.png",
+      "sizes": "76x76"
+    },
+    {
+      "src": "https://expenses.github.io/caster/favicons/120.png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "https://expenses.github.io/caster/favicons/152.png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "https://expenses.github.io/caster/favicons/180.png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "https://expenses.github.io/caster/favicons/1024.png",
+      "sizes": "1024x1024"
     }
-  ],
-  "theme_color": "#fd3777",
-  "background_color": "#2e2157"
+  ]
 }
