@@ -1,4 +1,4 @@
-import {AppConfig, UserSession} from 'blockstack';
+// import {AppConfig, UserSession} from 'blockstack';
 import * as moment from 'moment';
 import 'moment/min/locales';
 import React, {Component, Suspense} from 'react';
@@ -16,16 +16,6 @@ import './styling/basic.scss';
 
 // todo: testing
 
-const appConfig = new AppConfig();
-if (process.env.NODE_ENV === 'production') {
-  appConfig.manifestPath = '/caster/manifest.json';
-  appConfig.redirectPath = '/caster';
-}
-
-console.log(`Manifest path: ${appConfig.manifestURI()}`);
-console.log(`Redirect path: ${appConfig.redirectURI()}`);
-
-const userSession = new UserSession({appConfig});
 // set locale
 moment.locale(window.navigator.language);
 // Lazy load the dashboard
@@ -33,6 +23,9 @@ const Dashboard = React.lazy(() => import('./Dashboard'));
 
 interface State {
   anonymous: boolean;
+  // Should use UserSession | null and AppConfig | null but I can't import the types (I think)
+  userSession: any;
+  appConfig: any;
 }
 
 class App extends Component<{}, State> {
@@ -40,12 +33,18 @@ class App extends Component<{}, State> {
     super(props);
 
     this.state = {
-      anonymous: false
+      anonymous: false,
+      userSession: null,
+      appConfig: null
     };
   }
 
   render() {
-    if (userSession.isUserSignedIn() || this.state.anonymous) {
+    const {userSession, anonymous, appConfig} = this.state;
+
+    const signedIn = userSession && userSession.isUserSignedIn();
+
+    if (signedIn || anonymous) {
       return (
         <Suspense fallback={<></>}>
           <Dashboard
@@ -64,12 +63,30 @@ class App extends Component<{}, State> {
   }
 
   componentDidMount() {
-    if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then(() => {
-        // There is probably a better way of thing this
-        window.location.href = appConfig.redirectURI();
+    // Dynamically import blockstack
+    import('blockstack')
+      .then(({AppConfig, UserSession}) => {
+        const appConfig = new AppConfig();
+
+        if (process.env.NODE_ENV === 'production') {
+          appConfig.manifestPath = '/caster/manifest.json';
+          appConfig.redirectPath = '/caster';
+        }
+
+        console.log(`Manifest path: ${appConfig.manifestURI()}`);
+        console.log(`Redirect path: ${appConfig.redirectURI()}`);
+
+        const userSession = new UserSession({appConfig});
+
+        if (userSession.isSignInPending()) {
+          userSession.handlePendingSignIn().then(() => {
+            // There is probably a better way of thing this
+            window.location.href = appConfig.redirectURI();
+          });
+        }
+
+        this.setState({userSession, appConfig});
       });
-    }
   }
 }
 
