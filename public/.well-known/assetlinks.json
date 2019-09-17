@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : {
+    "namespace": "android_app",
+    "package_name": "io.github.expenses.caster",
+    "sha256_cert_fingerprints": [
+      "64:79:61:92:30:3D:0C:30:BA:E9:83:1F:6B:CE:84:BC:DC:A0:45:DF:FA:5A:3E:01:9B:1F:6A:66:88:F3:57:E3"
+    ]
+  }
+}]
